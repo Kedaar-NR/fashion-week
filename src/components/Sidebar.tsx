@@ -36,7 +36,7 @@ const Sidebar = () => {
           <h1 className={`text-lg font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'}`}>
             {collapsed ? null : (
               <TextShimmerWave
-                className="[--base-color:#E05780] [--base-gradient-color:#FFD700]"
+                className="[--base-color:#C0C0C0] [--base-gradient-color:#333333]"
                 duration={2}
                 spread={1.2}
                 zDistance={20}
@@ -78,7 +78,7 @@ const Sidebar = () => {
                 {user.photoURL ? (
                   <AvatarImage src={user.photoURL} alt={user.name || user.email} />
                 ) : (
-                  <AvatarFallback className="bg-gradient-to-br from-pink-500 to-orange-400 text-white text-xs">
+                  <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white text-xs">
                     {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 )}

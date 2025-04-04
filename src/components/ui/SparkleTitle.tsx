@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { SparklesCore } from "@/components/ui/sparkles";
-import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
+import { SparklesText } from "@/components/ui/sparkles-text";
 
 export function SparkleTitle() {
   return (
@@ -19,24 +19,20 @@ export function SparkleTitle() {
           }}
           className="text-center relative z-20"
         >
-          <TextShimmerWave
-            as="h1"
-            className="text-5xl font-extrabold tracking-tighter md:text-6xl
-                     [--base-color:#E05780] [--base-gradient-color:#FFD700]"
-            duration={2}
-            spread={1.2}
-            zDistance={20}
-          >
-            FASHION:WEEK
-          </TextShimmerWave>
+          <SparklesText 
+            text="Your gateway to curated fashion brands"
+            className="text-3xl md:text-4xl font-bold tracking-tight"
+            colors={{ first: "#c0c0c0", second: "#333333" }}
+            sparklesCount={15}
+          />
         </motion.div>
         
         <div className="w-full h-40 relative">
           {/* Gradients */}
-          <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-pink-500 to-transparent h-[2px] w-3/4 blur-sm" />
-          <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-pink-500 to-transparent h-px w-3/4" />
-          <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent h-[5px] w-1/4 blur-sm" />
-          <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-orange-400 to-transparent h-px w-1/4" />
+          <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-gray-500 to-transparent h-[2px] w-3/4 blur-sm" />
+          <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-gray-500 to-transparent h-px w-3/4" />
+          <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-gray-800 to-transparent h-[5px] w-1/4 blur-sm" />
+          <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-gray-800 to-transparent h-px w-1/4" />
 
           {/* Core sparkles component */}
           <SparklesCore
@@ -45,10 +41,9 @@ export function SparkleTitle() {
             maxSize={1}
             particleDensity={40}
             className="w-full h-full"
-            particleColor="#FFFFFF"
+            particleColor="#c0c0c0"
           />
         </div>
-        <p className="text-gray-600 mt-2 text-center">Your gateway to curated fashion brands.</p>
       </div>
     </div>
   );

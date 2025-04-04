@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -281,16 +280,16 @@ const Index = () => {
   
   // Brand colors for avatar backgrounds
   const brandColors = [
-    'from-purple-500 to-blue-500',
-    'from-pink-500 to-orange-400',
-    'from-green-400 to-blue-500',
-    'from-yellow-400 to-orange-500',
-    'from-pink-400 to-red-500',
-    'from-indigo-500 to-purple-500',
-    'from-blue-400 to-emerald-400',
-    'from-amber-400 to-orange-600',
-    'from-rose-400 to-red-600',
-    'from-violet-400 to-indigo-600',
+    'from-gray-500 to-gray-800',
+    'from-gray-400 to-black',
+    'from-gray-600 to-gray-900',
+    'from-silver-400 to-gray-700',
+    'from-gray-300 to-gray-800',
+    'from-gray-500 to-black',
+    'from-gray-400 to-gray-700',
+    'from-silver-500 to-gray-800',
+    'from-gray-400 to-black',
+    'from-gray-500 to-gray-700',
   ];
 
   return (

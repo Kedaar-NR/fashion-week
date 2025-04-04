@@ -3,12 +3,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { SparklesCore } from "@/components/ui/sparkles";
+import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
 
 export function SparkleTitle() {
   return (
     <div className="relative w-full overflow-hidden py-10">
       <div className="w-full relative">
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0.5, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{
@@ -16,10 +17,19 @@ export function SparkleTitle() {
             duration: 0.8,
             ease: "easeInOut",
           }}
-          className="text-center text-5xl font-extrabold tracking-tighter md:text-6xl bg-gradient-to-br from-pink-500 via-orange-400 to-yellow-300 bg-clip-text text-transparent relative z-20"
+          className="text-center relative z-20"
         >
-          FASHION:WEEK
-        </motion.h1>
+          <TextShimmerWave
+            as="h1"
+            className="text-5xl font-extrabold tracking-tighter md:text-6xl
+                     [--base-color:#E05780] [--base-gradient-color:#FFD700]"
+            duration={2}
+            spread={1.2}
+            zDistance={20}
+          >
+            FASHION:WEEK
+          </TextShimmerWave>
+        </motion.div>
         
         <div className="w-full h-40 relative">
           {/* Gradients */}

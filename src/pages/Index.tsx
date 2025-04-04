@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
@@ -7,7 +8,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
 import { SparkleTitle } from "@/components/ui/SparkleTitle";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
-import { useId, useRef, useEffect } from "react";
+import { useId, useRef } from "react";
+
+// Generate random follower counts for brands between 1 and 10k
+const brandsWithRandomFollowers = brands.map(brand => ({
+  ...brand,
+  followers: `${Math.floor(9000 + Math.random() * 1000)} followers`  // Generate random numbers close to 10k
+}));
 
 interface SlideData {
   title: string;
@@ -20,9 +27,10 @@ interface SlideProps {
   index: number;
   current: number;
   handleSlideClick: (index: number) => void;
+  onButtonClick: () => void;
 }
 
-const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
+const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: SlideProps) => {
   const slideRef = useRef<HTMLLIElement>(null);
 
   const xRef = useRef(0);
@@ -122,7 +130,13 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             {title}
           </h2>
           <div className="flex justify-center">
-            <button className="mt-4 px-3 py-1 w-fit mx-auto sm:text-sm text-black bg-white h-10 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                onButtonClick();
+              }}
+              className="mt-4 px-3 py-1 w-fit mx-auto sm:text-sm text-black bg-white h-10 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+            >
               {button}
             </button>
           </div>
@@ -158,9 +172,10 @@ const CarouselControl = ({
 
 interface CarouselProps {
   slides: SlideData[];
+  onButtonClick: () => void;
 }
 
-const CustomCarousel = ({ slides }: CarouselProps) => {
+const CustomCarousel = ({ slides, onButtonClick }: CarouselProps) => {
   const [current, setCurrent] = useState(0);
 
   const handlePreviousClick = () => {
@@ -199,6 +214,7 @@ const CustomCarousel = ({ slides }: CarouselProps) => {
             index={index}
             current={current}
             handleSlideClick={handleSlideClick}
+            onButtonClick={onButtonClick}
           />
         ))}
       </ul>
@@ -223,15 +239,21 @@ const CustomCarousel = ({ slides }: CarouselProps) => {
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Handle command selection
   const handleSelect = (brandName: string) => {
     setSelectedBrand(brandName.replace('@', ''));
   };
 
-  const filteredBrands = brands.filter(brand => 
+  const filteredBrands = brandsWithRandomFollowers.filter(brand => 
     brand.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Navigate to brands page when clicking carousel buttons
+  const handleCarouselButtonClick = () => {
+    navigate('/brands');
+  };
 
   // Fashion carousel slides - fashion and clothes focused
   const fashionSlides = [
@@ -339,7 +361,7 @@ const Index = () => {
             <div className="px-8 pb-8 mt-8">
               <div className="max-w-3xl mx-auto">
                 <div className="relative overflow-hidden w-full pb-16">
-                  <CustomCarousel slides={fashionSlides} />
+                  <CustomCarousel slides={fashionSlides} onButtonClick={handleCarouselButtonClick} />
                 </div>
               </div>
             </div>

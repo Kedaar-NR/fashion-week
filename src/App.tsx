@@ -23,6 +23,7 @@ const App = () => (
           <Route path="/liked" element={<LikedPage />} />
           <Route path="/brands" element={<BrandsPage />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/profile" element={<SignIn />} /> {/* Reuse SignIn component for profile temporarily */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </TooltipProvider>

@@ -1,12 +1,27 @@
 
 import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
 
 const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [user, setUser] = useState<{ email?: string, name?: string, photoURL?: string } | null>(null);
+  
+  useEffect(() => {
+    // Check if user exists in localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error('Failed to parse user data', e);
+      }
+    }
+  }, []);
   
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
@@ -18,7 +33,19 @@ const Sidebar = () => {
     >
       <div className="flex flex-col border-b border-gray-800">
         <div className="flex items-center justify-between p-3">
-          <h1 className={`text-lg font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'} bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-300 bg-clip-text text-transparent animate-pulse`}>FASHION:WEEK</h1>
+          <h1 className={`text-lg font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'}`}>
+            {collapsed ? null : (
+              <TextShimmerWave
+                className="[--base-color:#E05780] [--base-gradient-color:#FFD700]"
+                duration={2}
+                spread={1.2}
+                zDistance={20}
+                scaleDistance={1.1}
+              >
+                FASHION:WEEK
+              </TextShimmerWave>
+            )}
+          </h1>
           <button 
             onClick={toggleCollapse}
             className="text-white hover:bg-gray-800 rounded-full p-1"
@@ -27,17 +54,41 @@ const Sidebar = () => {
           </button>
         </div>
         
-        <Link 
-          to="/signin" 
-          className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
-            location.pathname === "/signin" ? 'bg-gray-800 text-white font-semibold' : 'text-gray-300'
-          } mx-2 mb-3`}
-        >
-          <div className="flex items-center">
-            <div><LogIn size={18} /></div>
-            <span className={`ml-3 text-sm ${collapsed ? 'hidden' : 'block'}`}>Sign In</span>
-          </div>
-        </Link>
+        {!user ? (
+          <Link 
+            to="/signin" 
+            className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
+              location.pathname === "/signin" ? 'bg-gray-800 text-white font-semibold' : 'text-gray-300'
+            } mx-2 mb-3`}
+          >
+            <div className="flex items-center">
+              <div><LogIn size={18} /></div>
+              <span className={`ml-3 text-sm ${collapsed ? 'hidden' : 'block'}`}>Sign In</span>
+            </div>
+          </Link>
+        ) : (
+          <Link
+            to="/profile"
+            className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
+              location.pathname === "/profile" ? 'bg-gray-800' : ''
+            } mx-2 mb-3`}
+          >
+            <div className="flex items-center">
+              <Avatar className="h-7 w-7">
+                {user.photoURL ? (
+                  <AvatarImage src={user.photoURL} alt={user.name || user.email} />
+                ) : (
+                  <AvatarFallback className="bg-gradient-to-br from-pink-500 to-orange-400 text-white text-xs">
+                    {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+              <span className={`ml-3 text-sm text-white ${collapsed ? 'hidden' : 'block'}`}>
+                {user.name || user.email?.split('@')[0] || 'Profile'}
+              </span>
+            </div>
+          </Link>
+        )}
       </div>
 
       <div className="flex flex-col space-y-1 mt-3 px-2">

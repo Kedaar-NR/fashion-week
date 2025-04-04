@@ -9,7 +9,7 @@ export function WorldMapDemo() {
       <div className="max-w-7xl mx-auto text-center">
         <div className="flex items-center justify-center gap-2 text-xl md:text-2xl font-bold mb-2">
           <Globe className="h-6 w-6" />
-          <h2>Join 150,000 people across the world checking out fashionweek</h2>
+          <h2>Join 150,000 fashion enthusiasts worldwide</h2>
         </div>
       </div>
     </div>

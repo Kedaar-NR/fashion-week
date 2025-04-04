@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import { brands, genreColors } from "@/data/brands";
@@ -42,8 +41,7 @@ const categories = [
   "VINTAGE",
   "BASIC",
   "GRUNGE",
-  "COWBOY",
-  "SELECTION BASED"
+  "COWBOY"
 ];
 
 const BrandsPage = () => {

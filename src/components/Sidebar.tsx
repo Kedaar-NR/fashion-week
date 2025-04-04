@@ -85,7 +85,7 @@ const Sidebar = () => {
             } mx-2 mb-3`}
           >
             <div className="flex items-center">
-              <div><LogIn size={18} /></div>
+              <div><LogIn size={18} className="text-blue-400" /></div>
               <span className={`ml-3 font-kanit text-sm ${collapsed ? 'hidden' : 'block'}`}>Sign In</span>
             </div>
           </Link>
@@ -117,7 +117,7 @@ const Sidebar = () => {
               className={`flex w-full items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md text-gray-300`}
             >
               <div className="flex items-center">
-                <div><LogOut size={18} /></div>
+                <div><LogOut size={18} className="text-red-400" /></div>
                 <span className={`ml-3 font-kanit text-sm ${collapsed ? 'hidden' : 'block'}`}>Logout</span>
               </div>
             </button>
@@ -127,14 +127,14 @@ const Sidebar = () => {
 
       <div className="flex flex-col space-y-1 mt-3 px-2">
         <NavItem 
-          icon={<Home size={18} />} 
+          icon={<Home size={18} className="text-green-400" />} 
           label="Home" 
           path="/" 
           isActive={location.pathname === "/"} 
           collapsed={collapsed}
         />
         <NavItem 
-          icon={<ShoppingBag size={18} />} 
+          icon={<ShoppingBag size={18} className="text-purple-400" />} 
           label="Brands" 
           path="/brands" 
           isActive={location.pathname === "/brands"} 

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useId, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -13,9 +12,45 @@ import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
 import StyleQuiz from "@/components/StyleQuiz";
 import { ParticleButton } from "@/components/ui/particle-button";
 import { GlobeDemo } from "@/components/ui/GlobeDemo";
+import { Heart } from "lucide-react";
+import { toast } from "sonner";
 
 // Sort brands alphabetically
 const brandsWithRandomFollowers = [...brands].sort((a, b) => a.name.localeCompare(b.name));
+
+// Generate brand descriptions
+const getBrandDescription = (brandName: string) => {
+  const descriptions = [
+    `${brandName} is a cutting-edge fashion brand known for its innovative designs and sustainable practices.`,
+    `With a focus on quality materials, ${brandName} creates timeless pieces for the modern individual.`,
+    `${brandName} blends contemporary aesthetics with traditional craftsmanship for a unique fashion experience.`,
+    `Founded with a passion for self-expression, ${brandName} pushes the boundaries of conventional fashion.`,
+    `${brandName} celebrates diversity and inclusivity through its bold and vibrant collections.`
+  ];
+  
+  // Use the first character of the brand name to consistently select a description
+  const index = brandName.charCodeAt(0) % descriptions.length;
+  return descriptions[index];
+};
+
+// Sample brand descriptions
+const brandBlurbs: Record<string, string> = {
+  "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
+  "isseymiyake": "Issey Miyake blends technology with tradition, creating innovative pleating techniques and architectural silhouettes that redefine modern fashion.",
+  "acnestudios": "Acne Studios combines Scandinavian minimalism with distinctive design elements, offering contemporary pieces with artistic sensibilities.",
+  "maisonmargiela": "Maison Margiela's avant-garde approach deconstructs and reimagines fashion conventions, creating conceptual designs with intellectual depth.",
+  "commedesgarcons": "Comme des Garçons challenges fashion norms with bold, architectural designs that blend art and fashion in unexpected ways.",
+  "rafsimons": "Raf Simons merges youth culture references with precise tailoring, creating collections that are both culturally relevant and impeccably crafted.",
+  "balenciaga": "Balenciaga delivers architectural silhouettes and street-inspired designs that define contemporary fashion through bold innovation.",
+  "vetements": "Vetements subverts fashion expectations with oversized proportions and street influences, creating statement pieces with cultural commentary.",
+  "rickowens": "Rick Owens crafts dark, architectural designs with a distinctive gothic aesthetic that balances brutalist forms with fluid draping.",
+};
+
+// Get a detailed blurb for a brand, fallback to generated description
+const getBlurb = (brandName: string) => {
+  const normalizedName = brandName.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return brandBlurbs[normalizedName] || getBrandDescription(brandName);
+};
 
 interface SlideData {
   title: string;
@@ -241,11 +276,16 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [showStyleQuiz, setShowStyleQuiz] = useState(false);
+  const [likedBrands, setLikedBrands] = useState<string[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Always show the quiz when loading the page
     setShowStyleQuiz(true);
+    
+    // Load liked brands from localStorage
+    const saved = JSON.parse(localStorage.getItem('likedBrands') || '[]');
+    setLikedBrands(saved);
   }, []);
 
   const handleSelect = (brandName: string) => {
@@ -267,6 +307,86 @@ const Index = () => {
 
   const handleOpenStyleQuiz = () => {
     setShowStyleQuiz(true);
+  };
+
+  // Handle toggling liked status for brands
+  const toggleLikeBrand = (e: React.MouseEvent, brandName: string) => {
+    e.stopPropagation();
+    
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error("Please sign in to save brands");
+      setTimeout(() => {
+        navigate('/signin');
+      }, 1500);
+      return;
+    }
+    
+    const isLiked = likedBrands.includes(brandName);
+    let updatedLikedBrands;
+    
+    if (isLiked) {
+      // Remove from liked
+      updatedLikedBrands = likedBrands.filter(name => name !== brandName);
+      toast.success(`Removed ${brandName} from liked brands`);
+    } else {
+      // Add to liked
+      updatedLikedBrands = [...likedBrands, brandName];
+      toast.success(`Added ${brandName} to liked brands`);
+    }
+    
+    setLikedBrands(updatedLikedBrands);
+    localStorage.setItem('likedBrands', JSON.stringify(updatedLikedBrands));
+  };
+
+  // Close brand popup
+  const closeInstagramView = () => {
+    setSelectedBrand(null);
+  };
+
+  // Brand popup UI - shared between Index and LikedPage
+  const renderBrandPopup = (brandName: string) => {
+    return (
+      <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center ml-14 md:ml-48">
+        <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">{brandName}</h2>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={(e) => toggleLikeBrand(e, brandName)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <Heart 
+                  className={`h-5 w-5 ${likedBrands.includes(brandName) ? 'fill-red-500 text-red-500' : ''}`} 
+                />
+              </button>
+              <button 
+                onClick={closeInstagramView}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+          
+          {/* Brand description */}
+          <p className="mb-4 text-gray-600 italic border-l-4 border-gray-300 pl-3 py-2 bg-gray-50">
+            {getBlurb(brandName)}
+          </p>
+          
+          <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
+            <iframe 
+              src={`https://www.instagram.com/${brandName}/embed`}
+              className="w-full h-full border-none" 
+              title={`${brandName} Instagram Feed`}
+              allowTransparency={true}
+              scrolling="no"
+            />
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const fashionSlides = [
@@ -304,21 +424,6 @@ const Index = () => {
     'from-gray-400 to-black',
     'from-gray-500 to-gray-700',
   ];
-
-  // Generate brand descriptions
-  const getBrandDescription = (brandName: string) => {
-    const descriptions = [
-      `${brandName} is a cutting-edge fashion brand known for its innovative designs and sustainable practices.`,
-      `With a focus on quality materials, ${brandName} creates timeless pieces for the modern individual.`,
-      `${brandName} blends contemporary aesthetics with traditional craftsmanship for a unique fashion experience.`,
-      `Founded with a passion for self-expression, ${brandName} pushes the boundaries of conventional fashion.`,
-      `${brandName} celebrates diversity and inclusivity through its bold and vibrant collections.`
-    ];
-    
-    // Use the first character of the brand name to consistently select a description
-    const index = brandName.charCodeAt(0) % descriptions.length;
-    return descriptions[index];
-  };
 
   return (
     <div className="min-h-screen flex flex-col font-kanit bg-white">
@@ -384,21 +489,7 @@ const Index = () => {
             </div>
             
             {selectedBrand ? (
-              <div className="px-8 pb-8 mt-6 animate-fade-in">
-                <h2 className="text-2xl font-bold mb-4 gradient-text gradient-primary">{selectedBrand}</h2>
-                <p className="mb-4 text-gray-600">
-                  {getBrandDescription(selectedBrand)}
-                </p>
-                <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square max-w-3xl mx-auto hover:shadow-xl transition-shadow">
-                  <iframe 
-                    src={`https://www.instagram.com/${selectedBrand}/embed`}
-                    className="w-full h-full border-none" 
-                    title={`${selectedBrand} Instagram Feed`}
-                    allowTransparency={true}
-                    scrolling="no"
-                  />
-                </div>
-              </div>
+              renderBrandPopup(selectedBrand)
             ) : (
               <>
                 <div className="px-8 pb-8 mt-8">
@@ -418,7 +509,9 @@ const Index = () => {
         </div>
       </div>
       
-      <Footerdemo />
+      <div className="relative z-10">
+        <Footerdemo />
+      </div>
       
       <ExpandableChatDemo />
 

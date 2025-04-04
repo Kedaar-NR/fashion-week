@@ -1,110 +1,90 @@
 
-import { useState } from "react";
-import { X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
+import { toast } from "sonner";
 
 interface BrandProps {
   name: string;
   followers: string;
-  genre?: string;
+  genre: string;
 }
 
 const Brand = ({ name, followers, genre }: BrandProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const instagramUsername = name.replace('@', '');
+  const navigate = useNavigate();
+  const [isLiked, setIsLiked] = useState(false);
+  
+  // Check if brand is in liked brands from localStorage
+  useEffect(() => {
+    const likedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
+    setIsLiked(likedBrands.includes(name));
+  }, [name]);
 
   const handleClick = () => {
-    setIsOpen(true);
+    navigate(`/brands?brand=${name}`);
   };
 
-  // Define genre colors
-  const getGenreColor = () => {
-    switch (genre?.toLowerCase()) {
-      case 'streetwear':
-      case 'street':
-        return 'bg-blue-500';
-      case 'punk':
-      case 'goth':
-      case 'grunge':
-      case 'punk/goth/grunge':
-        return 'bg-purple-600';
-      case 'vintage':
-      case 'cowboy':
-      case 'vintage/cowboy':
-        return 'bg-amber-600';
-      case 'basic':
-      case 'essentials':
-      case 'basic/essentials':
-        return 'bg-gray-500';
-      case 'outlier':
-        return 'bg-green-500';
-      default:
-        return 'bg-gray-400';
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the parent's onClick
+    
+    const likedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
+    
+    if (isLiked) {
+      // Remove from liked
+      const updatedLikedBrands = likedBrands.filter((brand: string) => brand !== name);
+      localStorage.setItem('likedBrands', JSON.stringify(updatedLikedBrands));
+      setIsLiked(false);
+      toast.success(`Removed ${name} from liked brands`);
+    } else {
+      // Add to liked
+      likedBrands.push(name);
+      localStorage.setItem('likedBrands', JSON.stringify(likedBrands));
+      setIsLiked(true);
+      toast.success(`Added ${name} to liked brands`);
     }
   };
 
-  return (
-    <>
-      <div 
-        className="aspect-square bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border border-gray-100"
-        onClick={handleClick}
-      >
-        <div className="flex flex-col h-full">
-          <div className="px-3 py-2 flex items-center justify-between">
-            <div className="text-sm font-medium truncate">{name}</div>
-            {genre && (
-              <div className={`text-xs px-2 py-0.5 rounded-full text-white ${getGenreColor()}`}>
-                {genre}
-              </div>
-            )}
-          </div>
-          <div className="flex-1 bg-gray-50 flex items-center justify-center overflow-hidden">
-            {/* Preview iframe */}
-            <div className="w-full h-full opacity-70 hover:opacity-90 transition-opacity">
-              <div className="w-full h-full flex items-center justify-center text-center bg-gray-200">
-                <span className="text-xs text-gray-500 px-2">{name}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  // Get first letter for avatar
+  const firstLetter = name.charAt(0).toUpperCase();
+  
+  // Get random light background color based on name
+  const getBackgroundColor = () => {
+    const colors = [
+      'bg-gradient-to-br from-purple-500 to-blue-500',
+      'bg-gradient-to-br from-pink-500 to-orange-400',
+      'bg-gradient-to-br from-green-400 to-blue-500',
+      'bg-gradient-to-br from-yellow-400 to-orange-500',
+      'bg-gradient-to-br from-pink-400 to-red-500',
+      'bg-gradient-to-br from-indigo-500 to-purple-500',
+      'bg-gradient-to-br from-blue-400 to-emerald-400',
+      'bg-gradient-to-br from-amber-400 to-orange-600',
+    ];
+    
+    // Use the brand name to generate a consistent color
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
 
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
-          <div className="bg-white w-full max-w-md h-full overflow-y-auto animate-slide-in-right">
-            <div className="flex justify-between items-center p-4 border-b">
-              <div>
-                <h2 className="font-bold">{name}</h2>
-                <p className="text-sm text-gray-500">{followers} followers</p>
-                {genre && (
-                  <div className={`inline-block text-xs px-2 py-0.5 rounded-full text-white mt-1 ${getGenreColor()}`}>
-                    {genre}
-                  </div>
-                )}
-              </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <div className="p-4">
-              <p className="text-gray-600 mb-4">
-                Latest posts from {name}
-              </p>
-              <div className="w-full aspect-square rounded-lg overflow-hidden">
-                <iframe 
-                  src={`https://www.instagram.com/${instagramUsername}/embed`}
-                  className="w-full h-full border-none" 
-                  title={`${name} Instagram Feed`}
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+  return (
+    <div 
+      onClick={handleClick}
+      className="relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer p-4 flex flex-col items-center"
+    >
+      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold mb-2 ${getBackgroundColor()}`}>
+        {firstLetter}
+      </div>
+      <h3 className="font-semibold text-gray-800">{name}</h3>
+      <p className="text-xs text-gray-500 mt-1">{genre}</p>
+      <p className="text-xs text-gray-400 mt-2">{followers}</p>
+      
+      <button 
+        onClick={handleLike} 
+        className="absolute top-2 right-2 p-1.5 hover:bg-gray-100 rounded-full"
+        aria-label={isLiked ? "Unlike" : "Like"}
+      >
+        <Heart className={`h-4 w-4 ${isLiked ? "fill-red-500 text-red-500" : "text-gray-400"}`} />
+      </button>
+    </div>
   );
 };
 

@@ -16,14 +16,28 @@ const Sidebar = () => {
     <div 
       className={`${collapsed ? 'w-14' : 'w-48'} h-full bg-black fixed left-0 top-0 bottom-0 flex flex-col transition-all duration-300 z-10 shadow-md`}
     >
-      <div className="flex items-center justify-between p-3 border-b border-gray-800">
-        <h1 className={`text-lg font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'} bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-300 bg-clip-text text-transparent animate-pulse`}>FASHION:WEEK</h1>
-        <button 
-          onClick={toggleCollapse}
-          className="text-white hover:bg-gray-800 rounded-full p-1"
+      <div className="flex flex-col border-b border-gray-800">
+        <div className="flex items-center justify-between p-3">
+          <h1 className={`text-lg font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'} bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-300 bg-clip-text text-transparent animate-pulse`}>FASHION:WEEK</h1>
+          <button 
+            onClick={toggleCollapse}
+            className="text-white hover:bg-gray-800 rounded-full p-1"
+          >
+            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          </button>
+        </div>
+        
+        <Link 
+          to="/signin" 
+          className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
+            location.pathname === "/signin" ? 'bg-gray-800 text-white font-semibold' : 'text-gray-300'
+          } mx-2 mb-3`}
         >
-          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-        </button>
+          <div className="flex items-center">
+            <div><LogIn size={18} /></div>
+            <span className={`ml-3 text-sm ${collapsed ? 'hidden' : 'block'}`}>Sign In</span>
+          </div>
+        </Link>
       </div>
 
       <div className="flex flex-col space-y-1 mt-3 px-2">
@@ -46,16 +60,6 @@ const Sidebar = () => {
           label="Liked" 
           path="/liked" 
           isActive={location.pathname === "/liked"} 
-          collapsed={collapsed}
-        />
-      </div>
-
-      <div className="mt-auto mb-4 px-2">
-        <NavItem 
-          icon={<LogIn size={18} />} 
-          label="Sign In" 
-          path="/signin" 
-          isActive={location.pathname === "/signin"} 
           collapsed={collapsed}
         />
       </div>

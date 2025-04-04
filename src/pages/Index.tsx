@@ -5,7 +5,7 @@ import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { ThreeDPhotoCarousel } from "@/components/ThreeDPhotoCarousel";
+import { Carousel3D } from "@/components/ui/carousel-3d";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,6 +20,30 @@ const Index = () => {
     brand.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Fashion carousel slides - fashion and clothes focused
+  const fashionSlides = [
+    {
+      title: "Modern Fashion",
+      button: "Explore Collection",
+      src: "https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    },
+    {
+      title: "Urban Streetwear",
+      button: "View Style",
+      src: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    },
+    {
+      title: "Designer Pieces",
+      button: "Browse Designs",
+      src: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    },
+    {
+      title: "Casual Elegance",
+      button: "Shop Now",
+      src: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    },
+  ];
+  
   // Array of streetwear images focusing on youth fashion - unique images
   const streetwearImages = [
     {
@@ -129,11 +153,14 @@ const Index = () => {
           <div className="px-8 pb-8 mt-4">
             <div className="max-w-6xl mx-auto">
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 gradient-text gradient-primary">Trending Streetwear</h2>
-                <ThreeDPhotoCarousel />
+                <h2 className="text-2xl font-semibold mb-4 gradient-text gradient-primary">Featured Fashion</h2>
+                <div className="relative overflow-hidden w-full py-10">
+                  <Carousel3D slides={fashionSlides} />
+                </div>
               </div>
               
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-6 animate-fade-in">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-16 animate-fade-in">
+                <h2 className="text-2xl font-semibold mb-4 gradient-text gradient-primary col-span-full">Trending Styles</h2>
                 {streetwearImages.map((image, index) => (
                   <div 
                     key={`grid-${index}`}

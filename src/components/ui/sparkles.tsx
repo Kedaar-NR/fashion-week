@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useId } from "react";
 import { useEffect, useState } from "react";
@@ -19,6 +18,7 @@ type ParticlesProps = {
   particleColor?: string;
   particleDensity?: number;
 };
+
 export const SparklesCore = (props: ParticlesProps) => {
   const {
     id,

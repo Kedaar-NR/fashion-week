@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import LikedPage from "./pages/LikedPage";
 import BrandsPage from "./pages/BrandsPage";
 import SignIn from "./pages/SignIn";
+import { SplashCursor } from "./components/ui/splash-cursor";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <TooltipProvider>
+        <SplashCursor />
         <Toaster />
         <Sonner />
         <Routes>

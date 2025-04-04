@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
@@ -9,17 +8,22 @@ interface BrandProps {
   followers: string;
   genre: string;
   onClick?: () => void;
+  isSaved?: boolean;
 }
 
-const Brand = ({ name, followers, genre, onClick }: BrandProps) => {
+const Brand = ({ name, followers, genre, onClick, isSaved: externalIsLiked }: BrandProps) => {
   const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   
   // Check if brand is in liked brands from localStorage
   useEffect(() => {
-    const likedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
-    setIsLiked(likedBrands.includes(name));
-  }, [name]);
+    if (externalIsLiked !== undefined) {
+      setIsLiked(externalIsLiked);
+    } else {
+      const likedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
+      setIsLiked(likedBrands.includes(name));
+    }
+  }, [name, externalIsLiked]);
 
   const handleClick = () => {
     if (onClick) {

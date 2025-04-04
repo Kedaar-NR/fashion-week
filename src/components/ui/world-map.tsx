@@ -5,15 +5,44 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 
 interface MapProps {
+  dots?: Array<{
+    start: { lat: number; lng: number };
+    end: { lat: number; lng: number };
+  }>;
   lineColor?: string;
 }
 
-export function WorldMap({ lineColor = "#0ea5e9" }: MapProps) {
+export function WorldMap({ 
+  dots = [
+    {
+      start: { lat: 64.2008, lng: -149.4937 }, // Alaska (Fairbanks)
+      end: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
+    },
+    {
+      start: { lat: 64.2008, lng: -149.4937 }, // Alaska (Fairbanks)
+      end: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+    },
+    {
+      start: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
+      end: { lat: 38.7223, lng: -9.1393 }, // Lisbon
+    },
+    {
+      start: { lat: 51.5074, lng: -0.1278 }, // London
+      end: { lat: 28.6139, lng: 77.209 }, // New Delhi
+    },
+    {
+      start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+      end: { lat: 43.1332, lng: 131.9113 }, // Vladivostok
+    },
+    {
+      start: { lat: 28.6139, lng: 77.209 }, // New Delhi
+      end: { lat: -1.2921, lng: 36.8219 }, // Nairobi
+    },
+  ],
+  lineColor = "#0ea5e9" 
+}: MapProps) {
   return (
-    <div className="w-full max-w-6xl mx-auto my-8 px-4 text-center">
-      <h2 className="text-2xl font-bold mb-2">Join the Global Community</h2>
-      <p className="text-lg mb-6">150,000+ people across the world are using FashionWeek</p>
-      
+    <div className="w-full max-w-6xl mx-auto my-8 px-4 text-center">      
       <div className="relative w-full aspect-[2/1] bg-white rounded-lg overflow-hidden">
         <svg viewBox="0 0 1000 500" className="w-full">
           {/* Simplified world map SVG */}
@@ -28,7 +57,7 @@ export function WorldMap({ lineColor = "#0ea5e9" }: MapProps) {
             cx="300" 
             cy="150" 
             r="3" 
-            fill="#0ea5e9" 
+            fill={lineColor} 
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "loop", delay: 0.5 }}
@@ -37,7 +66,7 @@ export function WorldMap({ lineColor = "#0ea5e9" }: MapProps) {
             cx="400" 
             cy="200" 
             r="3" 
-            fill="#0ea5e9" 
+            fill={lineColor} 
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "loop", delay: 0.8 }}
@@ -46,7 +75,7 @@ export function WorldMap({ lineColor = "#0ea5e9" }: MapProps) {
             cx="600" 
             cy="180" 
             r="3" 
-            fill="#0ea5e9" 
+            fill={lineColor} 
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "loop", delay: 1.2 }}
@@ -55,7 +84,7 @@ export function WorldMap({ lineColor = "#0ea5e9" }: MapProps) {
             cx="750" 
             cy="150" 
             r="3" 
-            fill="#0ea5e9" 
+            fill={lineColor} 
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "loop", delay: 1.5 }}
@@ -64,7 +93,7 @@ export function WorldMap({ lineColor = "#0ea5e9" }: MapProps) {
             cx="200" 
             cy="220" 
             r="3" 
-            fill="#0ea5e9" 
+            fill={lineColor} 
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 2, repeat: Infinity, repeatType: "loop", delay: 0.2 }}

@@ -1,5 +1,4 @@
-
-import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn, LogOut, Private } from "lucide-react";
+import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn, LogOut, FileText } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -12,7 +11,6 @@ const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState<{ email?: string, name?: string, photoURL?: string } | null>(null);
   
-  // Check for user on initial load and whenever localStorage changes
   useEffect(() => {
     const checkUserAuth = () => {
       const storedUser = localStorage.getItem('user');
@@ -28,10 +26,8 @@ const Sidebar = () => {
       }
     };
     
-    // Check on component mount
     checkUserAuth();
     
-    // Listen for storage changes (in case user logs in/out in another tab)
     window.addEventListener('storage', checkUserAuth);
     
     return () => {
@@ -45,7 +41,7 @@ const Sidebar = () => {
   
   const handleLogout = () => {
     localStorage.removeItem('user');
-    localStorage.removeItem('likedBrands'); // Clear liked brands on logout
+    localStorage.removeItem('likedBrands');
     setUser(null);
     toast.success("Successfully logged out");
   };
@@ -148,7 +144,7 @@ const Sidebar = () => {
           collapsed={collapsed}
         />
         <NavItem 
-          icon={<Private size={18} className="text-blue-400" />} 
+          icon={<FileText size={18} className="text-blue-400" />} 
           label="Terms" 
           path="/terms" 
           isActive={location.pathname === "/terms"} 

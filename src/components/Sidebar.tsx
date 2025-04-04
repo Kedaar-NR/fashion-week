@@ -13,35 +13,35 @@ const Sidebar = () => {
   
   return (
     <div 
-      className={`${collapsed ? 'w-16' : 'w-56'} h-full bg-purple-300/80 fixed left-0 top-0 bottom-0 flex flex-col transition-all duration-300 z-10 border-r border-purple-200 shadow-sm`}
+      className={`${collapsed ? 'w-14' : 'w-48'} h-full bg-black fixed left-0 top-0 bottom-0 flex flex-col transition-all duration-300 z-10 shadow-md`}
     >
-      <div className="flex items-center justify-between p-4 border-b border-purple-200">
-        <h1 className={`text-xl font-extrabold tracking-tighter text-purple-900 ${collapsed ? 'hidden' : 'block'}`}>FASHION:WEEK</h1>
+      <div className="flex items-center justify-between p-3 border-b border-gray-800">
+        <h1 className={`text-lg font-extrabold tracking-tighter text-white ${collapsed ? 'hidden' : 'block'}`}>FASHION:WEEK</h1>
         <button 
           onClick={toggleCollapse}
-          className="text-purple-700 hover:bg-purple-400/30 rounded-full p-2"
+          className="text-white hover:bg-gray-800 rounded-full p-1"
         >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
 
-      <div className="flex flex-col space-y-1 mt-4 px-2">
+      <div className="flex flex-col space-y-1 mt-3 px-2">
         <NavItem 
-          icon={<Home size={20} />} 
+          icon={<Home size={18} />} 
           label="HOME" 
           path="/" 
           isActive={location.pathname === "/"} 
           collapsed={collapsed}
         />
         <NavItem 
-          icon={<Heart size={20} />} 
+          icon={<Heart size={18} />} 
           label="LIKED" 
           path="/liked" 
           isActive={location.pathname === "/liked"} 
           collapsed={collapsed}
         />
         <NavItem 
-          icon={<ShoppingBag size={20} />} 
+          icon={<ShoppingBag size={18} />} 
           label="BRANDS" 
           path="/brands" 
           isActive={location.pathname === "/brands"} 
@@ -49,9 +49,9 @@ const Sidebar = () => {
         />
       </div>
 
-      <div className="mt-auto mb-4 px-2">
+      <div className="mt-2 px-2">
         <NavItem 
-          icon={<LogIn size={20} />} 
+          icon={<LogIn size={18} />} 
           label="SIGN IN" 
           path="/signin" 
           isActive={location.pathname === "/signin"} 
@@ -78,13 +78,13 @@ const NavItem = ({
   return (
     <Link 
       to={path} 
-      className={`flex items-center hover:bg-purple-400/30 transition-colors py-3 px-3 rounded-md ${
-        isActive ? 'bg-purple-400/20 text-purple-900 font-semibold' : 'text-purple-800'
+      className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
+        isActive ? 'bg-gray-800 text-white font-semibold' : 'text-gray-300'
       }`}
     >
       <div className="flex items-center">
         <div>{icon}</div>
-        {!collapsed && <span className="ml-3 text-sm">{label}</span>}
+        {!collapsed && <span className="ml-3 text-xs">{label}</span>}
       </div>
     </Link>
   );

@@ -17,7 +17,6 @@ const Index = () => {
   const handleSelect = (brandName: string) => {
     setOpen(false);
     setSelectedBrand(brandName.replace('@', ''));
-    // Note: Not navigating away, instead showing embedded Instagram
   };
 
   const filteredBrands = brands.filter(brand => 
@@ -30,7 +29,7 @@ const Index = () => {
       <Sidebar />
       
       {/* Main content */}
-      <div className="flex-1 flex flex-col ml-16 md:ml-56 transition-all duration-300">
+      <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
         {/* Search bar */}
         <div className="px-8 py-6">
           <div className="relative w-full max-w-3xl mx-auto">
@@ -65,53 +64,63 @@ const Index = () => {
         {selectedBrand ? (
           <div className="px-8 pb-8">
             <h2 className="text-2xl font-bold mb-4">{selectedBrand}</h2>
-            <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square">
+            <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square max-w-3xl mx-auto">
               <iframe 
                 src={`https://www.instagram.com/${selectedBrand}/embed`}
                 className="w-full h-full border-none" 
                 title={`${selectedBrand} Instagram Feed`}
-                allowTransparency
+                allowTransparency={true}
                 scrolling="no"
               />
             </div>
           </div>
         ) : (
-          <div className="px-8 grid grid-cols-12 gap-4 max-w-6xl mx-auto">
-            <div className="bg-purple-100 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow md:col-span-7 aspect-square">
-              <img 
-                src="/lovable-uploads/5dd82e63-58d4-418f-8e34-04396f0fcb62.png" 
-                alt="Work on yourself" 
-                className="w-full h-full object-cover"
-              />
+          <div className="px-8 pb-8">
+            <div className="grid grid-cols-12 gap-3 max-w-6xl mx-auto">
+              {/* Fashion collage with different sized elements */}
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-12 md:col-span-6 aspect-[3/2]">
+                <img 
+                  src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Fashion runway" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-12 md:col-span-6 aspect-square">
+                <img 
+                  src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Fashion model" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-6 md:col-span-4 aspect-square">
+                <img 
+                  src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Street style fashion" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-6 md:col-span-4 aspect-square">
+                <img 
+                  src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Fashion shopping" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-12 md:col-span-4 aspect-[3/4]">
+                <img 
+                  src="https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Fashion details" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-            <div className="bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow md:col-span-5 md:row-span-2 aspect-auto">
-              <img 
-                src="/lovable-uploads/6013111d-a744-42c2-b128-011569deddfb.png" 
-                alt="Person with laptop" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="bg-purple-200 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow md:col-span-4 aspect-square">
-              <img 
-                src="/lovable-uploads/c2bd1148-642a-4a7d-9260-13f2a29dda20.png" 
-                alt="Person with text" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="bg-pink-100 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow md:col-span-3 aspect-square">
-              <img 
-                src="/lovable-uploads/33313685-1825-452f-9e0b-e8e4f7c0693e.png" 
-                alt="Gospel" 
-                className="w-full h-full object-cover"
-              />
+            
+            <div className="text-center my-12">
+              <h1 className="text-3xl font-bold">FASHION:WEEK</h1>
+              <p className="text-gray-600 mt-2">Your gateway to curated fashion brands.</p>
             </div>
           </div>
         )}
-        
-        <div className="text-center my-12">
-          <h1 className="text-3xl font-bold">FASHION:WEEK</h1>
-          <p className="text-gray-600 mt-2">Your gateway to curated fashion brands.</p>
-        </div>
       </div>
     </div>
   );

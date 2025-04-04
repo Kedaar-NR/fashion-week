@@ -57,8 +57,14 @@ const Brand = ({ name, followers, genre }: BrandProps) => {
               </div>
             )}
           </div>
-          <div className="flex-1 bg-gray-50 flex items-center justify-center">
-            <div className="text-gray-400 text-sm">Instagram Preview</div>
+          <div className="flex-1 bg-gray-50 flex items-center justify-center overflow-hidden">
+            <iframe 
+              src={`https://www.instagram.com/${instagramUsername}/embed`}
+              className="w-full h-full border-none" 
+              title={`${name} Instagram Preview`}
+              loading="lazy"
+              style={{ opacity: 0.7 }}
+            />
           </div>
         </div>
       </div>
@@ -92,7 +98,7 @@ const Brand = ({ name, followers, genre }: BrandProps) => {
                   src={`https://www.instagram.com/${instagramUsername}/embed`}
                   className="w-full h-full border-none" 
                   title={`${name} Instagram Feed`}
-                  allowTransparency
+                  allowTransparency={true}
                   scrolling="no"
                 />
               </div>

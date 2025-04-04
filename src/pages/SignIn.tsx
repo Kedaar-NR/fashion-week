@@ -6,9 +6,9 @@ import { toast } from "sonner";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { initStack } from "@stackframe/init-stack";
+import * as Stack from "@stackframe/init-stack";
 
-const auth = initStack({
+const auth = Stack.init({
   providers: ["credentials", "github", "google"],
 });
 

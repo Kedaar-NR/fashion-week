@@ -5,7 +5,8 @@ import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { Carousel3D } from "@/components/ui/carousel-3d";
+import { Carousel } from "@/components/ui/carousel";
+import { LampTitle } from "@/components/ui/LampTitle";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,34 +45,6 @@ const Index = () => {
     },
   ];
   
-  // Array of streetwear images focusing on youth fashion - unique images
-  const streetwearImages = [
-    {
-      src: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      alt: "Young man in streetwear outfit with hoodie"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1583744946564-b52d01e2e08a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      alt: "Urban skater in streetwear"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      alt: "Streetwear with hat"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1495555687398-3f50d6e79e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      alt: "Young man with streetwear hat"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      alt: "Streetwear with backpack"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1574201635302-388dd92a4c3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      alt: "Neon streetwear"
-    }
-  ];
-  
   // Brand colors for avatar backgrounds
   const brandColors = [
     'from-purple-500 to-blue-500',
@@ -93,11 +66,8 @@ const Index = () => {
       
       {/* Main content */}
       <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
-        {/* Header at the top */}
-        <div className="text-center pt-8 pb-4 animate-fade-in">
-          <h1 className="text-4xl font-bold tracking-tight gradient-text gradient-secondary">FASHION:WEEK</h1>
-          <p className="text-gray-600 mt-2">Your gateway to curated fashion brands.</p>
-        </div>
+        {/* Header with Lamp effect */}
+        <LampTitle />
         
         {/* Search bar */}
         <div className="px-8 animate-scale-in">
@@ -151,29 +121,11 @@ const Index = () => {
           </div>
         ) : (
           <div className="px-8 pb-8 mt-4">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-3xl mx-auto">
               <div className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 gradient-text gradient-primary">Featured Fashion</h2>
-                <div className="relative overflow-hidden w-full py-10">
-                  <Carousel3D slides={fashionSlides} />
+                <div className="relative overflow-hidden w-full py-6">
+                  <Carousel slides={fashionSlides} />
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-16 animate-fade-in">
-                <h2 className="text-2xl font-semibold mb-4 gradient-text gradient-primary col-span-full">Trending Styles</h2>
-                {streetwearImages.map((image, index) => (
-                  <div 
-                    key={`grid-${index}`}
-                    className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
-                  >
-                    <img 
-                      src={image.src} 
-                      alt={image.alt} 
-                      className="w-full aspect-square object-cover"
-                      loading="eager"
-                    />
-                  </div>
-                ))}
               </div>
             </div>
           </div>

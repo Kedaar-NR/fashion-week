@@ -10,7 +10,7 @@ import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { Footerdemo } from "@/components/ui/footer-section";
 import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
 import StyleQuiz from "@/components/StyleQuiz";
-import { ParticleButton } from "@/components/ui/particle-button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 import { GlobeDemo } from "@/components/ui/GlobeDemo";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
@@ -444,12 +444,9 @@ const Index = () => {
             </div>
             
             <div className="flex justify-center mb-4">
-              <ParticleButton 
-                onClick={handleOpenStyleQuiz} 
-                className="bg-purple-500 hover:bg-purple-600"
-              >
+              <RainbowButton onClick={handleOpenStyleQuiz}>
                 Discover Your Style
-              </ParticleButton>
+              </RainbowButton>
             </div>
             
             <div className="px-8 mb-8 animate-scale-in">
@@ -477,7 +474,6 @@ const Index = () => {
                                 </div>
                               </Avatar>
                               <span>{brand.name}</span>
-                              <span className="ml-auto text-xs text-gray-400">{brand.followers}</span>
                             </CommandItem>
                           ))}
                         </ScrollArea>
@@ -500,7 +496,7 @@ const Index = () => {
                   </div>
                 </div>
                 
-                <div className="px-8 py-8">
+                <div className="px-8 pb-8">
                   <GlobeDemo />
                 </div>
               </>

@@ -44,6 +44,13 @@
     --blue-500: #3b82f6;
     --indigo-300: #a5b4fc;
     --violet-200: #ddd6fe;
+    
+    /* Gradient text and rainbow button variables */
+    --color-1: 340 82% 52%;
+    --color-2: 230 89% 65%;
+    --color-3: 48 96% 53%;
+    --color-4: 14 95% 57%;
+    --color-5: 280 87% 65%;
   }
 
   * {

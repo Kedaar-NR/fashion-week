@@ -8,7 +8,6 @@ import Brand from "@/components/Brand";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-// Sample brand descriptions
 const brandBlurbs: Record<string, string> = {
   "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
   "isseymiyake": "Issey Miyake blends technology with tradition, creating innovative pleating techniques and architectural silhouettes that redefine modern fashion.",
@@ -21,14 +20,12 @@ const brandBlurbs: Record<string, string> = {
   "rickowens": "Rick Owens crafts dark, architectural designs with a distinctive gothic aesthetic that balances brutalist forms with fluid draping.",
 };
 
-// Get a random blurb for brands without a specific one
 const getBlurb = (brandName: string) => {
   const normalizedName = brandName.toLowerCase().replace(/[^a-z0-9]/g, "");
   return brandBlurbs[normalizedName] || 
     "This cutting-edge brand combines innovative design with quality craftsmanship, offering distinctive pieces that reflect contemporary fashion sensibilities.";
 };
 
-// Categories for brands
 const categories = [
   "ALL",
   "STREETWEAR",
@@ -51,7 +48,6 @@ const BrandsPage = () => {
   const [savedBrands, setSavedBrands] = useState<string[]>([]);
   const location = useLocation();
 
-  // Load saved brands from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('savedBrands');
     if (saved) {
@@ -59,7 +55,6 @@ const BrandsPage = () => {
     }
   }, []);
 
-  // Get query params for preselecting a brand or filter by style
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const brandParam = searchParams.get("brand");
@@ -115,7 +110,6 @@ const BrandsPage = () => {
           <h1 className="text-3xl font-bold mb-6">Brands</h1>
           
           <div className="flex flex-wrap items-center gap-4 mb-8">
-            {/* Category dropdown */}
             <div className="w-64">
               <Select value={activeCategory} onValueChange={handleCategoryChange}>
                 <SelectTrigger className="w-full bg-white">
@@ -131,7 +125,6 @@ const BrandsPage = () => {
               </Select>
             </div>
             
-            {/* Search bar */}
             <div className="flex-grow max-w-md">
               <div className="relative">
                 <input
@@ -171,7 +164,6 @@ const BrandsPage = () => {
                   </div>
                 </div>
                 
-                {/* Brand description */}
                 <p className="mb-4 text-gray-600 italic border-l-4 border-gray-300 pl-3 py-2 bg-gray-50">
                   {getBlurb(selectedBrand)}
                 </p>

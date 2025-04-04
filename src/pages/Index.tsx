@@ -18,16 +18,9 @@ const Index = () => {
       <Sidebar />
       
       {/* Main content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="px-8 py-6 flex justify-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tighter">
-            FASHION:WEEK
-          </h1>
-        </header>
-        
+      <div className="flex-1 ml-[240px] flex flex-col">
         {/* Search bar */}
-        <div className="px-8 flex justify-center mb-4">
+        <div className="px-8 pt-6 pb-4">
           <div className="relative w-full max-w-3xl">
             <input
               type="text"

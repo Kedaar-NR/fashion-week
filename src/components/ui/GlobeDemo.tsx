@@ -1,16 +1,19 @@
 
-"use client";
-import { motion } from "framer-motion";
-import { Globe } from "lucide-react";
+"use client"
 
-export function WorldMapDemo() {
+import { Globe } from "@/components/ui/globe";
+
+export function GlobeDemo() {
   return (
-    <div className="py-10 w-full">
+    <div className="py-10 w-full relative">
       <div className="max-w-7xl mx-auto text-center">
         <div className="flex items-center justify-center gap-2 text-xl md:text-2xl font-bold mb-2">
-          <Globe className="h-6 w-6" />
           <h2>Join 150,000 people across the world checking out fashionweek</h2>
         </div>
+      </div>
+      
+      <div className="relative h-[300px] md:h-[400px]">
+        <Globe className="top-0" />
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
@@ -35,6 +36,17 @@ const Brand = ({ name, followers, genre, onClick, isSaved: externalIsLiked }: Br
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the parent's onClick
+    
+    // Check if user is logged in
+    const user = localStorage.getItem('user');
+    if (!user) {
+      toast.error("Please sign in to save brands");
+      // Redirect to sign in page
+      setTimeout(() => {
+        navigate('/signin');
+      }, 1500);
+      return;
+    }
     
     const likedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
     

@@ -1,3 +1,4 @@
+
 export interface Brand {
   name: string;
   followers: string;
@@ -15,8 +16,7 @@ const genreColors: Record<string, { bg: string, text: string }> = {
   "VINTAGE": { bg: "bg-orange-100", text: "text-orange-700" },
   "BASIC": { bg: "bg-slate-100", text: "text-slate-700" },
   "GRUNGE": { bg: "bg-purple-100", text: "text-purple-700" },
-  "COWBOY": { bg: "bg-amber-100", text: "text-amber-700" },
-  "SELECTION BASED": { bg: "bg-indigo-100", text: "text-indigo-700" }
+  "COWBOY": { bg: "bg-amber-100", text: "text-amber-700" }
 };
 
 export { genreColors };
@@ -113,7 +113,7 @@ export const brands: Brand[] = [
   { name: "insain.worldwide", followers: "10k-50k", genre: "PUNK" },
   { name: "septemberseventhstudios", followers: "1k-10k", genre: "STREETWEAR" },
   { name: "ihp.ihp.ihp", followers: "10k-50k", genre: "STREETWEAR" },
-  { name: "pdf.channel", followers: "100k+", genre: "DIGITAL" },
+  { name: "pdf.channel", followers: "100k+", genre: "STREETWEAR" },
   { name: "bykodyphillips", followers: "100k+", genre: "STREETWEAR" },
   { name: "srrysora", followers: "10k-50k", genre: "Y2K" },
   { name: "angel333online", followers: "10k-50k", genre: "STREETWEAR" },

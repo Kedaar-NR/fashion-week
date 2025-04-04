@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useId, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -7,16 +8,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
-import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Footerdemo } from "@/components/ui/footer-section";
 import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
 import StyleQuiz from "@/components/StyleQuiz";
-import { WorldMap } from "@/components/ui/world-map";
+import { ParticleButton } from "@/components/ui/particle-button";
+import { GlobeDemo } from "@/components/ui/GlobeDemo";
 
-// Generate random follower counts for brands between 1 and 10k
-const brandsWithRandomFollowers = brands.map(brand => ({
-  ...brand,
-}));
+// Sort brands alphabetically
+const brandsWithRandomFollowers = [...brands].sort((a, b) => a.name.localeCompare(b.name));
 
 interface SlideData {
   title: string;
@@ -241,14 +240,12 @@ const CustomCarousel = ({ slides, onButtonClick }: CarouselProps) => {
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [showStyleQuiz, setShowStyleQuiz] = useState(true);
+  const [showStyleQuiz, setShowStyleQuiz] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const hasSeenQuiz = localStorage.getItem('hasSeenStyleQuiz');
-    if (hasSeenQuiz) {
-      setShowStyleQuiz(false);
-    }
+    // Always show the quiz when loading the page
+    setShowStyleQuiz(true);
   }, []);
 
   const handleSelect = (brandName: string) => {
@@ -266,6 +263,10 @@ const Index = () => {
   const handleCloseStyleQuiz = () => {
     setShowStyleQuiz(false);
     localStorage.setItem('hasSeenStyleQuiz', 'true');
+  };
+
+  const handleOpenStyleQuiz = () => {
+    setShowStyleQuiz(true);
   };
 
   const fashionSlides = [
@@ -304,94 +305,117 @@ const Index = () => {
     'from-gray-500 to-gray-700',
   ];
 
+  // Generate brand descriptions
+  const getBrandDescription = (brandName: string) => {
+    const descriptions = [
+      `${brandName} is a cutting-edge fashion brand known for its innovative designs and sustainable practices.`,
+      `With a focus on quality materials, ${brandName} creates timeless pieces for the modern individual.`,
+      `${brandName} blends contemporary aesthetics with traditional craftsmanship for a unique fashion experience.`,
+      `Founded with a passion for self-expression, ${brandName} pushes the boundaries of conventional fashion.`,
+      `${brandName} celebrates diversity and inclusivity through its bold and vibrant collections.`
+    ];
+    
+    // Use the first character of the brand name to consistently select a description
+    const index = brandName.charCodeAt(0) % descriptions.length;
+    return descriptions[index];
+  };
+
   return (
-    <div className="min-h-screen flex flex-col font-kanit">
+    <div className="min-h-screen flex flex-col font-kanit bg-white">
       <div className="flex-grow">
-        <AuroraBackground className="min-h-screen overflow-auto p-0">
-          <div className="flex min-h-screen">
-            <Sidebar />
+        <div className="flex min-h-screen">
+          <Sidebar />
+          
+          <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
+            <div className="mt-6 mb-4 px-8">
+              <div className="relative">
+                <SparklesText 
+                  text="Your gateway to curated fashion brands"
+                  className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit"
+                  colors={{ first: "#c0c0c0", second: "#333333" }}
+                  sparklesCount={15}
+                />
+              </div>
+            </div>
             
-            <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
-              <div className="mt-6 mb-4 px-8">
-                <div className="relative">
-                  <SparklesText 
-                    text="Your gateway to curated fashion brands"
-                    className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit"
-                    colors={{ first: "#c0c0c0", second: "#333333" }}
-                    sparklesCount={15}
+            <div className="flex justify-center mb-4">
+              <ParticleButton 
+                onClick={handleOpenStyleQuiz} 
+                className="bg-purple-500 hover:bg-purple-600"
+              >
+                Discover Your Style
+              </ParticleButton>
+            </div>
+            
+            <div className="px-8 mb-8 animate-scale-in">
+              <div className="relative w-full max-w-3xl mx-auto">
+                <Command className="rounded-lg border shadow-md">
+                  <CommandInput
+                    placeholder="Search brands"
+                    value={searchQuery}
+                    onValueChange={setSearchQuery}
+                    className="h-12 font-kanit"
+                  />
+                  {searchQuery.length > 0 && filteredBrands.length > 0 && (
+                    <CommandList>
+                      <CommandGroup heading="Brands">
+                        <ScrollArea className="h-64">
+                          {filteredBrands.map((brand, index) => (
+                            <CommandItem
+                              key={brand.name}
+                              onSelect={() => handleSelect(brand.name)}
+                              className="cursor-pointer flex items-center space-x-2 hover:bg-gray-100 transition-colors"
+                            >
+                              <Avatar className={`h-8 w-8 bg-gradient-to-br ${brandColors[index % brandColors.length]}`}>
+                                <div className="font-bold text-white">
+                                  {brand.name.charAt(0).toUpperCase()}
+                                </div>
+                              </Avatar>
+                              <span>{brand.name}</span>
+                              <span className="ml-auto text-xs text-gray-400">{brand.followers}</span>
+                            </CommandItem>
+                          ))}
+                        </ScrollArea>
+                      </CommandGroup>
+                    </CommandList>
+                  )}
+                </Command>
+              </div>
+            </div>
+            
+            {selectedBrand ? (
+              <div className="px-8 pb-8 mt-6 animate-fade-in">
+                <h2 className="text-2xl font-bold mb-4 gradient-text gradient-primary">{selectedBrand}</h2>
+                <p className="mb-4 text-gray-600">
+                  {getBrandDescription(selectedBrand)}
+                </p>
+                <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square max-w-3xl mx-auto hover:shadow-xl transition-shadow">
+                  <iframe 
+                    src={`https://www.instagram.com/${selectedBrand}/embed`}
+                    className="w-full h-full border-none" 
+                    title={`${selectedBrand} Instagram Feed`}
+                    allowTransparency={true}
+                    scrolling="no"
                   />
                 </div>
               </div>
-              
-              <div className="px-8 mb-8 animate-scale-in">
-                <div className="relative w-full max-w-3xl mx-auto">
-                  <Command className="rounded-lg border shadow-md">
-                    <CommandInput
-                      placeholder="Search brands"
-                      value={searchQuery}
-                      onValueChange={setSearchQuery}
-                      className="h-12 font-kanit"
-                    />
-                    {searchQuery.length > 0 && filteredBrands.length > 0 && (
-                      <CommandList>
-                        <CommandGroup heading="Brands">
-                          <ScrollArea className="h-64">
-                            {filteredBrands.map((brand, index) => (
-                              <CommandItem
-                                key={brand.name}
-                                onSelect={() => handleSelect(brand.name)}
-                                className="cursor-pointer flex items-center space-x-2 hover:bg-gray-100 transition-colors"
-                              >
-                                <Avatar className={`h-8 w-8 bg-gradient-to-br ${brandColors[index % brandColors.length]}`}>
-                                  <div className="font-bold text-white">
-                                    {brand.name.charAt(0).toUpperCase()}
-                                  </div>
-                                </Avatar>
-                                <span>{brand.name}</span>
-                                <span className="ml-auto text-xs text-gray-400">{brand.followers}</span>
-                              </CommandItem>
-                            ))}
-                          </ScrollArea>
-                        </CommandGroup>
-                      </CommandList>
-                    )}
-                  </Command>
-                </div>
-              </div>
-              
-              <WorldMap />
-              
-              {selectedBrand ? (
-                <div className="px-8 pb-8 mt-6 animate-fade-in">
-                  <h2 className="text-2xl font-bold mb-4 gradient-text gradient-primary">{selectedBrand}</h2>
-                  <p className="mb-4 text-gray-600">
-                    {selectedBrand} is a cutting-edge fashion brand known for its innovative designs and sustainable practices.
-                    Their collections blend modern aesthetics with timeless elegance, creating pieces that stand out in any wardrobe.
-                  </p>
-                  <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square max-w-3xl mx-auto hover:shadow-xl transition-shadow">
-                    <iframe 
-                      src={`https://www.instagram.com/${selectedBrand}/embed`}
-                      className="w-full h-full border-none" 
-                      title={`${selectedBrand} Instagram Feed`}
-                      allowTransparency={true}
-                      scrolling="no"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div className="px-8 pb-8 mt-8">
-                    <div className="max-w-3xl mx-auto">
-                      <div className="relative overflow-hidden w-full pb-16">
-                        <CustomCarousel slides={fashionSlides} onButtonClick={handleCarouselButtonClick} />
-                      </div>
+            ) : (
+              <>
+                <div className="px-8 pb-8 mt-8">
+                  <div className="max-w-3xl mx-auto">
+                    <div className="relative overflow-hidden w-full pb-16">
+                      <CustomCarousel slides={fashionSlides} onButtonClick={handleCarouselButtonClick} />
                     </div>
                   </div>
-                </>
-              )}
-            </div>
+                </div>
+                
+                <div className="px-8 py-8">
+                  <GlobeDemo />
+                </div>
+              </>
+            )}
           </div>
-        </AuroraBackground>
+        </div>
       </div>
       
       <Footerdemo />

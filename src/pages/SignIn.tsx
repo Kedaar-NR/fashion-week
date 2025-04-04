@@ -3,28 +3,80 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
+  
+  useEffect(() => {
+    // Check if user is already logged in
+    const user = localStorage.getItem('user');
+    if (user) {
+      navigate('/');
+    }
+  }, [navigate]);
   
   const handleGoogleSignIn = () => {
     setIsLoading(true);
     
     // Simulate a Google OAuth flow for demonstration
     setTimeout(() => {
-      // Create a mock user object that would normally come from Google OAuth
+      // Store the user in localStorage
       const mockUser = {
-        name: "John Doe",
-        email: "johndoe@example.com",
-        photoURL: "https://api.dicebear.com/7.x/avataaars/svg?seed=John"
+        name: name || email.split('@')[0],
+        email: email || "user@example.com",
+        photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Date.now()}`
       };
       
-      // Store the user in localStorage
       localStorage.setItem('user', JSON.stringify(mockUser));
       
-      toast.success("Signed in with Google successfully!");
+      toast.success("Signed in successfully!");
+      toast("Redirecting to your account...");
+      
+      // Redirect after a short delay
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/");
+      }, 1500);
+    }, 1000);
+  };
+
+  const handleEmailSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    if (!email || !password) {
+      toast.error("Please enter both email and password");
+      setIsLoading(false);
+      return;
+    }
+    
+    // Simple validation
+    if (!email.includes('@')) {
+      toast.error("Please enter a valid email");
+      setIsLoading(false);
+      return;
+    }
+    
+    // Simulate authentication
+    setTimeout(() => {
+      // Create a user object
+      const user = {
+        name: name || email.split('@')[0],
+        email: email,
+        photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
+      };
+      
+      // Store in localStorage
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      toast.success(isSignUp ? "Account created successfully!" : "Signed in successfully!");
       toast("Redirecting to your account...");
       
       // Redirect after a short delay
@@ -42,9 +94,72 @@ const SignIn = () => {
         <div className="w-full max-w-md mt-12">
           <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
             <h1 className="text-3xl font-bold mb-6 text-center font-kanit">
-              Welcome to Fashion Week
+              {isSignUp ? "Create your account" : "Welcome back"}
             </h1>
-            <p className="text-gray-500 text-center mb-8">Sign in with Google to access your account</p>
+            <p className="text-gray-500 text-center mb-8">
+              {isSignUp ? "Sign up to start your fashion journey" : "Sign in to access your account"}
+            </p>
+            
+            <form onSubmit={handleEmailSignIn} className="space-y-4 mb-6">
+              {isSignUp && (
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <Input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    className="w-full"
+                  />
+                </div>
+              )}
+              
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full"
+                />
+              </div>
+              
+              <Button 
+                type="submit"
+                className="w-full h-12"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="w-5 h-5 border-2 border-t-2 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+                ) : (
+                  isSignUp ? "Create Account" : "Sign In"
+                )}
+              </Button>
+            </form>
+            
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+              </div>
+            </div>
             
             <Button 
               onClick={handleGoogleSignIn} 
@@ -71,7 +186,16 @@ const SignIn = () => {
             
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-500">
-                By signing in, you agree to our Terms and Privacy Policy
+                {isSignUp ? "Already have an account?" : "Don't have an account yet?"}{" "}
+                <button 
+                  onClick={() => setIsSignUp(!isSignUp)} 
+                  className="text-blue-500 hover:text-blue-600 font-medium"
+                >
+                  {isSignUp ? "Sign in" : "Sign up"}
+                </button>
+              </p>
+              <p className="text-xs text-gray-400 mt-4">
+                By signing in/up, you agree to our Terms and Privacy Policy
               </p>
             </div>
           </div>

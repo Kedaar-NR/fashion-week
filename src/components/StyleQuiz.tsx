@@ -68,6 +68,9 @@ const StyleQuiz: React.FC<StyleQuizProps> = ({ onClose }) => {
         }
       });
       
+      // Save to local storage that quiz has been completed
+      localStorage.setItem('hasSeenStyleQuiz', 'true');
+      
       // Navigate to brands page with the dominant style filter
       navigate(`/brands?style=${dominantStyle}`);
     }

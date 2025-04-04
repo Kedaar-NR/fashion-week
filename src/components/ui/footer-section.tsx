@@ -4,7 +4,6 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import {
   Tooltip,
@@ -26,15 +25,15 @@ function Footerdemo() {
   }, [isDarkMode])
 
   return (
-    <footer className="relative border-t bg-white text-foreground transition-colors duration-300 z-0 font-kanit">
-      <div className="container mx-auto px-4 py-6 md:px-6 lg:px-8">
-        <div className="grid gap-8 md:grid-cols-4">
-          <div className="relative">
-            <h2 className="mb-3 text-2xl font-bold tracking-tight">FashionWeek</h2>
-            <p className="mb-4 text-sm text-muted-foreground">
+    <footer className="relative border-t bg-white text-foreground transition-colors duration-300 z-10 font-kanit w-full py-4">
+      <div className="container mx-auto px-4 py-2">
+        <div className="grid gap-4 grid-flow-row place-items-center">
+          <div className="text-center">
+            <h2 className="mb-2 text-xl font-bold tracking-tight">FashionWeek</h2>
+            <p className="mb-3 text-sm text-muted-foreground">
               Join our newsletter for the latest updates and exclusive offers.
             </p>
-            <form className="relative max-w-[200px]">
+            <form className="relative mx-auto max-w-[200px] mb-4">
               <Input
                 type="email"
                 placeholder="Your email"
@@ -50,25 +49,9 @@ function Footerdemo() {
               </Button>
             </form>
           </div>
-          <div>
-            <h3 className="mb-2 text-base font-semibold">Quick Links</h3>
-            <nav className="space-y-1 text-xs">
-              <a href="/" className="block transition-colors hover:text-primary">Home</a>
-              <a href="/brands" className="block transition-colors hover:text-primary">Brands</a>
-              <a href="/liked" className="block transition-colors hover:text-primary">Liked</a>
-            </nav>
-          </div>
-          <div>
-            <h3 className="mb-2 text-base font-semibold">Contact Us</h3>
-            <address className="space-y-1 text-xs not-italic">
-              <p>Fashion Week HQ</p>
-              <p>New York, NY 10001</p>
-              <p>Email: hello@fashionweek.com</p>
-            </address>
-          </div>
-          <div className="relative">
-            <h3 className="mb-2 text-base font-semibold">Follow Us</h3>
-            <div className="mb-4 flex space-x-2">
+          
+          <div className="text-center">
+            <div className="flex justify-center space-x-2 mb-4">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -122,7 +105,8 @@ function Footerdemo() {
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <div className="flex items-center space-x-2">
+            
+            <div className="flex items-center justify-center space-x-2">
               <Sun className="h-3 w-3" />
               <Switch
                 id="dark-mode"
@@ -131,21 +115,19 @@ function Footerdemo() {
                 className="h-4 w-8"
               />
               <Moon className="h-3 w-3" />
-              <Label htmlFor="dark-mode" className="sr-only">
-                Toggle dark mode
-              </Label>
             </div>
           </div>
-        </div>
-        <div className="mt-4 flex flex-col items-center justify-between gap-2 border-t pt-4 text-center md:flex-row">
-          <p className="text-xs text-muted-foreground">
-            © 2024 FashionWeek. All rights reserved.
-          </p>
-          <nav className="flex gap-4 text-xs">
-            <a href="#" className="transition-colors hover:text-primary">Privacy</a>
-            <a href="#" className="transition-colors hover:text-primary">Terms</a>
-            <a href="#" className="transition-colors hover:text-primary">Cookies</a>
-          </nav>
+          
+          <div className="mt-2 flex flex-col items-center justify-center gap-2 pt-2 text-center">
+            <p className="text-xs text-muted-foreground">
+              © 2024 FashionWeek. All rights reserved.
+            </p>
+            <nav className="flex gap-4 text-xs">
+              <a href="#" className="transition-colors hover:text-primary">Privacy</a>
+              <a href="#" className="transition-colors hover:text-primary">Terms</a>
+              <a href="#" className="transition-colors hover:text-primary">Cookies</a>
+            </nav>
+          </div>
         </div>
       </div>
     </footer>

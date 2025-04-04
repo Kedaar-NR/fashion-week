@@ -1,21 +1,17 @@
 
 import { Search } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
-import { useNavigate } from "react-router-dom";
 import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [open, setOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   // Handle command selection
   const handleSelect = (brandName: string) => {
-    setOpen(false);
     setSelectedBrand(brandName.replace('@', ''));
   };
 
@@ -40,7 +36,7 @@ const Index = () => {
                 onValueChange={setSearchQuery}
                 className="h-12"
               />
-              {searchQuery.length > 0 && (
+              {searchQuery.length > 0 && filteredBrands.length > 0 && (
                 <CommandList>
                   <CommandGroup heading="Brands">
                     <ScrollArea className="h-64">

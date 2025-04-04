@@ -1,25 +1,48 @@
-import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn, LogOut } from "lucide-react";
+import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn, LogOut, FileText } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
 import { toast } from "sonner";
-import { useClerk, useUser } from "@clerk/clerk-react";
 
 const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
-  const { user } = useUser();
-  const { signOut } = useClerk();
+  const [user, setUser] = useState<{ email?: string, name?: string, photoURL?: string } | null>(null);
+  
+  useEffect(() => {
+    const checkUserAuth = () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          console.error('Failed to parse user data', e);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+    
+    checkUserAuth();
+    
+    window.addEventListener('storage', checkUserAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkUserAuth);
+    };
+  }, []);
   
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
   };
   
-  const handleLogout = async () => {
-    await signOut();
+  const handleLogout = () => {
+    localStorage.removeItem('user');
     localStorage.removeItem('likedBrands');
+    setUser(null);
     toast.success("Successfully logged out");
   };
   
@@ -72,16 +95,16 @@ const Sidebar = () => {
             >
               <div className="flex items-center">
                 <Avatar className="h-7 w-7">
-                  {user.imageUrl ? (
-                    <AvatarImage src={user.imageUrl} alt={user.fullName || user.primaryEmailAddress?.emailAddress} />
+                  {user.photoURL ? (
+                    <AvatarImage src={user.photoURL} alt={user.name || user.email} />
                   ) : (
                     <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white text-xs">
-                      {user.fullName ? user.fullName.charAt(0).toUpperCase() : user.primaryEmailAddress?.emailAddress?.charAt(0).toUpperCase()}
+                      {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   )}
                 </Avatar>
                 <span className={`ml-3 font-kanit text-sm text-white ${collapsed ? 'hidden' : 'block'}`}>
-                  {user.fullName || user.primaryEmailAddress?.emailAddress?.split('@')[0] || 'Profile'}
+                  {user.name || user.email?.split('@')[0] || 'Profile'}
                 </span>
               </div>
             </Link>
@@ -118,6 +141,13 @@ const Sidebar = () => {
           label="Liked" 
           path="/liked" 
           isActive={location.pathname === "/liked"} 
+          collapsed={collapsed}
+        />
+        <NavItem 
+          icon={<FileText size={18} className="text-blue-400" />} 
+          label="Terms" 
+          path="/terms" 
+          isActive={location.pathname === "/terms"} 
           collapsed={collapsed}
         />
       </div>

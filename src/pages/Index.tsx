@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar } from "@/components/ui/avatar";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,8 +27,14 @@ const Index = () => {
       
       {/* Main content */}
       <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
+        {/* Header at the top */}
+        <div className="text-center my-8">
+          <h1 className="text-3xl font-bold tracking-tight">FASHION:WEEK</h1>
+          <p className="text-gray-600 mt-2">Your gateway to curated fashion brands.</p>
+        </div>
+        
         {/* Search bar */}
-        <div className="px-8 py-6">
+        <div className="px-8">
           <div className="relative w-full max-w-3xl mx-auto">
             <Command className="rounded-lg border shadow-md">
               <CommandInput
@@ -44,9 +51,15 @@ const Index = () => {
                         <CommandItem
                           key={brand.name}
                           onSelect={() => handleSelect(brand.name)}
-                          className="cursor-pointer"
+                          className="cursor-pointer flex items-center space-x-2"
                         >
-                          {brand.name}
+                          <Avatar className="h-8 w-8 bg-gradient-to-br from-orange-400 to-pink-600">
+                            <div className="font-bold text-white">
+                              {brand.name.charAt(0).toUpperCase()}
+                            </div>
+                          </Avatar>
+                          <span>{brand.name}</span>
+                          <span className="ml-auto text-xs text-gray-400">{brand.followers}</span>
                         </CommandItem>
                       ))}
                     </ScrollArea>
@@ -58,7 +71,7 @@ const Index = () => {
         </div>
         
         {selectedBrand ? (
-          <div className="px-8 pb-8">
+          <div className="px-8 pb-8 mt-6">
             <h2 className="text-2xl font-bold mb-4">{selectedBrand}</h2>
             <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square max-w-3xl mx-auto">
               <iframe 
@@ -71,49 +84,58 @@ const Index = () => {
             </div>
           </div>
         ) : (
-          <div className="px-8 pb-8">
+          <div className="px-8 pb-8 mt-4">
             <div className="grid grid-cols-12 gap-3 max-w-6xl mx-auto">
-              {/* Fashion collage with different sized elements */}
-              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-12 md:col-span-6 aspect-[3/2]">
+              {/* Men's fashion collage with balanced, symmetrical layout */}
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-8 aspect-[16/9]">
                 <img 
-                  src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Fashion runway" 
+                  src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Men's fashion model" 
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-12 md:col-span-6 aspect-square">
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-4 aspect-square">
                 <img 
-                  src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Fashion model" 
+                  src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Men's casual fashion" 
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-6 md:col-span-4 aspect-square">
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-4 aspect-square">
                 <img 
-                  src="https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Street style fashion" 
+                  src="https://images.unsplash.com/photo-1617137968427-85924c800a22?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Men's streetwear" 
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-6 md:col-span-4 aspect-square">
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-4 aspect-square">
                 <img 
-                  src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Fashion shopping" 
+                  src="https://images.unsplash.com/photo-1520975867597-4ddbadfd2bae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Men's formal fashion" 
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-12 md:col-span-4 aspect-[3/4]">
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-4 aspect-square">
                 <img 
-                  src="https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Fashion details" 
+                  src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Men's casual style" 
                   className="w-full h-full object-cover"
                 />
               </div>
-            </div>
-            
-            <div className="text-center my-12">
-              <h1 className="text-3xl font-bold">FASHION:WEEK</h1>
-              <p className="text-gray-600 mt-2">Your gateway to curated fashion brands.</p>
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-6 aspect-[4/3]">
+                <img 
+                  src="https://images.unsplash.com/photo-1550246140-29f40b909e5a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Men's accessories" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="bg-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow col-span-6 aspect-[4/3]">
+                <img 
+                  src="https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                  alt="Men's fashion details" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         )}

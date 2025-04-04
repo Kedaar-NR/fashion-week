@@ -34,17 +34,17 @@ const Sidebar = () => {
           collapsed={collapsed}
         />
         <NavItem 
-          icon={<Heart size={18} />} 
-          label="LIKED" 
-          path="/liked" 
-          isActive={location.pathname === "/liked"} 
-          collapsed={collapsed}
-        />
-        <NavItem 
           icon={<ShoppingBag size={18} />} 
           label="BRANDS" 
           path="/brands" 
           isActive={location.pathname === "/brands"} 
+          collapsed={collapsed}
+        />
+        <NavItem 
+          icon={<Heart size={18} className="text-red-500" />} 
+          label="LIKED" 
+          path="/liked" 
+          isActive={location.pathname === "/liked"} 
           collapsed={collapsed}
         />
       </div>

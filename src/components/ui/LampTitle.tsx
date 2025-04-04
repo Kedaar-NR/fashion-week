@@ -6,7 +6,7 @@ import { LampContainer } from "@/components/ui/lamp";
 
 export function LampTitle() {
   return (
-    <LampContainer className="px-4">
+    <LampContainer className="px-4 py-8">
       <motion.h1
         initial={{ opacity: 0.5, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}

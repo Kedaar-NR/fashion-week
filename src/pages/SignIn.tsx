@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { useClerk, useUser, useSignIn } from "@clerk/clerk-react";
+import { useClerk, useUser, useSignIn, useSignUp } from "@clerk/clerk-react";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const SignIn = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const { isSignedIn, user } = useUser();
   const { signIn, setActive } = useSignIn();
+  const { signUp } = useSignUp();
   const clerk = useClerk();
   
   useEffect(() => {
@@ -59,8 +60,8 @@ const SignIn = () => {
     
     try {
       if (isSignUp) {
-        // Fix: accessing signUp from clerk object
-        const result = await clerk.signUp.create({
+        // Fixed: Using the signUp hook instead of accessing it on clerk object
+        const result = await signUp.create({
           emailAddress: email,
           password,
           firstName: name || undefined,

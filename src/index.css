@@ -34,6 +34,16 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* Aurora variables */
+    --white: rgba(255, 255, 255, 0.8);
+    --black: rgba(0, 0, 0, 0.8);
+    --transparent: transparent;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --indigo-300: #a5b4fc;
+    --violet-200: #ddd6fe;
   }
 
   * {
@@ -76,6 +86,20 @@
       transform: scale(1);
       opacity: 1;
     }
+  }
+
+  /* Aurora animation */
+  @keyframes aurora {
+    0%, 100% {
+      background-position: 0% 0%, 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%, 100% 100%;
+    }
+  }
+
+  .animate-aurora {
+    animation: aurora 10s ease infinite alternate;
   }
 
   .animate-fade-in {

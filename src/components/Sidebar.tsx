@@ -1,10 +1,11 @@
 
-import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn } from "lucide-react";
+import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
+import { toast } from "sonner";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -25,6 +26,12 @@ const Sidebar = () => {
   
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
+  };
+  
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    toast.success("Successfully logged out");
   };
   
   return (
@@ -67,27 +74,38 @@ const Sidebar = () => {
             </div>
           </Link>
         ) : (
-          <Link
-            to="/profile"
-            className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
-              location.pathname === "/profile" ? 'bg-gray-800' : ''
-            } mx-2 mb-3`}
-          >
-            <div className="flex items-center">
-              <Avatar className="h-7 w-7">
-                {user.photoURL ? (
-                  <AvatarImage src={user.photoURL} alt={user.name || user.email} />
-                ) : (
-                  <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white text-xs">
-                    {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                )}
-              </Avatar>
-              <span className={`ml-3 text-sm text-white ${collapsed ? 'hidden' : 'block'}`}>
-                {user.name || user.email?.split('@')[0] || 'Profile'}
-              </span>
-            </div>
-          </Link>
+          <div className="mx-2 mb-3 space-y-2">
+            <Link
+              to="/profile"
+              className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
+                location.pathname === "/profile" ? 'bg-gray-800' : ''
+              }`}
+            >
+              <div className="flex items-center">
+                <Avatar className="h-7 w-7">
+                  {user.photoURL ? (
+                    <AvatarImage src={user.photoURL} alt={user.name || user.email} />
+                  ) : (
+                    <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white text-xs">
+                      {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                <span className={`ml-3 text-sm text-white ${collapsed ? 'hidden' : 'block'}`}>
+                  {user.name || user.email?.split('@')[0] || 'Profile'}
+                </span>
+              </div>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className={`flex w-full items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md text-gray-300`}
+            >
+              <div className="flex items-center">
+                <div><LogOut size={18} /></div>
+                <span className={`ml-3 text-sm ${collapsed ? 'hidden' : 'block'}`}>Logout</span>
+              </div>
+            </button>
+          </div>
         )}
       </div>
 

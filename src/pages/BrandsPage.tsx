@@ -48,6 +48,14 @@ const BrandsPage = () => {
     (activeCategory === "ALL" || brand.genre === activeCategory)
   );
 
+  const handleBrandClick = (brandName: string) => {
+    setSelectedBrand(brandName);
+  };
+
+  const closeInstagramView = () => {
+    setSelectedBrand(null);
+  };
+
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />
@@ -87,17 +95,42 @@ const BrandsPage = () => {
             </div>
           </div>
           
-          {/* Brands grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {filteredBrands.map((brand) => (
-              <Brand
-                key={brand.name}
-                name={brand.name}
-                followers={brand.followers}
-                genre={brand.genre}
-              />
-            ))}
-          </div>
+          {selectedBrand ? (
+            <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center ml-14 md:ml-48">
+              <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold">{selectedBrand}</h2>
+                  <button 
+                    onClick={closeInstagramView}
+                    className="p-2 hover:bg-gray-100 rounded-full"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
+                  <iframe 
+                    src={`https://www.instagram.com/${selectedBrand}/embed`}
+                    className="w-full h-full border-none" 
+                    title={`${selectedBrand} Instagram Feed`}
+                    allowTransparency={true}
+                    scrolling="no"
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {filteredBrands.map((brand) => (
+                <Brand
+                  key={brand.name}
+                  name={brand.name}
+                  followers={brand.followers}
+                  genre={brand.genre}
+                  onClick={() => handleBrandClick(brand.name)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

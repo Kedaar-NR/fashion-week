@@ -1,13 +1,13 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { SparkleTitle } from "@/components/ui/SparkleTitle";
+import { SparklesText } from "@/components/ui/sparkles-text";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 import { useId, useRef } from "react";
 
 // Generate random follower counts for brands between 1 and 10k
@@ -294,81 +294,90 @@ const Index = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-white">
-      {/* Sidebar */}
-      <Sidebar />
-      
-      {/* Main content */}
-      <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
-        {/* Sparkle Title at the top */}
-        <div className="mt-6 mb-2">
-          <SparkleTitle />
-        </div>
+    <AuroraBackground className="min-h-screen overflow-auto p-0">
+      <div className="flex min-h-screen">
+        {/* Sidebar */}
+        <Sidebar />
         
-        {/* Search bar */}
-        <div className="px-8 animate-scale-in">
-          <div className="relative w-full max-w-3xl mx-auto">
-            <Command className="rounded-lg border shadow-md">
-              <CommandInput
-                placeholder="Search brands"
-                value={searchQuery}
-                onValueChange={setSearchQuery}
-                className="h-12"
-              />
-              {searchQuery.length > 0 && filteredBrands.length > 0 && (
-                <CommandList>
-                  <CommandGroup heading="Brands">
-                    <ScrollArea className="h-64">
-                      {filteredBrands.map((brand, index) => (
-                        <CommandItem
-                          key={brand.name}
-                          onSelect={() => handleSelect(brand.name)}
-                          className="cursor-pointer flex items-center space-x-2 hover:bg-gray-100 transition-colors"
-                        >
-                          <Avatar className={`h-8 w-8 bg-gradient-to-br ${brandColors[index % brandColors.length]}`}>
-                            <div className="font-bold text-white">
-                              {brand.name.charAt(0).toUpperCase()}
-                            </div>
-                          </Avatar>
-                          <span>{brand.name}</span>
-                          <span className="ml-auto text-xs text-gray-400">{brand.followers}</span>
-                        </CommandItem>
-                      ))}
-                    </ScrollArea>
-                  </CommandGroup>
-                </CommandList>
-              )}
-            </Command>
-          </div>
-        </div>
-        
-        {selectedBrand ? (
-          <div className="px-8 pb-8 mt-6 animate-fade-in">
-            <h2 className="text-2xl font-bold mb-4 gradient-text gradient-primary">{selectedBrand}</h2>
-            <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square max-w-3xl mx-auto hover:shadow-xl transition-shadow">
-              <iframe 
-                src={`https://www.instagram.com/${selectedBrand}/embed`}
-                className="w-full h-full border-none" 
-                title={`${selectedBrand} Instagram Feed`}
-                allowTransparency={true}
-                scrolling="no"
+        {/* Main content */}
+        <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
+          {/* Sparkle Title at the top */}
+          <div className="mt-6 mb-4 px-8">
+            <div className="relative">
+              <SparklesText 
+                text="Your gateway to curated fashion brands"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-center"
+                colors={{ first: "#c0c0c0", second: "#333333" }}
+                sparklesCount={15}
               />
             </div>
           </div>
-        ) : (
-          <>
-            {/* Carousel section */}
-            <div className="px-8 pb-8 mt-8">
-              <div className="max-w-3xl mx-auto">
-                <div className="relative overflow-hidden w-full pb-16">
-                  <CustomCarousel slides={fashionSlides} onButtonClick={handleCarouselButtonClick} />
-                </div>
+          
+          {/* Search bar moved up */}
+          <div className="px-8 mb-8 animate-scale-in">
+            <div className="relative w-full max-w-3xl mx-auto">
+              <Command className="rounded-lg border shadow-md">
+                <CommandInput
+                  placeholder="Search brands"
+                  value={searchQuery}
+                  onValueChange={setSearchQuery}
+                  className="h-12"
+                />
+                {searchQuery.length > 0 && filteredBrands.length > 0 && (
+                  <CommandList>
+                    <CommandGroup heading="Brands">
+                      <ScrollArea className="h-64">
+                        {filteredBrands.map((brand, index) => (
+                          <CommandItem
+                            key={brand.name}
+                            onSelect={() => handleSelect(brand.name)}
+                            className="cursor-pointer flex items-center space-x-2 hover:bg-gray-100 transition-colors"
+                          >
+                            <Avatar className={`h-8 w-8 bg-gradient-to-br ${brandColors[index % brandColors.length]}`}>
+                              <div className="font-bold text-white">
+                                {brand.name.charAt(0).toUpperCase()}
+                              </div>
+                            </Avatar>
+                            <span>{brand.name}</span>
+                            <span className="ml-auto text-xs text-gray-400">{brand.followers}</span>
+                          </CommandItem>
+                        ))}
+                      </ScrollArea>
+                    </CommandGroup>
+                  </CommandList>
+                )}
+              </Command>
+            </div>
+          </div>
+          
+          {selectedBrand ? (
+            <div className="px-8 pb-8 mt-6 animate-fade-in">
+              <h2 className="text-2xl font-bold mb-4 gradient-text gradient-primary">{selectedBrand}</h2>
+              <div className="rounded-xl overflow-hidden shadow-lg bg-white w-full aspect-square max-w-3xl mx-auto hover:shadow-xl transition-shadow">
+                <iframe 
+                  src={`https://www.instagram.com/${selectedBrand}/embed`}
+                  className="w-full h-full border-none" 
+                  title={`${selectedBrand} Instagram Feed`}
+                  allowTransparency={true}
+                  scrolling="no"
+                />
               </div>
             </div>
-          </>
-        )}
+          ) : (
+            <>
+              {/* Carousel section */}
+              <div className="px-8 pb-8 mt-8">
+                <div className="max-w-3xl mx-auto">
+                  <div className="relative overflow-hidden w-full pb-16">
+                    <CustomCarousel slides={fashionSlides} onButtonClick={handleCarouselButtonClick} />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </AuroraBackground>
   );
 };
 

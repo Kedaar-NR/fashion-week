@@ -16,7 +16,7 @@ const SignIn = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const { isSignedIn, user } = useUser();
   const { signIn, setActive } = useSignIn();
-  const { signUp } = useClerk();
+  const clerk = useClerk();
   
   useEffect(() => {
     // Check if user is already logged in
@@ -59,7 +59,7 @@ const SignIn = () => {
     
     try {
       if (isSignUp) {
-        const result = await signUp?.create({
+        const result = await clerk.signUp.create({
           emailAddress: email,
           password,
           firstName: name || undefined,

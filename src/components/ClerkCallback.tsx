@@ -2,21 +2,33 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useClerk } from "@clerk/clerk-react";
 
 export const ClerkCallback = () => {
   const navigate = useNavigate();
+  const { handleRedirectCallback } = useClerk();
 
   useEffect(() => {
     // Show a loading toast
     toast.loading("Finishing authentication...");
     
-    // Redirect to home page after a short delay
-    const timeout = setTimeout(() => {
-      navigate("/");
-    }, 2000);
+    async function processCallback() {
+      try {
+        // Handle the callback from Clerk
+        await handleRedirectCallback({
+          afterSignInUrl: "/",
+          afterSignUpUrl: "/"
+        });
+        toast.success("Authentication successful!");
+      } catch (error) {
+        console.error("Error during authentication callback:", error);
+        toast.error("Authentication failed. Please try again.");
+        navigate("/signin");
+      }
+    }
     
-    return () => clearTimeout(timeout);
-  }, [navigate]);
+    processCallback();
+  }, [navigate, handleRedirectCallback]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white">

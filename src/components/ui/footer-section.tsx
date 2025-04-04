@@ -15,9 +15,8 @@ import {
 import { Facebook, Instagram, Linkedin, Moon, Send, Sun, Twitter } from "lucide-react"
 
 function Footerdemo() {
-  const [isDarkMode, setIsDarkMode] = React.useState(true)
-  const [isChatOpen, setIsChatOpen] = React.useState(false)
-
+  const [isDarkMode, setIsDarkMode] = React.useState(false) // Default to light mode
+  
   React.useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark")
@@ -27,144 +26,125 @@ function Footerdemo() {
   }, [isDarkMode])
 
   return (
-    <footer className="relative border-t bg-background text-foreground transition-colors duration-300">
-      <div className="container mx-auto px-4 py-12 md:px-6 lg:px-8">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="relative border-t bg-white text-foreground transition-colors duration-300 z-0 font-kanit">
+      <div className="container mx-auto px-4 py-6 md:px-6 lg:px-8">
+        <div className="grid gap-8 md:grid-cols-4">
           <div className="relative">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight">FashionWeek</h2>
-            <p className="mb-6 text-muted-foreground">
+            <h2 className="mb-3 text-2xl font-bold tracking-tight">FashionWeek</h2>
+            <p className="mb-4 text-sm text-muted-foreground">
               Join our newsletter for the latest updates and exclusive offers.
             </p>
-            <form className="relative">
+            <form className="relative max-w-[200px]">
               <Input
                 type="email"
-                placeholder="Enter your email"
-                className="pr-12 backdrop-blur-sm"
+                placeholder="Your email"
+                className="pr-10 backdrop-blur-sm h-9 text-sm"
               />
               <Button
                 type="submit"
                 size="icon"
-                className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105"
+                className="absolute right-1 top-1 h-7 w-7 rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105"
               >
-                <Send className="h-4 w-4" />
+                <Send className="h-3 w-3" />
                 <span className="sr-only">Subscribe</span>
               </Button>
             </form>
-            <div className="absolute -right-4 top-0 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
           </div>
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Quick Links</h3>
-            <nav className="space-y-2 text-sm">
-              <a href="#" className="block transition-colors hover:text-primary">
-                Home
-              </a>
-              <a href="#" className="block transition-colors hover:text-primary">
-                About Us
-              </a>
-              <a href="#" className="block transition-colors hover:text-primary">
-                Services
-              </a>
-              <a href="#" className="block transition-colors hover:text-primary">
-                Products
-              </a>
-              <a href="#" className="block transition-colors hover:text-primary">
-                Contact
-              </a>
+            <h3 className="mb-2 text-base font-semibold">Quick Links</h3>
+            <nav className="space-y-1 text-xs">
+              <a href="/" className="block transition-colors hover:text-primary">Home</a>
+              <a href="/brands" className="block transition-colors hover:text-primary">Brands</a>
+              <a href="/liked" className="block transition-colors hover:text-primary">Liked</a>
             </nav>
           </div>
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Contact Us</h3>
-            <address className="space-y-2 text-sm not-italic">
-              <p>123 Innovation Street</p>
-              <p>Tech City, TC 12345</p>
-              <p>Phone: (123) 456-7890</p>
-              <p>Email: hello@example.com</p>
+            <h3 className="mb-2 text-base font-semibold">Contact Us</h3>
+            <address className="space-y-1 text-xs not-italic">
+              <p>Fashion Week HQ</p>
+              <p>New York, NY 10001</p>
+              <p>Email: hello@fashionweek.com</p>
             </address>
           </div>
           <div className="relative">
-            <h3 className="mb-4 text-lg font-semibold">Follow Us</h3>
-            <div className="mb-6 flex space-x-4">
+            <h3 className="mb-2 text-base font-semibold">Follow Us</h3>
+            <div className="mb-4 flex space-x-2">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Facebook className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="h-8 w-8 rounded-full">
+                      <Facebook className="h-3.5 w-3.5" />
                       <span className="sr-only">Facebook</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Follow us on Facebook</p>
+                    <p className="text-xs">Follow us on Facebook</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Twitter className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="h-8 w-8 rounded-full">
+                      <Twitter className="h-3.5 w-3.5" />
                       <span className="sr-only">Twitter</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Follow us on Twitter</p>
+                    <p className="text-xs">Follow us on Twitter</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Instagram className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="h-8 w-8 rounded-full">
+                      <Instagram className="h-3.5 w-3.5" />
                       <span className="sr-only">Instagram</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Follow us on Instagram</p>
+                    <p className="text-xs">Follow us on Instagram</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Linkedin className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="h-8 w-8 rounded-full">
+                      <Linkedin className="h-3.5 w-3.5" />
                       <span className="sr-only">LinkedIn</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Connect with us on LinkedIn</p>
+                    <p className="text-xs">Connect with us on LinkedIn</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
             <div className="flex items-center space-x-2">
-              <Sun className="h-4 w-4" />
+              <Sun className="h-3 w-3" />
               <Switch
                 id="dark-mode"
                 checked={isDarkMode}
                 onCheckedChange={setIsDarkMode}
+                className="h-4 w-8"
               />
-              <Moon className="h-4 w-4" />
+              <Moon className="h-3 w-3" />
               <Label htmlFor="dark-mode" className="sr-only">
                 Toggle dark mode
               </Label>
             </div>
           </div>
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-4 flex flex-col items-center justify-between gap-2 border-t pt-4 text-center md:flex-row">
+          <p className="text-xs text-muted-foreground">
             © 2024 FashionWeek. All rights reserved.
           </p>
-          <nav className="flex gap-4 text-sm">
-            <a href="#" className="transition-colors hover:text-primary">
-              Privacy Policy
-            </a>
-            <a href="#" className="transition-colors hover:text-primary">
-              Terms of Service
-            </a>
-            <a href="#" className="transition-colors hover:text-primary">
-              Cookie Settings
-            </a>
+          <nav className="flex gap-4 text-xs">
+            <a href="#" className="transition-colors hover:text-primary">Privacy</a>
+            <a href="#" className="transition-colors hover:text-primary">Terms</a>
+            <a href="#" className="transition-colors hover:text-primary">Cookies</a>
           </nav>
         </div>
       </div>

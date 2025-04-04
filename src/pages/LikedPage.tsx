@@ -14,9 +14,14 @@ const LikedPage = () => {
     const user = localStorage.getItem('user');
     setIsLoggedIn(!!user);
 
-    // Get liked brands from localStorage
-    const savedLikedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
-    setLikedBrands(savedLikedBrands);
+    if (user) {
+      // Only get liked brands if user is logged in
+      const savedLikedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
+      setLikedBrands(savedLikedBrands);
+    } else {
+      // Clear liked brands if not logged in
+      setLikedBrands([]);
+    }
   }, []);
 
   // Filter brands to only show liked ones
@@ -32,7 +37,7 @@ const LikedPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen bg-white font-kanit">
       <Sidebar />
       <div className="flex-1 ml-14 md:ml-48 p-8">
         <h1 className="text-3xl font-bold mb-6">Liked Brands</h1>

@@ -29,10 +29,10 @@ const Index = () => {
       <Sidebar />
       
       {/* Main content */}
-      <div className="flex-1 ml-[240px] flex flex-col transition-all duration-300">
+      <div className="flex-1 flex flex-col pt-24 transition-all duration-300">
         {/* Search bar */}
-        <div className="px-8 pt-6 pb-4">
-          <div className="relative w-full max-w-3xl">
+        <div className="px-8 py-6">
+          <div className="relative w-full max-w-3xl mx-auto">
             <Command className="rounded-lg border shadow-md">
               <CommandInput
                 placeholder="SEARCH BRANDS"
@@ -63,37 +63,37 @@ const Index = () => {
         
         {/* Image collage */}
         <div className="px-8 flex-1">
-          <div className="grid grid-cols-2 gap-4 max-w-5xl mx-auto">
-            <div className="bg-pink-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 max-w-6xl mx-auto">
+            <div className="bg-pink-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow md:col-span-2 md:row-span-2">
               <img 
                 src="/lovable-uploads/5dd82e63-58d4-418f-8e34-04396f0fcb62.png" 
                 alt="Work on yourself" 
-                className="w-full h-72 object-cover"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <img 
                 src="/lovable-uploads/6013111d-a744-42c2-b128-011569deddfb.png" 
                 alt="Person with laptop" 
-                className="w-full h-72 object-cover"
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="bg-purple-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <img 
                 src="/lovable-uploads/c2bd1148-642a-4a7d-9260-13f2a29dda20.png" 
                 alt="Person with text" 
-                className="w-full h-72 object-cover"
+                className="w-full h-full object-cover"
               />
             </div>
-            <div className="bg-pink-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+            <div className="bg-pink-100 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow md:col-span-2">
               <img 
                 src="/lovable-uploads/33313685-1825-452f-9e0b-e8e4f7c0693e.png" 
                 alt="Gospel" 
-                className="w-full h-72 object-cover"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
-          <div className="text-center my-8">
+          <div className="text-center my-12">
             <h1 className="text-3xl font-bold">FASHION:WEEK</h1>
             <p className="text-gray-600 mt-2">Your gateway to curated fashion brands.</p>
           </div>

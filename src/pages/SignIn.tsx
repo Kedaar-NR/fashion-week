@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
+import { useClerk, useUser, useSignIn } from "@clerk/clerk-react";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -13,41 +14,33 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
+  const { isSignedIn, user } = useUser();
+  const { signIn, setActive } = useSignIn();
+  const { signUp } = useClerk();
   
   useEffect(() => {
     // Check if user is already logged in
-    const user = localStorage.getItem('user');
-    if (user) {
+    if (isSignedIn && user) {
       navigate('/');
     }
-  }, [navigate]);
+  }, [isSignedIn, user, navigate]);
   
-  const handleGoogleSignIn = () => {
-    setIsLoading(true);
-    
-    // Simulate a Google OAuth flow for demonstration
-    setTimeout(() => {
-      // Store the user in localStorage
-      const mockUser = {
-        name: name || email.split('@')[0],
-        email: email || "user@example.com",
-        photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Date.now()}`
-      };
-      
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
-      toast.success("Signed in successfully!");
-      toast("Redirecting to your account...");
-      
-      // Redirect after a short delay
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/");
-      }, 1500);
-    }, 1000);
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      await signIn?.authenticateWithRedirect({
+        strategy: "oauth_google",
+        redirectUrl: "/sso-callback",
+        redirectUrlComplete: "/"
+      });
+    } catch (error) {
+      console.error("OAuth error:", error);
+      toast.error("Failed to sign in with Google");
+      setIsLoading(false);
+    }
   };
 
-  const handleEmailSignIn = (e: React.FormEvent) => {
+  const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
@@ -64,27 +57,40 @@ const SignIn = () => {
       return;
     }
     
-    // Simulate authentication
-    setTimeout(() => {
-      // Create a user object
-      const user = {
-        name: name || email.split('@')[0],
-        email: email,
-        photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
-      };
-      
-      // Store in localStorage
-      localStorage.setItem('user', JSON.stringify(user));
-      
-      toast.success(isSignUp ? "Account created successfully!" : "Signed in successfully!");
-      toast("Redirecting to your account...");
-      
-      // Redirect after a short delay
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/");
-      }, 1500);
-    }, 1000);
+    try {
+      if (isSignUp) {
+        const result = await signUp?.create({
+          emailAddress: email,
+          password,
+          firstName: name || undefined,
+        });
+        
+        await result?.prepareEmailAddressVerification({
+          strategy: "email_code"
+        });
+        
+        toast.success("Verification email sent! Please check your inbox.");
+      } else {
+        const result = await signIn?.create({
+          identifier: email,
+          password,
+        });
+        
+        if (result?.status === "complete") {
+          await setActive({ session: result.createdSessionId });
+          toast.success("Signed in successfully!");
+          navigate("/");
+        } else {
+          console.error("Sign in failed:", result);
+          toast.error("Failed to sign in");
+        }
+      }
+    } catch (error) {
+      console.error("Authentication error:", error);
+      toast.error(isSignUp ? "Failed to create account" : "Failed to sign in");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

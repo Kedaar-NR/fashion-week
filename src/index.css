@@ -51,7 +51,12 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  /* Apply Kanit font to all text by default */
+  html {
+    font-family: 'Kanit', sans-serif;
   }
 }
 

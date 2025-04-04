@@ -2,6 +2,7 @@
 import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -75,6 +76,28 @@ const NavItem = ({
   isActive: boolean;
   collapsed: boolean;
 }) => {
+  if (collapsed) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link 
+            to={path} 
+            className={`flex items-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
+              isActive ? 'bg-gray-800 text-white font-semibold' : 'text-gray-300'
+            }`}
+          >
+            <div className="flex items-center justify-center">
+              <div>{icon}</div>
+            </div>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          {label}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+  
   return (
     <Link 
       to={path} 
@@ -84,7 +107,7 @@ const NavItem = ({
     >
       <div className="flex items-center">
         <div>{icon}</div>
-        {!collapsed && <span className="ml-3 text-sm">{label}</span>}
+        <span className="ml-3 text-sm">{label}</span>
       </div>
     </Link>
   );

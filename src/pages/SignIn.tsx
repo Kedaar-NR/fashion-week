@@ -59,13 +59,14 @@ const SignIn = () => {
     
     try {
       if (isSignUp) {
+        // Fix: accessing signUp from clerk object
         const result = await clerk.signUp.create({
           emailAddress: email,
           password,
           firstName: name || undefined,
         });
         
-        await result?.prepareEmailAddressVerification({
+        await result.prepareEmailAddressVerification({
           strategy: "email_code"
         });
         

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -245,9 +246,9 @@ const Index = () => {
     setSelectedBrand(brandName.replace('@', ''));
   };
 
-  const filteredBrands = brandsWithRandomFollowers.filter(brand => 
+  const filteredBrands = searchQuery ? brandsWithRandomFollowers.filter(brand => 
     brand.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ) : [];
 
   // Navigate to brands page when clicking carousel buttons
   const handleCarouselButtonClick = () => {

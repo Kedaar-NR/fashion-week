@@ -5,7 +5,7 @@ import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { LampTitle } from "@/components/ui/LampTitle";
+import { SparkleTitle } from "@/components/ui/SparkleTitle";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { useId, useRef, useEffect } from "react";
 
@@ -75,7 +75,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
       <li
         ref={slideRef}
-        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[50vmin] h-[50vmin] mx-[4vmin] z-10"
+        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[40vmin] mx-[4vmin] z-10"
         onClick={() => handleSlideClick(index)}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -118,11 +118,11 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             current === index ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         >
-          <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold relative">
+          <h2 className="text-lg md:text-2xl lg:text-3xl font-semibold relative">
             {title}
           </h2>
           <div className="flex justify-center">
-            <button className="mt-6 px-4 py-2 w-fit mx-auto sm:text-sm text-black bg-white h-12 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
+            <button className="mt-4 px-3 py-1 w-fit mx-auto sm:text-sm text-black bg-white h-10 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]">
               {button}
             </button>
           </div>
@@ -145,7 +145,7 @@ const CarouselControl = ({
 }: CarouselControlProps) => {
   return (
     <button
-      className={`w-10 h-10 flex items-center mx-2 justify-center bg-neutral-200 dark:bg-neutral-800 border-3 border-transparent rounded-full focus:border-[#6D64F7] focus:outline-none hover:-translate-y-0.5 active:translate-y-0.5 transition duration-200 ${
+      className={`w-10 h-10 flex items-center mx-2 justify-center bg-neutral-200 dark:bg-neutral-800 border border-gray-300 rounded-full focus:border-[#6D64F7] focus:outline-none hover:-translate-y-0.5 active:translate-y-0.5 transition duration-200 ${
         type === "previous" ? "rotate-180" : ""
       }`}
       title={title}
@@ -183,7 +183,7 @@ const CustomCarousel = ({ slides }: CarouselProps) => {
 
   return (
     <div
-      className="relative w-[50vmin] h-[50vmin] mx-auto"
+      className="relative w-[40vmin] h-[40vmin] mx-auto"
       aria-labelledby={`carousel-heading-${id}`}
     >
       <ul
@@ -203,7 +203,7 @@ const CustomCarousel = ({ slides }: CarouselProps) => {
         ))}
       </ul>
 
-      <div className="absolute flex justify-center w-full top-[calc(100%+1rem)]">
+      <div className="absolute flex justify-center w-full bottom-[-3rem]">
         <CarouselControl
           type="previous"
           title="Go to previous slide"
@@ -278,8 +278,13 @@ const Index = () => {
       
       {/* Main content */}
       <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
+        {/* Sparkle Title at the top */}
+        <div className="mt-6 mb-2">
+          <SparkleTitle />
+        </div>
+        
         {/* Search bar */}
-        <div className="px-8 animate-scale-in pt-8">
+        <div className="px-8 animate-scale-in">
           <div className="relative w-full max-w-3xl mx-auto">
             <Command className="rounded-lg border shadow-md">
               <CommandInput
@@ -331,19 +336,12 @@ const Index = () => {
         ) : (
           <>
             {/* Carousel section */}
-            <div className="px-8 pb-8 mt-4">
+            <div className="px-8 pb-8 mt-8">
               <div className="max-w-3xl mx-auto">
-                <div className="mb-8">
-                  <div className="relative overflow-hidden w-full py-6">
-                    <CustomCarousel slides={fashionSlides} />
-                  </div>
+                <div className="relative overflow-hidden w-full pb-16">
+                  <CustomCarousel slides={fashionSlides} />
                 </div>
               </div>
-            </div>
-            
-            {/* Lamp title - moved below carousel */}
-            <div className="mt-8">
-              <LampTitle />
             </div>
           </>
         )}

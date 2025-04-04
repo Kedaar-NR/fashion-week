@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LikedPage from "./pages/LikedPage";
 import BrandsPage from "./pages/BrandsPage";
+import SignIn from "./pages/SignIn";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/liked" element={<LikedPage />} />
           <Route path="/brands" element={<BrandsPage />} />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

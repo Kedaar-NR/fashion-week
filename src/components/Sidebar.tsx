@@ -1,5 +1,5 @@
 
-import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
@@ -13,59 +13,51 @@ const Sidebar = () => {
   
   return (
     <div 
-      className={`${collapsed ? 'h-16 w-full' : 'h-20 w-full'} bg-purple-400/90 fixed top-0 left-0 flex items-center justify-between transition-all duration-300 z-10 px-6 border-b border-purple-300`}
+      className={`${collapsed ? 'w-16' : 'w-56'} h-full bg-purple-300/80 fixed left-0 top-0 bottom-0 flex flex-col transition-all duration-300 z-10 border-r border-purple-200 shadow-sm`}
     >
-      <div className="flex items-center">
-        <h1 className="text-2xl font-extrabold tracking-tighter text-white mr-8">FASHION:WEEK</h1>
-        
-        <div className={`flex items-center space-x-6 ${collapsed ? 'hidden' : ''}`}>
-          <NavItem 
-            icon={<Home size={22} />} 
-            label="HOME" 
-            path="/" 
-            isActive={location.pathname === "/"} 
-          />
-          <NavItem 
-            icon={<Heart size={22} />} 
-            label="LIKED" 
-            path="/liked" 
-            isActive={location.pathname === "/liked"} 
-          />
-          <NavItem 
-            icon={<ShoppingBag size={22} />} 
-            label="BRANDS" 
-            path="/brands" 
-            isActive={location.pathname === "/brands"} 
-          />
-        </div>
-
-        {collapsed && (
-          <div className="flex items-center space-x-6">
-            <IconNavItem 
-              icon={<Home size={22} />} 
-              path="/" 
-              isActive={location.pathname === "/"} 
-            />
-            <IconNavItem 
-              icon={<Heart size={22} />} 
-              path="/liked" 
-              isActive={location.pathname === "/liked"} 
-            />
-            <IconNavItem 
-              icon={<ShoppingBag size={22} />} 
-              path="/brands" 
-              isActive={location.pathname === "/brands"} 
-            />
-          </div>
-        )}
+      <div className="flex items-center justify-between p-4 border-b border-purple-200">
+        <h1 className={`text-xl font-extrabold tracking-tighter text-purple-900 ${collapsed ? 'hidden' : 'block'}`}>FASHION:WEEK</h1>
+        <button 
+          onClick={toggleCollapse}
+          className="text-purple-700 hover:bg-purple-400/30 rounded-full p-2"
+        >
+          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+        </button>
       </div>
-      
-      <button 
-        onClick={toggleCollapse}
-        className="text-white hover:bg-purple-500/50 rounded-full p-2"
-      >
-        {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-      </button>
+
+      <div className="flex flex-col space-y-1 mt-4 px-2">
+        <NavItem 
+          icon={<Home size={20} />} 
+          label="HOME" 
+          path="/" 
+          isActive={location.pathname === "/"} 
+          collapsed={collapsed}
+        />
+        <NavItem 
+          icon={<Heart size={20} />} 
+          label="LIKED" 
+          path="/liked" 
+          isActive={location.pathname === "/liked"} 
+          collapsed={collapsed}
+        />
+        <NavItem 
+          icon={<ShoppingBag size={20} />} 
+          label="BRANDS" 
+          path="/brands" 
+          isActive={location.pathname === "/brands"} 
+          collapsed={collapsed}
+        />
+      </div>
+
+      <div className="mt-auto mb-4 px-2">
+        <NavItem 
+          icon={<LogIn size={20} />} 
+          label="SIGN IN" 
+          path="/signin" 
+          isActive={location.pathname === "/signin"} 
+          collapsed={collapsed}
+        />
+      </div>
     </div>
   );
 };
@@ -75,44 +67,25 @@ const NavItem = ({
   label, 
   path,
   isActive,
+  collapsed,
 }: { 
   icon: React.ReactNode; 
   label: string; 
   path: string;
   isActive: boolean;
+  collapsed: boolean;
 }) => {
   return (
     <Link 
       to={path} 
-      className={`flex items-center hover:bg-purple-500/50 transition-colors py-2 px-4 rounded-md ${
-        isActive ? 'bg-purple-500/30 text-white' : 'text-white'
+      className={`flex items-center hover:bg-purple-400/30 transition-colors py-3 px-3 rounded-md ${
+        isActive ? 'bg-purple-400/20 text-purple-900 font-semibold' : 'text-purple-800'
       }`}
     >
       <div className="flex items-center">
         <div>{icon}</div>
-        <span className="ml-2 text-sm font-medium">{label}</span>
+        {!collapsed && <span className="ml-3 text-sm">{label}</span>}
       </div>
-    </Link>
-  );
-};
-
-const IconNavItem = ({ 
-  icon, 
-  path,
-  isActive,
-}: { 
-  icon: React.ReactNode; 
-  path: string;
-  isActive: boolean;
-}) => {
-  return (
-    <Link 
-      to={path} 
-      className={`flex items-center justify-center hover:bg-purple-500/50 transition-colors p-2 rounded-md ${
-        isActive ? 'bg-purple-500/30 text-white' : 'text-white'
-      }`}
-    >
-      {icon}
     </Link>
   );
 };

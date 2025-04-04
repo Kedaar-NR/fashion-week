@@ -5,23 +5,62 @@ import { X } from "lucide-react";
 interface BrandProps {
   name: string;
   followers: string;
+  genre?: string;
 }
 
-const Brand = ({ name, followers }: BrandProps) => {
+const Brand = ({ name, followers, genre }: BrandProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const instagramUsername = name.replace('@', '');
 
   const handleClick = () => {
     setIsOpen(true);
   };
 
+  // Define genre colors
+  const getGenreColor = () => {
+    switch (genre?.toLowerCase()) {
+      case 'streetwear':
+      case 'street':
+        return 'bg-blue-500';
+      case 'punk':
+      case 'goth':
+      case 'grunge':
+      case 'punk/goth/grunge':
+        return 'bg-purple-600';
+      case 'vintage':
+      case 'cowboy':
+      case 'vintage/cowboy':
+        return 'bg-amber-600';
+      case 'basic':
+      case 'essentials':
+      case 'basic/essentials':
+        return 'bg-gray-500';
+      case 'outlier':
+        return 'bg-green-500';
+      default:
+        return 'bg-gray-400';
+    }
+  };
+
   return (
     <>
       <div 
-        className="aspect-square bg-gray-50 rounded-md hover:bg-gray-100 transition-colors flex flex-col items-center justify-center cursor-pointer p-4"
+        className="aspect-square bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border border-gray-100"
         onClick={handleClick}
       >
-        <div className="text-base font-medium mb-2">{name}</div>
-        <div className="w-full h-48 bg-gray-200 rounded-md"></div>
+        <div className="flex flex-col h-full">
+          <div className="px-3 py-2 flex items-center justify-between">
+            <div className="text-sm font-medium truncate">{name}</div>
+            {genre && (
+              <div className={`text-xs px-2 py-0.5 rounded-full text-white ${getGenreColor()}`}>
+                {genre}
+              </div>
+            )}
+          </div>
+          <div className="flex-1 bg-gray-50 flex items-center justify-center">
+            <div className="text-gray-400 text-sm">Instagram Preview</div>
+          </div>
+        </div>
       </div>
 
       {isOpen && (
@@ -31,6 +70,11 @@ const Brand = ({ name, followers }: BrandProps) => {
               <div>
                 <h2 className="font-bold">{name}</h2>
                 <p className="text-sm text-gray-500">{followers} followers</p>
+                {genre && (
+                  <div className={`inline-block text-xs px-2 py-0.5 rounded-full text-white mt-1 ${getGenreColor()}`}>
+                    {genre}
+                  </div>
+                )}
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
@@ -43,8 +87,15 @@ const Brand = ({ name, followers }: BrandProps) => {
               <p className="text-gray-600 mb-4">
                 Latest posts from {name}
               </p>
-              <div className="aspect-square bg-gray-100 rounded-md mb-4"></div>
-              <div className="aspect-square bg-gray-100 rounded-md"></div>
+              <div className="w-full aspect-square rounded-lg overflow-hidden">
+                <iframe 
+                  src={`https://www.instagram.com/${instagramUsername}/embed`}
+                  className="w-full h-full border-none" 
+                  title={`${name} Instagram Feed`}
+                  allowTransparency
+                  scrolling="no"
+                />
+              </div>
             </div>
           </div>
         </div>

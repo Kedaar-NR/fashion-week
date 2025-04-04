@@ -5,6 +5,7 @@ import { brands, genreColors } from "@/data/brands";
 import { Search } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Brand from "@/components/Brand";
 
 // Categories for brands
 const categories = [
@@ -50,7 +51,7 @@ const BrandsPage = () => {
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 pt-24 px-8">
+      <div className="flex-1 ml-14 md:ml-48 pt-8 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Brands</h1>
           
@@ -88,86 +89,16 @@ const BrandsPage = () => {
           
           {/* Brands grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {filteredBrands.map((brand) => {
-              const genreStyle = brand.genre && genreColors[brand.genre] ? 
-                genreColors[brand.genre] : 
-                { bg: "bg-gray-100", text: "text-gray-700" };
-              
-              return (
-                <div 
-                  key={brand.name}
-                  className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer"
-                  onClick={() => setSelectedBrand(brand.name)}
-                >
-                  <div className={`h-32 ${genreStyle.bg} flex items-center justify-center`}>
-                    <span className="text-xs text-gray-500">Instagram Post</span>
-                  </div>
-                  <div className="p-3">
-                    <h3 className="text-xs font-medium text-gray-800 mb-1 truncate">{brand.name}</h3>
-                    {brand.genre && (
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${genreStyle.bg} ${genreStyle.text}`}>
-                        {brand.genre}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+            {filteredBrands.map((brand) => (
+              <Brand
+                key={brand.name}
+                name={brand.name}
+                followers={brand.followers}
+                genre={brand.genre}
+              />
+            ))}
           </div>
         </div>
-        
-        {/* Brand detail sidebar */}
-        {selectedBrand && (
-          <div className="fixed top-0 right-0 w-96 h-full bg-white border-l border-gray-200 shadow-lg p-6 overflow-y-auto z-20">
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-              onClick={() => setSelectedBrand(null)}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            
-            <div className="pt-8">
-              <h2 className="text-2xl font-bold mb-2">{selectedBrand}</h2>
-              
-              {brands.find(brand => brand.name === selectedBrand) && (
-                <>
-                  <p className="text-sm text-gray-500 mb-1">
-                    {brands.find(brand => brand.name === selectedBrand)?.followers} followers
-                  </p>
-                  
-                  {brands.find(brand => brand.name === selectedBrand)?.genre && (
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      genreColors[brands.find(brand => brand.name === selectedBrand)?.genre || ""]?.bg || "bg-gray-100"
-                    } ${
-                      genreColors[brands.find(brand => brand.name === selectedBrand)?.genre || ""]?.text || "text-gray-700"
-                    } inline-block mb-4`}>
-                      {brands.find(brand => brand.name === selectedBrand)?.genre}
-                    </span>
-                  )}
-                </>
-              )}
-              
-              <p className="text-gray-600 my-4">
-                {selectedBrand} is a contemporary fashion brand known for its unique aesthetic and cultural influence. 
-                Their designs blend modern sensibilities with artistic expression.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-400">Instagram Feed</span>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="aspect-square bg-gray-100 rounded-md"></div>
-                  <div className="aspect-square bg-gray-100 rounded-md"></div>
-                  <div className="aspect-square bg-gray-100 rounded-md"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

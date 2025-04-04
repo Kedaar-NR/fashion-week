@@ -58,20 +58,19 @@ const Brand = ({ name, followers, genre }: BrandProps) => {
             )}
           </div>
           <div className="flex-1 bg-gray-50 flex items-center justify-center overflow-hidden">
-            <iframe 
-              src={`https://www.instagram.com/${instagramUsername}/embed`}
-              className="w-full h-full border-none" 
-              title={`${name} Instagram Preview`}
-              loading="lazy"
-              style={{ opacity: 0.7 }}
-            />
+            {/* Preview iframe */}
+            <div className="w-full h-full opacity-70 hover:opacity-90 transition-opacity">
+              <div className="w-full h-full flex items-center justify-center text-center bg-gray-200">
+                <span className="text-xs text-gray-500 px-2">{name}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
-          <div className="bg-white w-full max-w-md h-full overflow-y-auto">
+          <div className="bg-white w-full max-w-md h-full overflow-y-auto animate-slide-in-right">
             <div className="flex justify-between items-center p-4 border-b">
               <div>
                 <h2 className="font-bold">{name}</h2>
@@ -98,8 +97,7 @@ const Brand = ({ name, followers, genre }: BrandProps) => {
                   src={`https://www.instagram.com/${instagramUsername}/embed`}
                   className="w-full h-full border-none" 
                   title={`${name} Instagram Feed`}
-                  allowTransparency={true}
-                  scrolling="no"
+                  loading="lazy"
                 />
               </div>
             </div>

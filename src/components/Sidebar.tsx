@@ -28,21 +28,21 @@ const Sidebar = () => {
       <div className="flex flex-col space-y-1 mt-3 px-2">
         <NavItem 
           icon={<Home size={18} />} 
-          label="HOME" 
+          label="Home" 
           path="/" 
           isActive={location.pathname === "/"} 
           collapsed={collapsed}
         />
         <NavItem 
           icon={<ShoppingBag size={18} />} 
-          label="BRANDS" 
+          label="Brands" 
           path="/brands" 
           isActive={location.pathname === "/brands"} 
           collapsed={collapsed}
         />
         <NavItem 
           icon={<Heart size={18} className="text-red-500" />} 
-          label="LIKED" 
+          label="Liked" 
           path="/liked" 
           isActive={location.pathname === "/liked"} 
           collapsed={collapsed}
@@ -52,7 +52,7 @@ const Sidebar = () => {
       <div className="mt-auto mb-4 px-2">
         <NavItem 
           icon={<LogIn size={18} />} 
-          label="SIGN IN" 
+          label="Sign In" 
           path="/signin" 
           isActive={location.pathname === "/signin"} 
           collapsed={collapsed}
@@ -84,7 +84,7 @@ const NavItem = ({
     >
       <div className="flex items-center">
         <div>{icon}</div>
-        {!collapsed && <span className="ml-3 text-xs">{label}</span>}
+        {!collapsed && <span className="ml-3 text-sm">{label}</span>}
       </div>
     </Link>
   );

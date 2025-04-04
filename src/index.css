@@ -93,4 +93,36 @@
   .hover-scale:hover {
     @apply scale-105;
   }
+  
+  /* Slide animations */
+  @keyframes slide-in-right {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0); }
+  }
+  
+  @keyframes slide-out-right {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s ease-out;
+  }
+  
+  .animate-slide-out-right {
+    animation: slide-out-right 0.3s ease-out;
+  }
+  
+  /* Gradient text utilities */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+  }
+  
+  .gradient-primary {
+    @apply bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500;
+  }
+  
+  .gradient-secondary {
+    @apply bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-300;
+  }
 }

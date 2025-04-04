@@ -8,9 +8,10 @@ interface BrandProps {
   name: string;
   followers: string;
   genre: string;
+  onClick?: () => void;
 }
 
-const Brand = ({ name, followers, genre }: BrandProps) => {
+const Brand = ({ name, followers, genre, onClick }: BrandProps) => {
   const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(false);
   
@@ -21,7 +22,11 @@ const Brand = ({ name, followers, genre }: BrandProps) => {
   }, [name]);
 
   const handleClick = () => {
-    navigate(`/brands?brand=${name}`);
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(`/brands?brand=${name}`);
+    }
   };
 
   const handleLike = (e: React.MouseEvent) => {

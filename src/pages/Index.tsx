@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useId, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { brands } from "@/data/brands";
@@ -8,7 +8,6 @@ import { Avatar } from "@/components/ui/avatar";
 import { SparklesText } from "@/components/ui/sparkles-text";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { AuroraBackground } from "@/components/ui/aurora-background";
-import { useId, useRef } from "react";
 
 // Generate random follower counts for brands between 1 and 10k
 const brandsWithRandomFollowers = brands.map(brand => ({

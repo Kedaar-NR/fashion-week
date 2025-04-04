@@ -16,7 +16,7 @@ const Sidebar = () => {
       className={`${collapsed ? 'w-14' : 'w-48'} h-full bg-black fixed left-0 top-0 bottom-0 flex flex-col transition-all duration-300 z-10 shadow-md`}
     >
       <div className="flex items-center justify-between p-3 border-b border-gray-800">
-        <h1 className={`text-lg font-extrabold tracking-tighter text-white ${collapsed ? 'hidden' : 'block'}`}>FASHION:WEEK</h1>
+        <h1 className={`text-lg font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'} bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-300 bg-clip-text text-transparent animate-pulse`}>FASHION:WEEK</h1>
         <button 
           onClick={toggleCollapse}
           className="text-white hover:bg-gray-800 rounded-full p-1"
@@ -49,7 +49,7 @@ const Sidebar = () => {
         />
       </div>
 
-      <div className="mt-2 px-2">
+      <div className="mt-auto mb-4 px-2">
         <NavItem 
           icon={<LogIn size={18} />} 
           label="SIGN IN" 

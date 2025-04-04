@@ -6,11 +6,6 @@ import { toast } from "sonner";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import * as Stack from "@stackframe/init-stack";
-
-const auth = Stack.init({
-  providers: ["credentials", "github", "google"],
-});
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -47,22 +42,16 @@ const SignIn = () => {
         return;
       }
       
+      // Simulate authentication delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       if (isSignUp) {
-        // Handle sign up
+        // Handle sign up - in a real app, you would call your API here
         if (!name) {
           toast.error("Please enter your name");
           setIsLoading(false);
           return;
         }
-        
-        await auth.signUp({
-          email,
-          password,
-          metadata: { name }
-        });
-        
-        toast.success("Account created successfully!");
-        toast("Redirecting to your account...");
         
         // Create a user object
         const user = {
@@ -73,12 +62,10 @@ const SignIn = () => {
         
         // Store in localStorage
         localStorage.setItem('user', JSON.stringify(user));
+        toast.success("Account created successfully!");
       } else {
-        // Handle sign in
-        await auth.signIn({
-          email,
-          password
-        });
+        // Handle sign in - in a real app, you would call your API here
+        // For demo purposes, we'll just accept any email/password
         
         // Create a user object
         const user = {
@@ -89,12 +76,11 @@ const SignIn = () => {
         
         // Store in localStorage
         localStorage.setItem('user', JSON.stringify(user));
-        
         toast.success("Signed in successfully!");
-        toast("Redirecting to your account...");
       }
       
       // Redirect after a short delay
+      toast("Redirecting to your account...");
       setTimeout(() => {
         setIsLoading(false);
         navigate("/");
@@ -112,10 +98,28 @@ const SignIn = () => {
     setIsLoading(true);
     
     try {
-      await auth.signIn({ provider });
+      // Simulate authentication delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // The rest will be handled by the redirect flow
-      toast.success("Redirecting to authentication provider...");
+      // In a real app, you would integrate with the provider's OAuth flow
+      // For demo purposes, we'll create a dummy user
+      const user = {
+        name: `${provider} User`,
+        email: `${provider.toLowerCase()}user@example.com`,
+        photoURL: `https://api.dicebear.com/7.x/avataaars/svg?seed=${provider}`
+      };
+      
+      // Store in localStorage
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      toast.success(`Signed in with ${provider} successfully!`);
+      toast("Redirecting to your account...");
+      
+      // Redirect after a short delay
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/");
+      }, 1500);
     } catch (error) {
       console.error("Social authentication error:", error);
       toast.error(`Failed to sign in with ${provider}. Please try again.`);

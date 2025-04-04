@@ -14,7 +14,7 @@ const styleImages: StyleImage[] = [
   // First row
   { id: 1, url: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8", style: "MINIMALIST" },
   { id: 2, url: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2", style: "STREETWEAR" },
-  { id: 3, url: "https://images.unsplash.com/photo-1615506372313-64b4cd9945fb", style: "PUNK" },
+  { id: 3, url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f", style: "PUNK" },
   { id: 4, url: "https://images.unsplash.com/photo-1599032909756-5deb82fea3b0", style: "LUXURY" },
   { id: 5, url: "https://images.unsplash.com/photo-1583744946564-b52d01e7f922", style: "Y2K" },
   { id: 6, url: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7", style: "GRUNGE" },
@@ -22,7 +22,7 @@ const styleImages: StyleImage[] = [
   
   // Second row
   { id: 8, url: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd", style: "ESSENTIALS" },
-  { id: 9, url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f", style: "LUXURY" },
+  { id: 9, url: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952", style: "LUXURY" },
   { id: 10, url: "https://images.unsplash.com/photo-1566206091558-7f218b696731", style: "COWBOY" },
   { id: 11, url: "https://images.unsplash.com/photo-1508427953056-b00b8d78ebf5", style: "STREETWEAR" },
   { id: 12, url: "https://images.unsplash.com/photo-1603189343302-e603f7add05f", style: "MINIMALIST" },

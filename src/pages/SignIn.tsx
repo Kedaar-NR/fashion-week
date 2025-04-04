@@ -9,19 +9,16 @@ const SignIn = () => {
   
   const handleGoogleSignIn = () => {
     // Mock Google sign-in for demonstration
-    const avatarIndex = Math.floor(Math.random() * 1000);
-    const randomName = ["Alex", "Jordan", "Taylor", "Casey", "Morgan", "Riley"][Math.floor(Math.random() * 6)];
-    const randomLastname = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia"][Math.floor(Math.random() * 6)];
+    // In a real application, this would integrate with Google OAuth
+    // We're removing the autofill functionality as requested
     
-    const userData = {
-      email: `${randomName.toLowerCase()}.${randomLastname.toLowerCase()}@gmail.com`,
-      name: `${randomName} ${randomLastname}`,
-      photoURL: `https://i.pravatar.cc/150?img=${avatarIndex}`
-    };
-    
-    localStorage.setItem('user', JSON.stringify(userData));
     toast.success("Signed in with Google successfully!");
-    navigate("/");
+    toast("Redirecting to your account...");
+    
+    // Redirect after a short delay to simulate auth flow
+    setTimeout(() => {
+      navigate("/");
+    }, 1500);
   };
 
   return (

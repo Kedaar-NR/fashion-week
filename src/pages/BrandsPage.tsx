@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Brand from "@/components/Brand";
+import { toast } from "sonner";
 
 // Categories for brands
 const categories = [
@@ -30,12 +31,19 @@ const BrandsPage = () => {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const location = useLocation();
 
-  // Get query params for preselecting a brand
+  // Get query params for preselecting a brand or filter by style
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const brandParam = searchParams.get("brand");
+    const styleParam = searchParams.get("style");
+    
     if (brandParam) {
       setSelectedBrand(brandParam);
+    }
+    
+    if (styleParam && categories.includes(styleParam)) {
+      setActiveCategory(styleParam);
+      toast.success(`Showing ${styleParam.toLowerCase()} brands based on your style`);
     }
   }, [location]);
   

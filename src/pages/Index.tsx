@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useId, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -11,11 +10,11 @@ import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { Footerdemo } from "@/components/ui/footer-section";
 import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
+import StyleQuiz from "@/components/StyleQuiz";
 
 // Generate random follower counts for brands between 1 and 10k
 const brandsWithRandomFollowers = brands.map(brand => ({
   ...brand,
-  followers: `${Math.floor(9000 + Math.random() * 1000)} followers`  // Generate random numbers close to 10k
 }));
 
 interface SlideData {
@@ -241,9 +240,16 @@ const CustomCarousel = ({ slides, onButtonClick }: CarouselProps) => {
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [showStyleQuiz, setShowStyleQuiz] = useState(true);
   const navigate = useNavigate();
 
-  // Handle command selection
+  useEffect(() => {
+    const hasSeenQuiz = localStorage.getItem('hasSeenStyleQuiz');
+    if (hasSeenQuiz) {
+      setShowStyleQuiz(false);
+    }
+  }, []);
+
   const handleSelect = (brandName: string) => {
     setSelectedBrand(brandName.replace('@', ''));
   };
@@ -252,12 +258,15 @@ const Index = () => {
     brand.name.toLowerCase().includes(searchQuery.toLowerCase())
   ) : [];
 
-  // Navigate to brands page when clicking carousel buttons
   const handleCarouselButtonClick = () => {
     navigate('/brands');
   };
 
-  // Fashion carousel slides - fashion and clothes focused
+  const handleCloseStyleQuiz = () => {
+    setShowStyleQuiz(false);
+    localStorage.setItem('hasSeenStyleQuiz', 'true');
+  };
+
   const fashionSlides = [
     {
       title: "Modern Fashion",
@@ -280,8 +289,7 @@ const Index = () => {
       src: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     },
   ];
-  
-  // Brand colors for avatar backgrounds
+
   const brandColors = [
     'from-gray-500 to-gray-800',
     'from-gray-400 to-black',
@@ -299,12 +307,9 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <AuroraBackground className="min-h-screen flex-1 overflow-auto p-0">
         <div className="flex min-h-screen">
-          {/* Sidebar */}
           <Sidebar />
           
-          {/* Main content */}
           <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
-            {/* Sparkle Title at the top */}
             <div className="mt-6 mb-4 px-8">
               <div className="relative">
                 <SparklesText 
@@ -316,7 +321,6 @@ const Index = () => {
               </div>
             </div>
             
-            {/* Search bar moved up */}
             <div className="px-8 mb-8 animate-scale-in">
               <div className="relative w-full max-w-3xl mx-auto">
                 <Command className="rounded-lg border shadow-md">
@@ -368,7 +372,6 @@ const Index = () => {
               </div>
             ) : (
               <>
-                {/* Carousel section */}
                 <div className="px-8 pb-8 mt-8">
                   <div className="max-w-3xl mx-auto">
                     <div className="relative overflow-hidden w-full pb-16">
@@ -382,11 +385,11 @@ const Index = () => {
         </div>
       </AuroraBackground>
       
-      {/* Footer */}
       <Footerdemo />
       
-      {/* Chat */}
       <ExpandableChatDemo />
+
+      {showStyleQuiz && <StyleQuiz onClose={handleCloseStyleQuiz} />}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 import { Home, Heart, ShoppingBag, ChevronLeft, ChevronRight, LogIn, LogOut, FileText } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -141,13 +142,6 @@ const Sidebar = () => {
           label="Liked" 
           path="/liked" 
           isActive={location.pathname === "/liked"} 
-          collapsed={collapsed}
-        />
-        <NavItem 
-          icon={<FileText size={18} className="text-blue-400" />} 
-          label="Terms" 
-          path="/terms" 
-          isActive={location.pathname === "/terms"} 
           collapsed={collapsed}
         />
       </div>

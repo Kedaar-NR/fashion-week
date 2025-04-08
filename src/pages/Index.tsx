@@ -87,7 +87,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="rounded-xl overflow-hidden aspect-square w-full h-[50vh]">
+          <div className="rounded-xl overflow-hidden aspect-square w-full h-[60vh]">
             <iframe 
               src={`https://www.instagram.com/${cleanBrandName}/embed`}
               className="w-full h-full border-none" 
@@ -120,7 +120,7 @@ const Index = () => {
           </div>
           
           <div className="mt-4 p-4 bg-gray-50 rounded-lg text-center">
-            <h4 className="text-lg font-medium text-gray-800">Coming soon</h4>
+            <h4 className="text-lg font-medium text-gray-800">More details coming soon</h4>
           </div>
         </div>
       </div>

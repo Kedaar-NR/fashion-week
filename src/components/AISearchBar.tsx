@@ -66,9 +66,8 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
       <div className="relative" ref={commandRef}>
         <Command className="rounded-lg border shadow-md">
           <div className="flex items-center px-3">
-            <Search size={16} className="text-gray-400 mr-2" />
             <CommandInput
-              placeholder="Search fashion brands..."
+              placeholder="Search"
               value={searchQuery}
               onValueChange={setSearchQuery}
               onKeyDown={handleKeyPress}

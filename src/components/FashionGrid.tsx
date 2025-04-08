@@ -62,9 +62,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
     localStorage.setItem('likedBrands', JSON.stringify(updatedLikes));
     
     if (!likedBrands.includes(brandTitle)) {
-      // Add toast notification
-      // (If you want to add toast, import toast from sonner and uncomment this)
-      // toast.success(`Added ${brandTitle} to your liked brands!`);
+      // Toast notification is handled in the parent component
     }
   };
 
@@ -86,9 +84,9 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
                 <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-gray-200 flex items-center justify-center">
                   <span className="font-bold text-gray-500 text-base">{item.title.charAt(0).toUpperCase()}</span>
                 </div>
-                <div className="flex-1 flex flex-col items-start">
+                <div className="flex-1">
                   <div className="font-medium text-lg">@{item.title.replace('@', '')}</div>
-                  <div className="mt-1 flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-1 mt-1">
                     {item.genre.split('/').map((genre, idx) => (
                       <span 
                         key={idx}
@@ -142,7 +140,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
               />
               <button 
                 onClick={(e) => toggleLike(item.title, e)}
-                className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
+                className="absolute top-4 right-4 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
               >
                 <Heart 
                   size={18} 

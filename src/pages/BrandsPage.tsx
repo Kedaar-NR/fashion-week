@@ -3,10 +3,10 @@ import Sidebar from "@/components/Sidebar";
 import { brands, genreColors } from "@/data/brands";
 import { Search, Heart } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Brand from "@/components/Brand";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import Marquee from "@/components/ui/marquee";
 
 const brandBlurbs: Record<string, string> = {
   "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
@@ -109,22 +109,15 @@ const BrandsPage = () => {
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Brands</h1>
           
+          {/* Marquee for brand genres */}
+          <Marquee 
+            items={categories} 
+            activeItem={activeCategory} 
+            onItemClick={handleCategoryChange} 
+            speed={25}
+          />
+          
           <div className="flex flex-wrap items-center gap-4 mb-8">
-            <div className="w-64">
-              <Select value={activeCategory} onValueChange={handleCategoryChange}>
-                <SelectTrigger className="w-full bg-white">
-                  <SelectValue placeholder="Filter by category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
             <div className="flex-grow max-w-md">
               <div className="relative">
                 <input

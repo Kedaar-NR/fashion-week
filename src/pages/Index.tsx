@@ -280,10 +280,7 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Always show the quiz when loading the page
-    setShowStyleQuiz(true);
-    
-    // Load liked brands from localStorage
+    // Only load liked brands from localStorage, don't show quiz automatically
     const saved = JSON.parse(localStorage.getItem('likedBrands') || '[]');
     setLikedBrands(saved);
   }, []);
@@ -306,7 +303,8 @@ const Index = () => {
   };
 
   const handleOpenStyleQuiz = () => {
-    setShowStyleQuiz(true);
+    // Navigate to the quiz page instead of showing a popup
+    navigate('/quiz');
   };
 
   // Handle toggling liked status for brands
@@ -389,26 +387,27 @@ const Index = () => {
     );
   };
 
+  // Using random 4 images from the images folder for the carousel
   const fashionSlides = [
     {
       title: "Modern Fashion",
       button: "Explore Collection",
-      src: "https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images1/IMG_4953.JPG",
     },
     {
       title: "Urban Streetwear",
       button: "View Style",
-      src: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images2/IMG_4969.JPG",
     },
     {
       title: "Designer Pieces",
       button: "Browse Designs",
-      src: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images1/IMG_4958.JPG",
     },
     {
       title: "Casual Elegance",
       button: "Shop Now",
-      src: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images2/IMG_4974.JPG",
     },
   ];
 

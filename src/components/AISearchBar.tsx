@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Command, CommandInput } from '@/components/ui/command';
 import { toast } from 'sonner';
 
@@ -43,12 +43,6 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
               <X size={16} className="text-gray-500" />
             </button>
           )}
-          <button
-            onClick={handleSearch}
-            className="p-1 rounded-full hover:bg-gray-100 ml-1"
-          >
-            <Search size={16} className="text-gray-500" />
-          </button>
         </div>
       </Command>
     </div>

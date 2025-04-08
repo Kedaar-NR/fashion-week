@@ -27,19 +27,30 @@ const fashionItems = brands.map((brand, index) => ({
   followers: brand.followers
 }));
 
-const FashionGrid = () => {
+interface FashionGridProps {
+  searchQuery?: string;
+}
+
+const FashionGrid = ({ searchQuery = "" }: FashionGridProps) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState<typeof fashionItems[0] | null>(null);
   
-  const filteredItems = selectedCategory
-    ? fashionItems.filter(item => item.genre.toUpperCase() === selectedCategory.toUpperCase())
-    : fashionItems;
+  // Filter items by category and search query if provided
+  const filteredItems = fashionItems
+    .filter(item => {
+      // First filter by category if selected
+      return selectedCategory ? item.genre.toUpperCase() === selectedCategory.toUpperCase() : true;
+    })
+    .filter(item => {
+      // Then filter by search query if provided
+      return searchQuery ? item.title.toLowerCase().includes(searchQuery.toLowerCase()) : true;
+    });
 
   return (
     <div className="p-1 flex-1 overflow-hidden">
       <MarqueeCategories onSelectCategory={setSelectedCategory} />
       
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-1 overflow-hidden max-h-[calc(100vh-200px)]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1 overflow-hidden max-h-[calc(100vh-200px)]">
         {filteredItems.map((item) => (
           <motion.div
             key={item.id}

@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { X, Mail } from 'lucide-react';
 
 const TallyEmailWidget = () => {
@@ -58,14 +58,12 @@ const TallyEmailWidget = () => {
         )}
       </AnimatePresence>
 
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+      <button
         onClick={handleOpenForm}
         className="bg-black text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
       >
         <Mail size={20} />
-      </motion.button>
+      </button>
     </div>
   );
 };

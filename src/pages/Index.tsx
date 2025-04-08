@@ -2,17 +2,14 @@
 import { useState, useEffect } from "react";
 import { brands } from "@/data/brands";
 import { motion } from "framer-motion";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { Heart, X, Shirt } from "lucide-react";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { X, Shirt } from "lucide-react";
 import StyleQuiz from "@/components/StyleQuiz";
 import FashionGrid from "@/components/FashionGrid";
 import { Footerdemo } from "@/components/ui/footer-section";
-import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
 import AISearchBar from "@/components/AISearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
-import { Button } from "@/components/ui/button";
 
 // Sort brands alphabetically
 const brandsData = [...brands].sort((a, b) => a.name.localeCompare(b.name));
@@ -21,6 +18,7 @@ const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [showStyleQuiz, setShowStyleQuiz] = useState(false);
   const [likedBrands, setLikedBrands] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   
   useEffect(() => {
     // Check if user has completed the quiz or previously seen the style quiz
@@ -48,9 +46,7 @@ const Index = () => {
   };
   
   const handleSearch = (query: string) => {
-    console.log("Searching for:", query);
-    // Implement AI search functionality here
-    // This could filter brands, show recommendations, etc.
+    setSearchQuery(query);
   };
 
   // Close brand popup
@@ -145,7 +141,7 @@ const Index = () => {
             renderBrandPopup(selectedBrand)
           ) : (
             <div className="flex-1 overflow-hidden">
-              <FashionGrid />
+              <FashionGrid searchQuery={searchQuery} />
             </div>
           )}
         </div>

@@ -1,10 +1,9 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Mail } from 'lucide-react';
 
 const TallyEmailWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
 
   useEffect(() => {
@@ -24,14 +23,8 @@ const TallyEmailWidget = () => {
     localStorage.setItem('tallyWidgetDismissed', 'true');
   };
 
-  const handleToggle = () => {
-    if (isOpen) {
-      setIsOpen(false);
-      setTimeout(() => setIsMinimized(true), 300);
-    } else {
-      setIsMinimized(false);
-      setTimeout(() => setIsOpen(true), 300);
-    }
+  const handleOpenForm = () => {
+    window.open('https://tally.so/r/walQGB', '_blank');
   };
 
   return (
@@ -50,31 +43,17 @@ const TallyEmailWidget = () => {
                 <X size={16} />
               </button>
             </div>
-            {isOpen ? (
-              <div className="h-[320px]">
-                <iframe
-                  src="https://tally.so/embed/3yO9AO?alignLeft=1&hideTitle=1&transparentBackground=1"
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                  marginHeight={0}
-                  marginWidth={0}
-                  title="Newsletter Signup"
-                ></iframe>
-              </div>
-            ) : (
-              <div className="p-4">
-                <p className="text-sm text-gray-600 mb-3">
-                  Stay updated with the latest fashion trends and brand releases.
-                </p>
-                <button
-                  onClick={() => setIsOpen(true)}
-                  className="w-full bg-black text-white py-2 rounded font-kanit hover:bg-gray-800 transition-colors"
-                >
-                  Subscribe Now
-                </button>
-              </div>
-            )}
+            <div className="p-4">
+              <p className="text-sm text-gray-600 mb-3">
+                Stay updated with the latest fashion trends and brand releases.
+              </p>
+              <button
+                onClick={handleOpenForm}
+                className="w-full bg-black text-white py-2 rounded font-kanit hover:bg-gray-800 transition-colors"
+              >
+                Subscribe Now
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -82,17 +61,10 @@ const TallyEmailWidget = () => {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={handleToggle}
+        onClick={handleOpenForm}
         className="bg-black text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
       >
-        {isMinimized ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-        ) : (
-          <X size={20} />
-        )}
+        <Mail size={20} />
       </motion.button>
     </div>
   );

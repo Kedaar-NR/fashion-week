@@ -1,8 +1,7 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { brands, genreColors } from "@/data/brands";
-import { Shirt } from "lucide-react";
 import MarqueeCategories from "./MarqueeCategories";
 
 // Get brand website URL if available
@@ -40,14 +39,14 @@ const FashionGrid = () => {
     <div className="p-1 flex-1 overflow-hidden">
       <MarqueeCategories onSelectCategory={setSelectedCategory} />
       
-      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-1 overflow-hidden max-h-[calc(100vh-200px)]">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-1 overflow-hidden max-h-[calc(100vh-200px)]">
         {filteredItems.map((item) => (
           <motion.div
             key={item.id}
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
             onClick={() => setSelectedBrand(item)}
-            className="aspect-square bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
+            className="aspect-[3/4] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
             <div className="p-1 border-b flex items-center">
               <div className="w-4 h-4 rounded-full overflow-hidden mr-0.5 bg-gray-200 flex items-center justify-center">

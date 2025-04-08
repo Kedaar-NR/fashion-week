@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 const Sidebar = () => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(true); // Set to true for auto-minimized
+  const [collapsed, setCollapsed] = useState(true); // Keep this true for auto-minimized
   const [user, setUser] = useState<{ email?: string, name?: string, photoURL?: string } | null>(null);
   
   useEffect(() => {
@@ -53,7 +53,7 @@ const Sidebar = () => {
         className={`${collapsed ? 'w-14' : 'w-48'} h-full bg-white fixed left-0 top-0 bottom-0 flex flex-col transition-all duration-300 z-10 shadow-md`}
       >
         <div className="flex flex-col border-b border-gray-200">
-          <div className="flex items-center justify-between p-3">
+          <div className="flex items-center justify-center p-3">
             <h1 className={`text-lg font-kanit font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'}`}>
               {collapsed ? null : (
                 <TextShimmerWave
@@ -69,7 +69,7 @@ const Sidebar = () => {
             </h1>
             <button 
               onClick={toggleCollapse}
-              className="text-black hover:bg-gray-100 rounded-full p-1 mx-auto"
+              className="text-black hover:bg-gray-100 rounded-full p-1"
             >
               {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </button>
@@ -123,21 +123,24 @@ const Sidebar = () => {
           )}
         </div>
 
-        <div className="flex flex-col space-y-1 mt-3 px-2 items-center">
-          <NavItem 
-            icon={<Home size={18} className="text-green-600" />} 
-            label="Home" 
-            path="/home" 
-            isActive={location.pathname === "/home"} 
-            collapsed={collapsed}
-          />
-          <NavItem 
-            icon={<Heart size={18} className="text-red-500" />} 
-            label="Liked" 
-            path="/liked" 
-            isActive={location.pathname === "/liked"} 
-            collapsed={collapsed}
-          />
+        {/* Center the navigation items vertically in the sidebar */}
+        <div className="flex flex-col items-center justify-center flex-grow">
+          <div className="flex flex-col space-y-6 items-center">
+            <NavItem 
+              icon={<Home size={18} className="text-green-600" />} 
+              label="Home" 
+              path="/home" 
+              isActive={location.pathname === "/home"} 
+              collapsed={collapsed}
+            />
+            <NavItem 
+              icon={<Heart size={18} className="text-red-500" />} 
+              label="Liked" 
+              path="/liked" 
+              isActive={location.pathname === "/liked"} 
+              collapsed={collapsed}
+            />
+          </div>
         </div>
       </div>
     </TooltipProvider>

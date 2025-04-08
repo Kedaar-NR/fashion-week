@@ -62,12 +62,20 @@ const RecommendationsPage = () => {
     
     // Save the recommended brands to localStorage
     localStorage.setItem('recommendedBrands', JSON.stringify(randomBrands.map(b => b.name)));
+    
+    // Auto-save recommended brands to liked brands
+    const existingLikedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
+    const brandNames = randomBrands.map(brand => brand.name);
+    
+    // Add only brands that aren't already in likedBrands
+    const newLikedBrands = [...new Set([...existingLikedBrands, ...brandNames])];
+    localStorage.setItem('likedBrands', JSON.stringify(newLikedBrands));
   }, []);
 
   const handleFinish = () => {
     // Save that the user has completed the quiz
     localStorage.setItem('hasCompletedQuiz', 'true');
-    toast.success('Your brand recommendations have been saved!');
+    toast.success('Your brand recommendations have been saved to your liked brands!');
     navigate('/home');
   };
 

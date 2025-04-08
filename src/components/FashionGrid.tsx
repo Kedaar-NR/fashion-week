@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { brands } from "@/data/brands";
+import { TShirt } from "lucide-react";
 
 // Function to get detailed brand descriptions
 const getBrandDescription = (brandName: string) => {
@@ -120,6 +121,7 @@ interface BrandPopupProps {
 const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
   const [instagramFailed, setInstagramFailed] = useState(false);
   const websiteUrl = getBrandWebsiteUrl(brand.title);
+  const cleanBrandName = brand.title.replace('@', '');
   
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
@@ -134,7 +136,7 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-1/2 aspect-square rounded-2xl overflow-hidden bg-gray-100">
             <iframe 
-              src={`https://www.instagram.com/${brand.title.replace('@', '')}/embed`}
+              src={`https://www.instagram.com/${cleanBrandName}/embed`}
               className={`w-full h-full border-none ${instagramFailed ? 'hidden' : 'block'}`}
               title={`${brand.title} Instagram Feed`}
               scrolling="no"
@@ -158,7 +160,7 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
                       rel="noopener noreferrer"
                       className="text-white hover:underline"
                     >
-                      Visit {brand.title} Website
+                      Visit {cleanBrandName} Website
                     </a>
                   </div>
                 )}
@@ -167,7 +169,7 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
           </div>
           
           <div className="w-full md:w-1/2">
-            <h2 className="text-3xl font-bold mb-4">@{brand.title.replace('@', '')}</h2>
+            <h2 className="text-3xl font-bold mb-4">@{cleanBrandName}</h2>
             
             <div className="mb-6">
               <span className={`px-3 py-1 rounded-full ${getGenreColor(brand.genre)}`}>
@@ -194,7 +196,7 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
   );
 };
 
-// Marquee component for categories
+// Marquee component for categories with smaller width
 const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: string) => void }) => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [duplicatedCategories, setDuplicatedCategories] = useState<string[]>([]);
@@ -211,20 +213,20 @@ const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: 
   };
   
   return (
-    <div className="w-full overflow-hidden py-4 bg-gradient-to-r from-gray-50 to-white rounded-xl my-4">
+    <div className="w-full overflow-hidden py-2 bg-gradient-to-r from-gray-50 to-white rounded-xl my-4">
       <motion.div 
         className="flex whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
         transition={{ 
           repeat: Infinity, 
-          duration: 30, 
+          duration: 20, // Faster scroll
           ease: "linear" 
         }}
       >
         {duplicatedCategories.map((category, idx) => (
           <button
             key={`${category}-${idx}`}
-            className={`px-6 py-3 mx-2 whitespace-nowrap rounded-full transition-colors text-sm font-medium ${
+            className={`px-3 py-1.5 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
               activeCategory === category 
                 ? "bg-black text-white" 
                 : "bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -249,33 +251,33 @@ const FashionGrid = () => {
     : fashionItems;
 
   return (
-    <div className="p-4 md:p-8 flex-1">
+    <div className="p-2 md:p-4 flex-1">
       <MarqueeCategories onSelectCategory={setSelectedCategory} />
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         {filteredItems.map((item) => (
           <motion.div
             key={item.id}
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
             onClick={() => setSelectedBrand(item)}
-            className="aspect-square bg-gray-50 rounded-xl overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
+            className="aspect-square bg-gray-50 rounded-lg overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
-            <div className="p-4 border-b flex items-center">
-              <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-gray-200 flex items-center justify-center">
-                <span className="font-bold text-gray-500">{item.title.charAt(0).toUpperCase()}</span>
+            <div className="p-2 border-b flex items-center">
+              <div className="w-6 h-6 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
+                <span className="font-bold text-gray-500 text-xs">{item.title.charAt(0).toUpperCase()}</span>
               </div>
-              <div>
-                <div className="font-medium">@{item.title.replace('@', '')}</div>
-                <div className="text-xs mt-1">
-                  <span className={`px-2 py-1 rounded-full text-xs ${getGenreColor(item.genre)}`}>
+              <div className="overflow-hidden">
+                <div className="font-medium text-xs truncate">@{item.title.replace('@', '')}</div>
+                <div className="text-xxs mt-0.5">
+                  <span className={`px-1.5 py-0.5 rounded-full text-xxs ${getGenreColor(item.genre)}`}>
                     {item.genre.toUpperCase()}
                   </span>
                 </div>
               </div>
             </div>
             
-            <div className="flex-1 overflow-hidden rounded-b-xl relative">
+            <div className="flex-1 overflow-hidden rounded-b-lg relative">
               <iframe 
                 src={`https://www.instagram.com/${item.title.replace('@', '')}/embed`}
                 className="w-full h-full border-none" 
@@ -289,26 +291,25 @@ const FashionGrid = () => {
                   
                   // Create container for the image
                   const container = document.createElement('div');
-                  container.className = 'w-full h-full relative';
+                  container.className = 'w-full h-full flex items-center justify-center bg-gray-100';
                   
-                  // Add image from Unsplash related to fashion and the genre
-                  const img = document.createElement('img');
-                  img.src = `https://source.unsplash.com/300x300/?fashion,${item.genre}`;
-                  img.className = 'w-full h-full object-cover';
-                  img.alt = item.title;
-                  container.appendChild(img);
+                  // Add t-shirt icon as fallback
+                  const iconContainer = document.createElement('div');
+                  iconContainer.className = 'text-gray-400 flex items-center justify-center h-full';
+                  iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
+                  container.appendChild(iconContainer);
                   
                   // Add website link if available
                   const websiteUrl = getBrandWebsiteUrl(item.title);
                   if (websiteUrl) {
                     const linkContainer = document.createElement('div');
-                    linkContainer.className = 'absolute bottom-0 left-0 right-0 bg-black/70 p-2 text-white text-center';
+                    linkContainer.className = 'absolute bottom-0 left-0 right-0 bg-black/70 p-1 text-white text-center text-xs';
                     
                     const link = document.createElement('a');
                     link.href = websiteUrl;
                     link.target = '_blank';
                     link.rel = 'noopener noreferrer';
-                    link.className = 'text-white hover:underline text-sm';
+                    link.className = 'text-white hover:underline text-xs';
                     link.textContent = 'Visit Website';
                     
                     linkContainer.appendChild(link);

@@ -1,7 +1,6 @@
 
 import { useState, useEffect, useId, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "@/components/Sidebar";
 import { brands } from "@/data/brands";
 import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -121,7 +120,7 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
     <div className="[perspective:1200px] [transform-style:preserve-3d]">
       <li
         ref={slideRef}
-        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[40vmin] h-[40vmin] mx-[4vmin] z-10"
+        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[30vmin] h-[30vmin] mx-[2vmin] z-10"
         onClick={() => handleSlideClick(index)}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -160,11 +159,11 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
         </div>
 
         <article
-          className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${
+          className={`relative p-[2vmin] transition-opacity duration-1000 ease-in-out ${
             current === index ? "opacity-100 visible" : "opacity-0 invisible"
           }`}
         >
-          <h2 className="text-lg md:text-2xl lg:text-3xl font-semibold relative font-kanit">
+          <h2 className="text-base md:text-lg lg:text-xl font-semibold relative font-kanit">
             {title}
           </h2>
           <div className="flex justify-center">
@@ -173,7 +172,7 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
                 e.stopPropagation();
                 onButtonClick();
               }}
-              className="mt-4 px-3 py-1 w-fit mx-auto sm:text-sm text-black bg-white h-10 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] font-kanit"
+              className="mt-2 px-2 py-1 w-fit mx-auto text-xs text-black bg-white h-8 border border-transparent flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] font-kanit"
             >
               {button}
             </button>
@@ -197,7 +196,7 @@ const CarouselControl = ({
 }: CarouselControlProps) => {
   return (
     <button
-      className={`w-10 h-10 flex items-center mx-2 justify-center bg-neutral-200 dark:bg-neutral-800 border border-gray-300 rounded-full focus:border-[#6D64F7] focus:outline-none hover:-translate-y-0.5 active:translate-y-0.5 transition duration-200 ${
+      className={`w-8 h-8 flex items-center mx-1 justify-center bg-neutral-200 dark:bg-neutral-800 border border-gray-300 rounded-full focus:border-[#6D64F7] focus:outline-none hover:-translate-y-0.5 active:translate-y-0.5 transition duration-200 ${
         type === "previous" ? "rotate-180" : ""
       }`}
       title={title}
@@ -236,11 +235,11 @@ const CustomCarousel = ({ slides, onButtonClick }: CarouselProps) => {
 
   return (
     <div
-      className="relative w-[40vmin] h-[40vmin] mx-auto"
+      className="relative w-[30vmin] h-[30vmin] mx-auto"
       aria-labelledby={`carousel-heading-${id}`}
     >
       <ul
-        className="absolute flex mx-[-4vmin] transition-transform duration-1000 ease-in-out"
+        className="absolute flex mx-[-2vmin] transition-transform duration-1000 ease-in-out"
         style={{
           transform: `translateX(-${current * (100 / slides.length)}%)`,
         }}
@@ -257,7 +256,7 @@ const CustomCarousel = ({ slides, onButtonClick }: CarouselProps) => {
         ))}
       </ul>
 
-      <div className="absolute flex justify-center w-full bottom-[-3rem]">
+      <div className="absolute flex justify-center w-full bottom-[-2rem]">
         <CarouselControl
           type="previous"
           title="Go to previous slide"
@@ -375,7 +374,7 @@ const Index = () => {
   // Brand popup UI - shared between Index and LikedPage
   const renderBrandPopup = (brandName: string) => {
     return (
-      <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center ml-14 md:ml-48">
+      <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
         <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold">{brandName}</h2>
@@ -404,7 +403,7 @@ const Index = () => {
           
           <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
             <iframe 
-              src={`https://www.instagram.com/${brandName.replace('@', '')}/embed`}
+              src={`https://www.instagram.com/${brandName}/embed`}
               className="w-full h-full border-none" 
               title={`${brandName} Instagram Feed`}
               allowTransparency={true}
@@ -471,99 +470,93 @@ const Index = () => {
       className="min-h-screen flex flex-col font-kanit bg-white"
     >
       <div className="flex-grow">
-        <div className="flex min-h-screen">
-          <Sidebar />
-          
-          <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300">
-            <div className="mt-6 mb-4 px-8">
-              <div className="relative">
-                <SparklesText 
-                  text="Your gateway to curated fashion brands"
-                  className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit"
-                  colors={{ first: "#c0c0c0", second: "#333333" }}
-                  sparklesCount={15}
-                />
-              </div>
-            </div>
-            
-            <div className="flex justify-center mb-4">
-              <RainbowButton onClick={handleOpenStyleQuiz}>
-                Discover Your Style
-              </RainbowButton>
-            </div>
-            
-            <div className="px-8 mb-8 animate-scale-in">
-              <div className="relative w-full max-w-3xl mx-auto" ref={commandRef}>
-                <Command className="rounded-lg border shadow-md">
-                  <div className="flex items-center px-3">
-                    <CommandInput
-                      placeholder="Search brands"
-                      value={searchQuery}
-                      onValueChange={setSearchQuery}
-                      onFocus={() => setIsSearchFocused(true)}
-                      className="h-12 font-kanit"
-                    />
-                    {searchQuery && (
-                      <button 
-                        onClick={() => {
-                          setSearchQuery('');
-                          setIsSearchFocused(false);
-                        }}
-                        className="p-1 rounded-full hover:bg-gray-100"
-                      >
-                        <X size={16} className="text-gray-500" />
-                      </button>
-                    )}
-                  </div>
-                  {isSearchFocused && searchQuery.length > 0 && filteredBrands.length > 0 && (
-                    <CommandList>
-                      <CommandGroup heading="Brands">
-                        <ScrollArea className="h-64">
-                          {filteredBrands.map((brand, index) => (
-                            <CommandItem
-                              key={brand.name}
-                              onSelect={() => handleSelect(brand.name)}
-                              className="cursor-pointer flex items-center space-x-2 hover:bg-gray-100 transition-colors"
-                            >
-                              <Avatar className={`h-8 w-8 bg-gradient-to-br ${brandColors[index % brandColors.length]}`}>
-                                <div className="font-bold text-white">
-                                  {brand.name.charAt(0).toUpperCase()}
-                                </div>
-                              </Avatar>
-                              <span>{brand.name}</span>
-                            </CommandItem>
-                          ))}
-                        </ScrollArea>
-                      </CommandGroup>
-                    </CommandList>
-                  )}
-                </Command>
-              </div>
-            </div>
-            
-            {selectedBrand ? (
-              renderBrandPopup(selectedBrand)
-            ) : (
-              <>
-                <div className="px-8 pb-8 mt-8">
-                  <div className="max-w-3xl mx-auto">
-                    <div className="relative overflow-hidden w-full pb-16">
-                      <CustomCarousel slides={fashionSlides} onButtonClick={handleCarouselButtonClick} />
-                    </div>
-                  </div>
-                </div>
-                
-                <div id="fashion-grid" className="px-8 pb-8">
-                  <h2 className="text-2xl font-bold mb-6">Browse All Styles</h2>
-                  <FashionGrid />
-                </div>
-              </>
-            )}
+        <div className="mt-4 mb-2 px-6">
+          <div className="relative">
+            <SparklesText 
+              text="Your gateway to curated fashion brands"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-center font-kanit"
+              colors={{ first: "#c0c0c0", second: "#333333" }}
+              sparklesCount={10}
+            />
           </div>
         </div>
+        
+        <div className="flex justify-center mb-2">
+          <RainbowButton onClick={handleOpenStyleQuiz}>
+            Discover Your Style
+          </RainbowButton>
+        </div>
+        
+        <div className="px-4 mb-4 animate-scale-in">
+          <div className="relative w-full max-w-2xl mx-auto" ref={commandRef}>
+            <Command className="rounded-lg border shadow-md">
+              <div className="flex items-center px-3">
+                <CommandInput
+                  placeholder="Search brands"
+                  value={searchQuery}
+                  onValueChange={setSearchQuery}
+                  onFocus={() => setIsSearchFocused(true)}
+                  className="h-10 font-kanit"
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => {
+                      setSearchQuery('');
+                      setIsSearchFocused(false);
+                    }}
+                    className="p-1 rounded-full hover:bg-gray-100"
+                  >
+                    <X size={16} className="text-gray-500" />
+                  </button>
+                )}
+              </div>
+              {isSearchFocused && searchQuery.length > 0 && filteredBrands.length > 0 && (
+                <CommandList>
+                  <CommandGroup heading="Brands">
+                    <ScrollArea className="h-64">
+                      {filteredBrands.map((brand, index) => (
+                        <CommandItem
+                          key={brand.name}
+                          onSelect={() => handleSelect(brand.name)}
+                          className="cursor-pointer flex items-center space-x-2 hover:bg-gray-100 transition-colors"
+                        >
+                          <Avatar className={`h-8 w-8 bg-gradient-to-br ${brandColors[index % brandColors.length]}`}>
+                            <div className="font-bold text-white">
+                              {brand.name.charAt(0).toUpperCase()}
+                            </div>
+                          </Avatar>
+                          <span>{brand.name}</span>
+                        </CommandItem>
+                      ))}
+                    </ScrollArea>
+                  </CommandGroup>
+                </CommandList>
+              )}
+            </Command>
+          </div>
+        </div>
+        
+        {selectedBrand ? (
+          renderBrandPopup(selectedBrand)
+        ) : (
+          <>
+            <div className="px-4 pb-4 mt-0">
+              <div className="max-w-2xl mx-auto">
+                <div className="relative overflow-hidden w-full pb-8">
+                  <CustomCarousel slides={fashionSlides} onButtonClick={handleCarouselButtonClick} />
+                </div>
+              </div>
+            </div>
+            
+            <div id="fashion-grid" className="pb-8">
+              <h2 className="text-xl font-bold mb-2 px-6">Browse All Styles</h2>
+              <FashionGrid />
+            </div>
+          </>
+        )}
       </div>
       
-      <div className="relative z-10 ml-0 md:ml-48 transition-all duration-300">
+      <div className="relative z-10 transition-all duration-300">
         <Footerdemo />
       </div>
       

@@ -19,7 +19,7 @@ const LandingPage = () => {
       className="h-screen w-screen flex flex-col items-center justify-center bg-white"
     >
       <div className="text-center max-w-lg mx-auto">
-        <h1 className="text-6xl md:text-8xl font-bold text-black mb-12 tracking-tight transform -translate-x-4">
+        <h1 className="text-6xl md:text-8xl font-bold text-black mb-12 tracking-tight">
           WELCOME TO<br /><span className="font-extrabold">FASHION:WEEK</span>
         </h1>
         <Button 

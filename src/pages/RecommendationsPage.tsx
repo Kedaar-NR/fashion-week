@@ -91,56 +91,60 @@ const RecommendationsPage = () => {
         <h1 className="text-5xl md:text-7xl font-bold text-black text-center my-12">CURATED FOR YOU:</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {recommendedBrands.map((brand, index) => (
-            <motion.div 
-              key={index}
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: index * 0.2 }}
-              className="flex flex-col"
-            >
-              <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
-                <div className="flex items-center mb-4 justify-center">
-                  <div className="w-14 h-14 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
-                    <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
+          {recommendedBrands.map((brand, index) => {
+            const cleanName = brand.name.replace('@', '');
+            return (
+              <motion.div 
+                key={index}
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: index * 0.2 }}
+                className="flex flex-col"
+              >
+                <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
+                  <div className="flex items-center mb-4">
+                    <div className="w-14 h-14 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
+                      <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-semibold">@{cleanName}</h2>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {getBrandTags(brand).map((tag, i) => (
+                          <span 
+                            key={i} 
+                            className={`px-3 py-1 rounded-full ${tag.color} ${tag.textColor} text-sm font-medium`}
+                          >
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <h2 className="text-2xl font-semibold">@{brand.name.replace('@', '')}</h2>
-                </div>
-                
-                <div className="rounded-2xl overflow-hidden h-96">
-                  <div className="aspect-square w-full h-80">
-                    <iframe 
-                      src={`https://www.instagram.com/${brand.name.replace('@', '')}/embed`}
-                      className="w-full h-full border-none" 
-                      title={`${brand.name} Instagram Feed`}
-                      scrolling="no"
-                      allowTransparency
-                      onError={(e) => {
-                        // If iframe fails to load, replace with fallback image
-                        const iframe = e.currentTarget;
-                        iframe.style.display = 'none';
-                        const img = document.createElement('img');
-                        img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
-                        img.className = 'w-full h-full object-cover rounded-xl';
-                        iframe.parentNode?.appendChild(img);
-                      }}
-                    ></iframe>
+                  
+                  <div className="rounded-2xl overflow-hidden h-96">
+                    <div className="aspect-square w-full h-80">
+                      <iframe 
+                        src={`https://www.instagram.com/${cleanName}/embed`}
+                        className="w-full h-full border-none" 
+                        title={`${brand.name} Instagram Feed`}
+                        scrolling="no"
+                        allowTransparency
+                        onError={(e) => {
+                          // If iframe fails to load, replace with fallback image
+                          const iframe = e.currentTarget;
+                          iframe.style.display = 'none';
+                          const img = document.createElement('img');
+                          img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
+                          img.className = 'w-full h-full object-cover rounded-xl';
+                          iframe.parentNode?.appendChild(img);
+                        }}
+                      ></iframe>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="flex justify-center mt-4 flex-wrap gap-2">
-                  {getBrandTags(brand).map((tag, i) => (
-                    <span 
-                      key={i} 
-                      className={`px-4 py-1 rounded-full ${tag.color} ${tag.textColor} text-sm font-medium`}
-                    >
-                      {tag.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
         
         <div className="flex justify-center mt-8 mb-12">

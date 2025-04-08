@@ -1,10 +1,12 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail } from 'lucide-react';
 
 const TallyEmailWidget = () => {
   const [isMinimized, setIsMinimized] = useState(true);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Check if user has dismissed the widget before
@@ -18,13 +20,27 @@ const TallyEmailWidget = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // Handle clicks outside the form to close it
+    const handleClickOutside = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node) && isFormOpen) {
+        setIsFormOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isFormOpen]);
+
   const handleDismiss = () => {
     setIsMinimized(true);
     localStorage.setItem('tallyWidgetDismissed', 'true');
   };
 
-  const handleOpenForm = () => {
-    window.open('https://tally.so/r/walQGB', '_blank');
+  const handleToggleForm = () => {
+    setIsFormOpen(!isFormOpen);
   };
 
   return (
@@ -48,7 +64,7 @@ const TallyEmailWidget = () => {
                 Stay updated with the latest fashion trends and brand releases.
               </p>
               <button
-                onClick={handleOpenForm}
+                onClick={handleToggleForm}
                 className="w-full bg-black text-white py-2 rounded font-kanit hover:bg-gray-800 transition-colors"
               >
                 Subscribe Now
@@ -58,8 +74,37 @@ const TallyEmailWidget = () => {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {isFormOpen && (
+          <motion.div 
+            ref={formRef}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed bottom-16 right-4 bg-white rounded-lg shadow-lg p-3 w-96 h-[500px] z-50"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-bold">Newsletter Signup</h3>
+              <button onClick={() => setIsFormOpen(false)} className="hover:bg-gray-100 rounded-full p-1">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="w-full h-[460px] overflow-hidden">
+              <iframe
+                src="https://tally.so/r/walQGB"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                title="Newsletter Signup Form"
+                style={{ border: "none" }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <button
-        onClick={handleOpenForm}
+        onClick={handleToggleForm}
         className="bg-black text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
       >
         <Mail size={20} />

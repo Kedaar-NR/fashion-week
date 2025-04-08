@@ -29,11 +29,11 @@ const fashionItems = brands.map((brand, index) => ({
 
 interface FashionGridProps {
   searchQuery?: string;
+  onSelectBrand: (brand: any) => void;
 }
 
-const FashionGrid = ({ searchQuery = "" }: FashionGridProps) => {
+const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState<typeof fashionItems[0] | null>(null);
   
   // Filter items by category and search query if provided
   const filteredItems = fashionItems
@@ -50,23 +50,23 @@ const FashionGrid = ({ searchQuery = "" }: FashionGridProps) => {
     <div className="p-1 flex-1 overflow-hidden">
       <MarqueeCategories onSelectCategory={setSelectedCategory} />
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1 overflow-hidden max-h-[calc(100vh-200px)]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto max-h-[calc(100vh-200px)] p-2">
         {filteredItems.map((item) => (
           <motion.div
             key={item.id}
-            whileHover={{ scale: 1.03 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            onClick={() => setSelectedBrand(item)}
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+            onClick={() => onSelectBrand(item)}
             className="aspect-[3/4] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
-            <div className="p-1 border-b flex items-center">
-              <div className="w-4 h-4 rounded-full overflow-hidden mr-0.5 bg-gray-200 flex items-center justify-center">
-                <span className="font-bold text-gray-500 text-[8px]">{item.title.charAt(0).toUpperCase()}</span>
+            <div className="p-2 border-b flex items-center">
+              <div className="w-6 h-6 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
+                <span className="font-bold text-gray-500 text-[10px]">{item.title.charAt(0).toUpperCase()}</span>
               </div>
-              <div className="overflow-hidden">
-                <div className="font-medium text-[8px] truncate">@{item.title.replace('@', '')}</div>
-                <div className="text-[6px] mt-0.5">
-                  <span className={`px-1 py-0.5 rounded-full text-[6px] ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}>
+              <div className="overflow-hidden flex-1">
+                <div className="font-medium text-sm truncate">@{item.title.replace('@', '')}</div>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  <span className={`px-2 py-0.5 rounded-full text-xs ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}>
                     {item.genre}
                   </span>
                 </div>

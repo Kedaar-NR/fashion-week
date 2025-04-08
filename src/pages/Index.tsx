@@ -3,50 +3,26 @@ import { useState, useEffect } from "react";
 import { brands } from "@/data/brands";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { X, Shirt } from "lucide-react";
-import StyleQuiz from "@/components/StyleQuiz";
+import { X } from "lucide-react";
 import FashionGrid from "@/components/FashionGrid";
 import { Footerdemo } from "@/components/ui/footer-section";
 import AISearchBar from "@/components/AISearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
-
-// Sort brands alphabetically
-const brandsData = [...brands].sort((a, b) => a.name.localeCompare(b.name));
+import { useNavigate } from "react-router-dom";
+import UserProfile from "@/components/UserProfile";
 
 const Index = () => {
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [showStyleQuiz, setShowStyleQuiz] = useState(false);
-  const [likedBrands, setLikedBrands] = useState<string[]>([]);
+  const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  
-  useEffect(() => {
-    // Check if user has completed the quiz or previously seen the style quiz
-    const hasCompletedQuiz = localStorage.getItem('hasCompletedQuiz');
-    const hasSeenStyleQuiz = localStorage.getItem('hasSeenStyleQuiz');
-    
-    // Only show the quiz if neither condition is met
-    if (!hasCompletedQuiz && !hasSeenStyleQuiz) {
-      setShowStyleQuiz(true);
-    }
-    
-    // Load liked brands from localStorage
-    const saved = JSON.parse(localStorage.getItem('likedBrands') || '[]');
-    setLikedBrands(saved);
-  }, []);
-  
-  const handleCloseStyleQuiz = () => {
-    setShowStyleQuiz(false);
-    // Mark as seen so it doesn't show again
-    localStorage.setItem('hasSeenStyleQuiz', 'true');
-  };
-
-  const handleOpenStyleQuiz = () => {
-    setShowStyleQuiz(true);
-  };
+  const navigate = useNavigate();
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+  };
+
+  const handleSelectBrand = (brand: any) => {
+    setSelectedBrand(brand);
   };
 
   // Close brand popup
@@ -54,9 +30,16 @@ const Index = () => {
     setSelectedBrand(null);
   };
   
-  // Simplified brand popup UI with just the Instagram embed
-  const renderBrandPopup = (brandName: string) => {
-    const cleanBrandName = brandName.replace('@', '');
+  const handleDiscoverStyle = () => {
+    // Skip the initial popup and go directly to the quiz page
+    navigate('/quiz');
+  };
+  
+  // Render brand detail modal with Instagram embed and description
+  const renderBrandPopup = () => {
+    if (!selectedBrand) return null;
+    
+    const cleanBrandName = selectedBrand.title.replace('@', '');
     
     return (
       <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
@@ -71,11 +54,11 @@ const Index = () => {
             </button>
           </div>
           
-          <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
+          <div className="rounded-xl overflow-hidden aspect-square w-full h-[50vh]">
             <iframe 
               src={`https://www.instagram.com/${cleanBrandName}/embed`}
               className="w-full h-full border-none" 
-              title={`${brandName} Instagram Feed`}
+              title={`${selectedBrand.title} Instagram Feed`}
               allowTransparency={true}
               scrolling="no"
               onError={(e) => {
@@ -102,6 +85,19 @@ const Index = () => {
               }}
             />
           </div>
+          
+          <div className="mt-6">
+            <h3 className="text-xl font-semibold mb-2">Description</h3>
+            <p className="text-gray-600">
+              {selectedBrand.title} is a cutting-edge fashion brand known for its distinctive {selectedBrand.genre.toLowerCase()} style and innovative designs.
+            </p>
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg text-center">
+              <h4 className="text-lg font-medium text-gray-800">More details coming soon</h4>
+              <p className="text-sm text-gray-500 mt-1">
+                We're working on bringing you more information about this brand.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -118,15 +114,17 @@ const Index = () => {
         className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-hidden"
       >
         <div className="flex flex-col h-full">
-          <div className="mt-4 mb-2 px-4">
+          <div className="mt-4 mb-2 px-4 flex justify-between items-center">
+            <div className="w-12"></div> {/* Empty space for balance */}
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit">
               GALLERY
             </h1>
+            <UserProfile className="pr-4" />
           </div>
           
           <div className="flex justify-center mb-3">
             <Button 
-              onClick={handleOpenStyleQuiz}
+              onClick={handleDiscoverStyle}
               className="bg-black text-white hover:bg-gray-800"
             >
               Discover Your Style
@@ -137,17 +135,16 @@ const Index = () => {
             <AISearchBar onSearch={handleSearch} />
           </div>
           
-          {selectedBrand ? (
-            renderBrandPopup(selectedBrand)
-          ) : (
-            <div className="flex-1 overflow-hidden">
-              <FashionGrid searchQuery={searchQuery} />
-            </div>
-          )}
+          <div className="flex-1 overflow-hidden">
+            <FashionGrid 
+              searchQuery={searchQuery}
+              onSelectBrand={handleSelectBrand}
+            />
+          </div>
         </div>
         
         <TallyEmailWidget />
-        {showStyleQuiz && <StyleQuiz onClose={handleCloseStyleQuiz} />}
+        {selectedBrand && renderBrandPopup()}
       </motion.div>
     </div>
   );

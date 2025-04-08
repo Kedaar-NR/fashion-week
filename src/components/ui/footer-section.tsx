@@ -7,7 +7,7 @@ import { Footer } from "@/components/ui/footer";
 
 export function Footerdemo() {
   return (
-    <div className="w-full ml-0 md:ml-14">
+    <div className="w-full">
       <Footer
         logo={<span className="text-lg font-semibold">FW</span>}
         brandName="Fashion Week"
@@ -32,11 +32,10 @@ export function Footerdemo() {
           { href: "/", label: "Home" },
           { href: "/brands", label: "Brands" },
           { href: "/liked", label: "Favorites" },
-          { href: "/terms", label: "Terms" }
         ]}
         legalLinks={[
           { href: "#", label: "Privacy" },
-          { href: "#", label: "Terms of Service" },
+          { href: "#", label: "Terms" },
         ]}
         copyright={{
           text: "© 2025 Fashion Week",

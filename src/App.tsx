@@ -1,34 +1,56 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Index from '@/pages/Index';
-import BrandsPage from '@/pages/BrandsPage';
-import LikedPage from '@/pages/LikedPage';
-import SignIn from '@/pages/SignIn';
-import NotFound from '@/pages/NotFound';
-import TermsPage from '@/pages/TermsPage';
-import RecommendationsPage from '@/pages/RecommendationsPage';
-import QuizPage from '@/pages/QuizPage';
-import LandingPage from '@/pages/LandingPage';
-import './App.css';
-import { Toaster } from '@/components/ui/sonner';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+import LikedPage from "./pages/LikedPage";
+import BrandsPage from "./pages/BrandsPage";
+import SignIn from "./pages/SignIn";
 
-function App() {
+const queryClient = new QueryClient();
+
+const App = () => {
+  // Add Kanit font to the document
+  useEffect(() => {
+    // Create a link element for the Google Font
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap';
+    
+    // Add it to the document head
+    document.head.appendChild(link);
+    
+    // Add the font-family to the body
+    document.body.style.fontFamily = "'Kanit', sans-serif";
+    
+    // Clean up function
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<Index />} />
-        <Route path="/brands" element={<BrandsPage />} />
-        <Route path="/liked" element={<LikedPage />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/terms" element={<TermsPage />} />
-        <Route path="/recommendations" element={<RecommendationsPage />} />
-        <Route path="/quiz" element={<QuizPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Toaster />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/liked" element={<LikedPage />} />
+            <Route path="/brands" element={<BrandsPage />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/profile" element={<SignIn />} /> {/* Reuse SignIn component for profile temporarily */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;

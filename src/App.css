@@ -40,17 +40,3 @@
 .read-the-docs {
   color: #888;
 }
-
-/* Marquee animation for brand genres */
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}

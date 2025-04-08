@@ -1,11 +1,5 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Modern circular background -->
-  <circle cx="50" cy="50" r="50" fill="#000000" />
-  
-  <!-- FW text in a modern sans-serif font -->
-  <text x="50" y="65" font-family="'Kanit', sans-serif" font-size="40" font-weight="700" text-anchor="middle" fill="#ffffff" letter-spacing="-2">FW</text>
-  
-  <!-- Decorative line element -->
-  <rect x="25" y="72" width="50" height="3" fill="#ffffff" />
+  <rect width="100" height="100" fill="#000000" />
+  <text x="50" y="65" font-family="'Kanit', sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="#ffffff">FW</text>
 </svg>

@@ -153,15 +153,15 @@ const Index = () => {
       >
         <div className="flex flex-col h-full">
           <div className="mt-4 mb-2 px-4 flex justify-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit">
-              GALLERY
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center font-kanit">
+              <span className="font-extrabold">GALLERY</span>
             </h1>
           </div>
           
           <div className="flex justify-center mb-3">
             <Button 
               onClick={handleDiscoverStyle}
-              className="bg-black text-white hover:bg-gray-800"
+              className="bg-black text-white hover:bg-gray-800 font-bold"
             >
               Discover Your Style
             </Button>

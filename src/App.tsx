@@ -36,12 +36,12 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <TooltipProvider>
-      <Router>
+    <Router>
+      <TooltipProvider>
         <AnimatedRoutes />
-        <Toaster />
-      </Router>
-    </TooltipProvider>
+      </TooltipProvider>
+      <Toaster />
+    </Router>
   );
 }
 

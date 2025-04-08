@@ -65,7 +65,7 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
         {duplicatedCategories.map((category, idx) => (
           <button
             key={`${category}-${idx}`}
-            className={`px-3 py-1.5 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
+            className={`px-2 py-1 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
               activeCategory === category 
                 ? "bg-black text-white" 
                 : getCategoryColorClass(category)

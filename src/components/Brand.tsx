@@ -69,6 +69,17 @@ const Brand = ({ name, followers, genre, onClick, isSaved: externalIsLiked }: Br
   // Get first letter for avatar
   const firstLetter = name.charAt(0).toUpperCase();
   
+  // Format follower count to round up with a "+"
+  const formatFollowers = () => {
+    const count = parseInt(followers, 10);
+    if (isNaN(count)) return followers;
+    
+    if (count < 1000) return `${count}+`;
+    if (count < 10000) return `${Math.floor(count / 1000)}k+`;
+    if (count < 1000000) return `${Math.floor(count / 1000)}k+`;
+    return `${Math.floor(count / 1000000)}M+`;
+  };
+  
   // Get random light background color based on name
   const getBackgroundColor = () => {
     const colors = [
@@ -103,7 +114,7 @@ const Brand = ({ name, followers, genre, onClick, isSaved: externalIsLiked }: Br
           {genre}
         </span>
       </div>
-      <p className="text-xs text-gray-400 mt-2">{followers}</p>
+      <p className="text-xs text-gray-400 mt-2">{formatFollowers()}</p>
       
       <button 
         onClick={handleLike} 

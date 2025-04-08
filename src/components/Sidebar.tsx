@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 const Sidebar = () => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(true); // Keep this true for auto-minimized
+  const [collapsed, setCollapsed] = useState(true);
   const [user, setUser] = useState<{ email?: string, name?: string, photoURL?: string } | null>(null);
   
   useEffect(() => {

@@ -12,31 +12,9 @@ import RecommendationsPage from '@/pages/RecommendationsPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import './App.css';
 import { Toaster } from '@/components/ui/sonner';
-import Sidebar from '@/components/Sidebar';
-
-// Create a layout component that includes the sidebar
-const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 ml-14 transition-all duration-300">
-        {children}
-      </div>
-    </div>
-  );
-};
 
 function AnimatedRoutes() {
   const location = useLocation();
-  
-  // Pages that should have the sidebar
-  const pagesWithSidebar = ['/home', '/liked', '/profile'];
-  const shouldShowSidebar = pagesWithSidebar.includes(location.pathname);
-  
-  // Wrap routes that need sidebar with the AppLayout component
-  const renderRouteWithLayout = (element: React.ReactNode) => {
-    return shouldShowSidebar ? <AppLayout>{element}</AppLayout> : element;
-  };
   
   return (
     <AnimatePresence mode="wait">

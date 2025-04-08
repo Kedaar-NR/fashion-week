@@ -140,7 +140,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
               />
               <button 
                 onClick={(e) => toggleLike(item.title, e)}
-                className="absolute top-4 right-4 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
+                className="absolute top-8 right-4 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
               >
                 <Heart 
                   size={18} 

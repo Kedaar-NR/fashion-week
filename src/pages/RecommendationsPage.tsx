@@ -102,13 +102,13 @@ const RecommendationsPage = () => {
                 className="flex flex-col"
               >
                 <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-center justify-center mb-4">
                     <div className="w-14 h-14 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
                       <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
                     </div>
                     <div>
                       <h2 className="text-2xl font-semibold">@{cleanName}</h2>
-                      <div className="flex flex-wrap gap-2 mt-1">
+                      <div className="flex flex-wrap gap-2 mt-1 justify-center">
                         {getBrandTags(brand).map((tag, i) => (
                           <span 
                             key={i} 

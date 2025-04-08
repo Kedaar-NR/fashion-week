@@ -71,10 +71,10 @@ const LikedPage = () => {
     <div className="flex min-h-screen bg-white font-kanit">
       <Sidebar />
       <div className="flex-1 ml-14 md:ml-48 p-8">
-        <h1 className="text-3xl font-bold mb-6">Liked Brands</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Liked Brands</h1>
         
         {!isLoggedIn && (
-          <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center">
+          <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center max-w-2xl mx-auto">
             <h2 className="text-xl font-semibold mb-2">Sign in to view your liked brands</h2>
             <p className="text-gray-500 mb-4">Create an account to save and organize your favorite brands</p>
             <a 
@@ -87,7 +87,7 @@ const LikedPage = () => {
         )}
         
         {isLoggedIn && filteredBrands.length === 0 && (
-          <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center">
+          <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center max-w-2xl mx-auto">
             <Heart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h2 className="text-xl font-semibold mb-2">No liked brands yet</h2>
             <p className="text-gray-500 mb-4">Start browsing and save your favorite brands</p>
@@ -101,7 +101,7 @@ const LikedPage = () => {
         )}
         
         {isLoggedIn && filteredBrands.length > 0 && !selectedBrand && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
             {filteredBrands.map((brand) => (
               <div 
                 key={brand.name}
@@ -150,9 +150,9 @@ const LikedPage = () => {
                 </div>
               </div>
               
-              <p className="mb-4 text-gray-600 italic border-l-4 border-gray-300 pl-3 py-2 bg-gray-50">
-                {getBlurb(selectedBrand)}
-              </p>
+              <div className="mb-4 text-gray-600 text-center py-2 bg-gray-50 rounded-lg">
+                More details coming soon
+              </div>
               
               <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
                 <iframe 

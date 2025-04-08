@@ -88,7 +88,7 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
             )}
           </div>
           
-          {showSuggestions && suggestions && suggestions.length > 0 && (
+          {showSuggestions && suggestions && Array.isArray(suggestions) && suggestions.length > 0 && (
             <CommandList className="max-h-60 overflow-auto border-t">
               {suggestions.map((suggestion) => (
                 <CommandItem

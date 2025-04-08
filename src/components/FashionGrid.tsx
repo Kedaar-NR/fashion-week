@@ -70,7 +70,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
     <div className="p-1 flex-1 overflow-hidden">
       <MarqueeCategories onSelectCategory={setSelectedCategory} />
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto max-h-[calc(100vh-200px)] p-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 overflow-y-auto max-h-[calc(100vh-200px)] p-2">
         {filteredItems.map((item) => (
           <motion.div
             key={item.id}
@@ -140,7 +140,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
               />
               <button 
                 onClick={(e) => toggleLike(item.title, e)}
-                className="absolute top-8 right-4 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
+                className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
               >
                 <Heart 
                   size={18} 

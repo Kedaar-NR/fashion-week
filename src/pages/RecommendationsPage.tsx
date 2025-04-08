@@ -90,7 +90,7 @@ const RecommendationsPage = () => {
       <div className="flex-grow p-4">
         <h1 className="text-5xl md:text-7xl font-bold text-black text-center my-12">CURATED FOR YOU:</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {recommendedBrands.map((brand, index) => {
             const cleanName = brand.name.replace('@', '');
             return (
@@ -128,6 +128,7 @@ const RecommendationsPage = () => {
                         className="w-full h-full border-none" 
                         title={`${brand.name} Instagram Feed`}
                         scrolling="no"
+                        loading="lazy"
                         onError={(e) => {
                           // If iframe fails to load, replace with fallback image
                           const iframe = e.currentTarget;

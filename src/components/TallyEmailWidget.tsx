@@ -7,6 +7,7 @@ const TallyEmailWidget = () => {
   const [isMinimized, setIsMinimized] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   useEffect(() => {
     // Check if user has dismissed the widget before
@@ -103,12 +104,29 @@ const TallyEmailWidget = () => {
         )}
       </AnimatePresence>
 
-      <button
-        onClick={handleToggleForm}
-        className="bg-black text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
-      >
-        <Mail size={20} />
-      </button>
+      <div className="relative">
+        <AnimatePresence>
+          {!isFormOpen && isTooltipVisible && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="absolute bottom-full mb-2 right-0 bg-black text-white py-1 px-3 rounded-md text-sm whitespace-nowrap"
+            >
+              Join the movement
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+        <button
+          onClick={handleToggleForm}
+          onMouseEnter={() => setIsTooltipVisible(true)}
+          onMouseLeave={() => setIsTooltipVisible(false)}
+          className="bg-black text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
+        >
+          <Mail size={20} />
+        </button>
+      </div>
     </div>
   );
 };

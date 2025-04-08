@@ -1,16 +1,13 @@
 
-import { useState, useEffect } from "react";
-import { brands } from "@/data/brands";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import FashionGrid from "@/components/FashionGrid";
-import { Footerdemo } from "@/components/ui/footer-section";
 import AISearchBar from "@/components/AISearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
 import { useNavigate } from "react-router-dom";
-import UserProfile from "@/components/UserProfile";
 
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
@@ -114,12 +111,10 @@ const Index = () => {
         className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-hidden"
       >
         <div className="flex flex-col h-full">
-          <div className="mt-4 mb-2 px-4 flex justify-between items-center">
-            <div className="w-12"></div> {/* Empty space for balance */}
+          <div className="mt-4 mb-2 px-4 flex justify-center">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit">
               GALLERY
             </h1>
-            <UserProfile className="pr-4" />
           </div>
           
           <div className="flex justify-center mb-3">

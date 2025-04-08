@@ -59,17 +59,24 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
             onClick={() => onSelectBrand(item)}
             className="aspect-[3/4] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
-            <div className="p-2 border-b flex items-center">
-              <div className="w-6 h-6 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
-                <span className="font-bold text-gray-500 text-[10px]">{item.title.charAt(0).toUpperCase()}</span>
-              </div>
-              <div className="overflow-hidden flex-1">
-                <div className="font-medium text-sm truncate">@{item.title.replace('@', '')}</div>
-                <div className="mt-1 flex flex-wrap gap-1">
-                  <span className={`px-2 py-0.5 rounded-full text-xs ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}>
-                    {item.genre}
-                  </span>
+            <div className="p-2 border-b">
+              <div className="flex items-center">
+                <div className="w-7 h-7 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
+                  <span className="font-bold text-gray-500 text-xs">{item.title.charAt(0).toUpperCase()}</span>
                 </div>
+                <div className="overflow-hidden flex-1">
+                  <div className="font-medium text-base truncate">@{item.title.replace('@', '')}</div>
+                </div>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1 justify-center">
+                {item.genre.split('/').map((genre, idx) => (
+                  <span 
+                    key={idx}
+                    className={`px-2 py-0.5 rounded-full text-sm ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
+                  >
+                    {genre.trim()}
+                  </span>
+                ))}
               </div>
             </div>
             

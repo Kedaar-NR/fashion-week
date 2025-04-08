@@ -117,6 +117,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
         
         <MarqueeCategories onSelectCategory={setSelectedCategory} />
         
+        {/* Modified grid layout - 2 columns for mobile, higher aspect ratio */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 overflow-y-auto max-h-[calc(100vh-200px)] p-2 w-full">
           {filteredItems.map((item) => (
             <motion.div
@@ -124,7 +125,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
               onClick={() => onSelectBrand(item)}
-              className="aspect-[3/5] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
+              className="aspect-[3/5] md:aspect-[3/5] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
             >
               <div className="p-2 border-b flex items-center justify-between">
                 <div className="flex items-center">

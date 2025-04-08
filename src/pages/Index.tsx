@@ -9,6 +9,7 @@ import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { brands } from "@/data/brands";
 
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
@@ -24,6 +25,23 @@ const Index = () => {
 
   const handleSelectBrand = (brand: any) => {
     setSelectedBrand(brand);
+  };
+
+  // Handle brand selection from search bar
+  const handleSearchBrandSelect = (brandName: string) => {
+    // Find the brand in our data
+    const brand = brands.find(b => b.name === brandName);
+    if (brand) {
+      // Create a brand object similar to what FashionGrid would pass
+      const brandItem = {
+        id: brands.indexOf(brand) + 1,
+        title: brand.name,
+        genre: brand.genre?.toUpperCase() || "STREET",
+        image: `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`,
+        followers: brand.followers
+      };
+      setSelectedBrand(brandItem);
+    }
   };
 
   // Close brand popup
@@ -154,7 +172,10 @@ const Index = () => {
           </div>
           
           <div className="px-4 mb-3 animate-scale-in">
-            <AISearchBar onSearch={handleSearch} />
+            <AISearchBar 
+              onSearch={handleSearch} 
+              onSelectBrand={handleSearchBrandSelect}
+            />
           </div>
           
           <div className="flex-1 overflow-hidden">

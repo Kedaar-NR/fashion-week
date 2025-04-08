@@ -6,9 +6,10 @@ import { brands } from '@/data/brands';
 
 interface AISearchBarProps {
   onSearch: (query: string) => void;
+  onSelectBrand?: (brandName: string) => void;
 }
 
-const AISearchBar = ({ onSearch }: AISearchBarProps) => {
+const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -59,6 +60,11 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
   const handleSelectSuggestion = (suggestion: string) => {
     setSearchQuery(suggestion);
     handleSearch(suggestion);
+    
+    // If onSelectBrand is provided, call it to display the popup
+    if (onSelectBrand) {
+      onSelectBrand(suggestion);
+    }
   };
 
   // Ensure suggestions is always an array before rendering
@@ -74,7 +80,7 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
               value={searchQuery}
               onValueChange={setSearchQuery}
               onKeyDown={handleKeyPress}
-              onFocus={() => searchQuery && validSuggestions.length > 0 && setShowSuggestions(true)}
+              onFocus={() => setShowSuggestions(validSuggestions.length > 0)}
               className="h-10 font-kanit"
             />
             {searchQuery && (

@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, Heart } from "lucide-react";
 import FashionGrid from "@/components/FashionGrid";
-import AISearchBar from "@/components/AISearchBar";
+import BrandSearchBar from "@/components/BrandSearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
 import { useNavigate } from "react-router-dom";
@@ -27,12 +26,9 @@ const Index = () => {
     setSelectedBrand(brand);
   };
 
-  // Handle brand selection from search bar
   const handleSearchBrandSelect = (brandName: string) => {
-    // Find the brand in our data
     const brand = brands.find(b => b.name === brandName);
     if (brand) {
-      // Create a brand object similar to what FashionGrid would pass
       const brandItem = {
         id: brands.indexOf(brand) + 1,
         title: brand.name,
@@ -44,19 +40,16 @@ const Index = () => {
     }
   };
 
-  // Close brand popup
   const closeInstagramView = () => {
     setSelectedBrand(null);
   };
   
   const handleDiscoverStyle = () => {
-    // Skip the initial popup and go directly to the quiz page
     navigate('/quiz');
   };
   
-  // Toggle like status for a brand
   const toggleLike = (brandTitle: string, event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent triggering parent click
+    event.stopPropagation();
     
     const updatedLikes = likedBrands.includes(brandTitle)
       ? likedBrands.filter(name => name !== brandTitle)
@@ -70,7 +63,6 @@ const Index = () => {
     }
   };
   
-  // Render brand detail modal with Instagram embed and description
   const renderBrandPopup = () => {
     if (!selectedBrand) return null;
     
@@ -113,7 +105,6 @@ const Index = () => {
               allowTransparency={true}
               scrolling="no"
               onError={(e) => {
-                // If iframe fails to load, replace with fallback image
                 const iframe = e.currentTarget;
                 iframe.style.display = 'none';
                 const container = document.createElement('div');
@@ -172,7 +163,7 @@ const Index = () => {
           </div>
           
           <div className="px-4 mb-3 animate-scale-in">
-            <AISearchBar 
+            <BrandSearchBar 
               onSearch={handleSearch} 
               onSelectBrand={handleSearchBrandSelect}
             />

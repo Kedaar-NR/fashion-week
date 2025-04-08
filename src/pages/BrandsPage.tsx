@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import { brands, genreColors } from "@/data/brands";
-import { Search, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Brand from "@/components/Brand";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import BrandSearchBar from "@/components/BrandSearchBar";
 
 const brandBlurbs: Record<string, string> = {
   "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
@@ -74,10 +75,13 @@ const BrandsPage = () => {
     setActiveCategory(value);
   };
 
-  const filteredBrands = brands.filter(brand => 
-    brand.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-    (activeCategory === "ALL" || brand.genre === activeCategory)
-  );
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleSearchBrandSelect = (brandName: string) => {
+    setSelectedBrand(brandName);
+  };
 
   const handleBrandClick = (brandName: string) => {
     setSelectedBrand(brandName);
@@ -101,6 +105,11 @@ const BrandsPage = () => {
       toast.success(`Saved ${brandName} to your collection`);
     }
   };
+
+  const filteredBrands = brands.filter(brand => 
+    brand.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+    (activeCategory === "ALL" || brand.genre === activeCategory)
+  );
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -126,16 +135,10 @@ const BrandsPage = () => {
             </div>
             
             <div className="flex-grow max-w-md">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search brands"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full py-2 pl-10 pr-4 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-purple-400"
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              </div>
+              <BrandSearchBar 
+                onSearch={handleSearch}
+                onSelectBrand={handleSearchBrandSelect}
+              />
             </div>
           </div>
           

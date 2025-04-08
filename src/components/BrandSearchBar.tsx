@@ -1,7 +1,6 @@
 
 import { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
-import { Command, CommandInput, CommandList, CommandItem } from '@/components/ui/command';
+import { X, Search } from 'lucide-react';
 import { brands } from '@/data/brands';
 
 interface AISearchBarProps {
@@ -13,7 +12,7 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const commandRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
   
   // Get unique brand names for autocomplete suggestions
   const brandNames = brands.map(brand => brand.name);
@@ -21,7 +20,7 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
   useEffect(() => {
     // Handle clicks outside search suggestions to close them
     const handleClickOutside = (event: MouseEvent) => {
-      if (commandRef.current && !commandRef.current.contains(event.target as Node)) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowSuggestions(false);
       }
     };
@@ -72,45 +71,47 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="relative" ref={commandRef}>
-        <Command className="rounded-lg border shadow-md">
-          <div className="flex items-center px-3">
-            <CommandInput
-              placeholder="Search"
+      <div className="relative" ref={searchRef}>
+        <div className="flex items-center w-full rounded-lg border shadow-md">
+          <div className="flex-grow relative">
+            <input
+              type="text"
+              placeholder="Search brands..."
               value={searchQuery}
-              onValueChange={setSearchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyPress}
               onFocus={() => setShowSuggestions(validSuggestions.length > 0)}
-              className="h-10 font-kanit"
+              className="w-full h-10 px-4 pl-10 rounded-lg font-kanit focus:outline-none"
             />
-            {searchQuery && (
-              <button 
-                onClick={() => {
-                  setSearchQuery('');
-                  setSuggestions([]);
-                  setShowSuggestions(false);
-                }}
-                className="p-1 rounded-full hover:bg-gray-100"
-              >
-                <X size={16} className="text-gray-500" />
-              </button>
-            )}
+            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
           </div>
-          
-          {showSuggestions && validSuggestions.length > 0 && (
-            <CommandList className="max-h-60 overflow-auto border-t">
-              {validSuggestions.map((suggestion) => (
-                <CommandItem
-                  key={suggestion}
-                  onSelect={() => handleSelectSuggestion(suggestion)}
-                  className="px-2 py-1.5 hover:bg-gray-100 cursor-pointer"
-                >
-                  {suggestion}
-                </CommandItem>
-              ))}
-            </CommandList>
+          {searchQuery && (
+            <button 
+              onClick={() => {
+                setSearchQuery('');
+                setSuggestions([]);
+                setShowSuggestions(false);
+              }}
+              className="p-2 mr-1 rounded-full hover:bg-gray-100"
+            >
+              <X size={16} className="text-gray-500" />
+            </button>
           )}
-        </Command>
+        </div>
+        
+        {showSuggestions && validSuggestions.length > 0 && (
+          <div className="absolute w-full mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50">
+            {validSuggestions.map((suggestion) => (
+              <div
+                key={suggestion}
+                onClick={() => handleSelectSuggestion(suggestion)}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

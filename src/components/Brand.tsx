@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
+import { genreColors } from "@/data/brands";
 
 interface BrandProps {
   name: string;
@@ -86,6 +87,8 @@ const Brand = ({ name, followers, genre, onClick, isSaved: externalIsLiked }: Br
     return colors[index];
   };
 
+  const genreStyle = genreColors[genre.toUpperCase()];
+
   return (
     <div 
       onClick={handleClick}
@@ -95,7 +98,11 @@ const Brand = ({ name, followers, genre, onClick, isSaved: externalIsLiked }: Br
         {firstLetter}
       </div>
       <h3 className="font-semibold text-gray-800">{name}</h3>
-      <p className="text-xs text-gray-500 mt-1">{genre}</p>
+      <div className="mt-1">
+        <span className={`px-2 py-0.5 rounded-full text-xs ${genreStyle?.bg || "bg-gray-500"} ${genreStyle?.text || "text-white"}`}>
+          {genre}
+        </span>
+      </div>
       <p className="text-xs text-gray-400 mt-2">{followers}</p>
       
       <button 

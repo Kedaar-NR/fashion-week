@@ -2,19 +2,17 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+// Updated categories based on the provided image
 const categories = [
-  "STREETWEAR",
-  "PUNK",
+  "STREET",
+  "PUNK/GOTH/GRUNGE",
   "ESSENTIALS",
-  "LUXURY",
-  "MINIMALIST",
-  "GORPCORE", 
+  "LUXURY/VINTAGE",
+  "MINIMALISTIC",
+  "CRAZY EXPERIMENTAL",
   "Y2K",
-  "VINTAGE",
-  "BASIC",
-  "GRUNGE",
-  "COWBOY",
-  "SELECTION BASED"
+  "JEWELERY",
+  "TECHWEAR"
 ];
 
 interface MarqueeCategoriesProps {
@@ -36,8 +34,25 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
     onSelectCategory(newActive || "");
   };
   
+  // Define color classes for each category based on the image
+  const getCategoryColorClass = (category: string) => {
+    const colorMap: Record<string, string> = {
+      "STREET": "bg-red-700 text-white",
+      "PUNK/GOTH/GRUNGE": "bg-purple-800 text-white",
+      "ESSENTIALS": "bg-blue-700 text-white",
+      "LUXURY/VINTAGE": "bg-yellow-200 text-black",
+      "MINIMALISTIC": "bg-gray-500 text-white",
+      "CRAZY EXPERIMENTAL": "bg-yellow-300 text-black",
+      "Y2K": "bg-pink-200 text-black",
+      "JEWELERY": "bg-gray-700 text-white",
+      "TECHWEAR": "bg-green-700 text-white"
+    };
+    
+    return colorMap[category] || "bg-gray-100 text-gray-700";
+  };
+  
   return (
-    <div className="w-full overflow-hidden py-4 bg-gradient-to-r from-gray-50 to-white rounded-xl my-4">
+    <div className="w-full overflow-hidden py-2 bg-gradient-to-r from-gray-50 to-white rounded-xl my-2">
       <motion.div 
         className="flex whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
@@ -50,10 +65,10 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
         {duplicatedCategories.map((category, idx) => (
           <button
             key={`${category}-${idx}`}
-            className={`px-6 py-3 mx-2 whitespace-nowrap rounded-full transition-colors text-sm font-medium ${
+            className={`px-3 py-1.5 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
               activeCategory === category 
                 ? "bg-black text-white" 
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                : getCategoryColorClass(category)
             }`}
             onClick={() => handleCategoryClick(category)}
           >

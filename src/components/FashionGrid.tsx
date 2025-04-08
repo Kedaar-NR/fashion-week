@@ -1,37 +1,26 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { brands } from "@/data/brands";
+import { brands, genreColors } from "@/data/brands";
 import { Shirt } from "lucide-react";
 
 // Function to get detailed brand descriptions
 const getBrandDescription = (brandName: string) => {
   const descriptions: Record<string, string> = {
-    "kine.jkt": "KINE.JKT crafts minimalist streetwear with Indonesian influences, focusing on sustainable production and ethical sourcing. Their signature oversized silhouettes and muted color palette have garnered a dedicated following in Southeast Asia.",
-    "concrete_orchids": "Blending brutalist architecture with delicate floral motifs, Concrete Orchids creates luxury pieces that challenge conventional fashion norms. Each garment is meticulously crafted with premium materials and innovative construction techniques.",
-    "shortsarchive": "A nostalgic journey through decades of short styles, Shorts Archive preserves and reimagines vintage designs for the modern wardrobe. Their curated collections feature rare finds and thoughtfully restored pieces.",
-    "twopockets": "Function meets form in TwoPockets' essential garments, where practical storage solutions become design features. Their commitment to quality basics has earned them a reputation for reliability and thoughtful design.",
-    "nihil.ny": "Raw energy and counterculture spirit define NIHIL.NY's punk-inspired collections. Drawing from New York's underground scene, their pieces feature distressed elements, bold graphics, and anti-establishment messaging.",
-    "babyev2k": "BabyEV2K captures millennial nostalgia with their Y2K-inspired pieces, featuring metallic fabrics, playful graphics, and tech-inspired details that bridge past and future aesthetics.",
-    "friedrice_nyc": "A celebration of Asian-American culture through the lens of NYC street style, FriedRice blends cultural references with urban sensibilities in their vibrant and authentic collections.",
-    "profitminded.clo": "Elevating everyday business casual, ProfitMinded creates minimal, sophisticated pieces for ambitious professionals who value quality and understated elegance.",
-    "chxmicalover": "Exploring the intersection of grunge aesthetics and chemical processes, ChxmicalOver creates experimental pieces featuring unique dye techniques, distressed textiles, and unconventional silhouettes.",
-    "gumisdum": "A fashion label challenging conventions with its distorted silhouettes and asymmetrical cuts. Founded by a collective of artists, each piece tells a story of rebellion and artistic expression.",
-    "hwasan": "Taking inspiration from traditional Asian garments, Hwasan offers a modern twist on heritage silhouettes using sustainable fabrics and artisanal techniques passed down through generations.",
-    "loadingtofuture": "A tech-inspired brand blending futuristic elements with everyday streetwear. Their innovative textiles and forward-thinking details create garments that feel ahead of their time.",
-    "excess.us": "Maximalist fashion celebrating abundance and opulence with bold prints, intricate embellishments, and layered textures that reject minimalist trends in favor of more-is-more aesthetics.",
-    "vadis.shop": "Contemporary women's wear focusing on fluid silhouettes and innovative draping techniques. Their garments transform simple fabrics into sculptural pieces that move elegantly with the body.",
-    "blan.nyc": "A New York City brand defined by their monochromatic palette and architectural influences. Their pieces feature clean lines and precise tailoring with subtle, thoughtful details.",
-    "toofar.us": "Experimental streetwear pushing boundaries with deconstructed garments, unexpected proportions, and provocative graphics that challenge fashion conventions.",
-    "bevyi.us": "Luxury leisurewear blending comfort with elevation through premium fabrics and refined details, creating versatile pieces for the modern, multifaceted lifestyle.",
-    "aiona.us": "Sustainable fashion with a focus on zero-waste pattern cutting and naturally dyed fabrics. Each collection tells a story of environmental consciousness and timeless design.",
-    "lowkey.industries": "Understated luxury that speaks in whispers rather than shouts, focusing on impeccable craftsmanship, quality materials, and subtle branding for the discerning customer.",
-    "sketsaparis": "Parisian-influenced designs with a contemporary edge, blending French effortlessness with bold, artistic elements inspired by modern art movements.",
-    "gospel.core": "Faith-inspired streetwear that merges spiritual imagery with contemporary designs, creating meaningful pieces that spark conversation and connection.",
-    "somar.us": "Luxury activewear designed for movement and performance while maintaining a sophisticated aesthetic. Their technical fabrics and innovative cuts bridge the gap between function and fashion.",
-    "joy_divizn": "A tribute to post-punk aesthetics with modern sensibilities, featuring dark palettes, utilitarian details, and graphic elements inspired by iconic album artwork.",
-    "derschutze_clo": "Military-inspired garments reinterpreted through a luxury lens, with attention to authentic details, premium materials, and precise construction.",
-    "vicinity.de": "Berlin-based label combining contemporary German design sensibility with urban attitude, featuring clean lines and avant-garde detailing.",
-    "aliasonline.us": "Ultra-modern streetwear with a digital-forward aesthetic, merging virtual culture with tangible fashion that pushes creative boundaries.",
+    "shmuie": "Shmuie creates authentic streetwear with bold, unique designs that challenge conventional fashion norms.",
+    "berlinc.co": "Berlin C. offers essential pieces with a European design aesthetic, focusing on quality and durability.",
+    "heavenonearthstudios": "Heaven On Earth Studios crafts pieces that blend spiritual motifs with contemporary street design.",
+    "ssstufff.official": "Ssstufff pushes boundaries with their experimental approach to fashion, creating avant-garde pieces that defy categorization.",
+    "eternalloveworld": "Eternal Love brings gothic romance to modern fashion with their darkly poetic collections and intricate details.",
+    "hypedept.co": "Hype Department creates contemporary streetwear that captures the energy and attitude of urban culture.",
+    "roypubliclabel": "Roy Public combines punk aesthetics with ethical production practices, creating rebellious yet conscious fashion.",
+    "fourfour.jpg": "Four Four creates grunge-inspired pieces that blend 90s nostalgia with contemporary edge.",
+    "qbsay": "QB Say delivers street styles with distinctive graphics and innovative cuts that stand out in the crowd.",
+    "gospel.core": "Gospel Core fuses spiritual motifs with punk and grunge aesthetics to create unique, thought-provoking garments.",
+    "somar.us": "Somar blends street sensibilities with punk edge, creating distinctive pieces for the modern wardrobe.",
+    "vicinity_de": "Vicinity brings German precision to street fashion with clean lines and bold urban statements.",
+    "aliasonline.us": "Alias Online creates barrier-breaking street pieces that blur the lines between digital and physical aesthetics.",
+    "california.arts": "California Arts preserves vintage luxury through their carefully curated and restored collection pieces."
   };
   
   if (descriptions[brandName]) {
@@ -50,32 +39,15 @@ const getBrandDescription = (brandName: string) => {
   return `${brandName} represents ${randomAdjective} fashion through their unique ${randomConcept}, creating ${randomOutcome}. Their distinctive approach to design has garnered them a dedicated following in the fashion community.`;
 };
 
-// Function to get color class based on genre
-const getGenreColor = (genre: string) => {
-  const genreColors: Record<string, string> = {
-    'punk': 'bg-pink-500 text-white',
-    'streetwear': 'bg-red-500 text-white',
-    'basic': 'bg-blue-500 text-white',
-    'luxury': 'bg-yellow-500 text-black',
-    'y2k': 'bg-purple-500 text-white',
-    'essentials': 'bg-green-500 text-white',
-    'vintage': 'bg-orange-500 text-white',
-    'minimalist': 'bg-gray-500 text-white',
-    'gorpcore': 'bg-emerald-500 text-white',
-    'grunge': 'bg-purple-600 text-white',
-    'cowboy': 'bg-amber-500 text-white',
-    'selection based': 'bg-slate-500 text-white',
-  };
-  
-  return genreColors[genre.toLowerCase()] || 'bg-blue-500 text-white';
-};
-
 // Function to get brand website URL if available
 const getBrandWebsiteUrl = (brandName: string) => {
   const websiteUrls: Record<string, string> = {
     "aliasonline.us": "https://aliasonline.us",
-    "vicinity.de": "https://vicinity.de",
+    "vicinity_de": "https://vicinity.de",
     "gospel.core": "https://gospelcore.com",
+    "somar.us": "https://somar.us",
+    "berlinc.co": "https://berlinc.co",
+    "sixshooter.us": "https://sixshooter.us",
   };
   
   return websiteUrls[brandName] || null;
@@ -85,25 +57,22 @@ const getBrandWebsiteUrl = (brandName: string) => {
 const fashionItems = brands.map((brand, index) => ({
   id: index + 1,
   title: brand.name,
-  genre: brand.genre?.toLowerCase() || "streetwear",
+  genre: brand.genre?.toUpperCase() || "STREET",
   image: `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`,
   followers: brand.followers
 }));
 
-// Marquee categories
+// Updated categories based on the provided image
 const categories = [
-  "STREETWEAR",
-  "PUNK",
+  "STREET",
+  "PUNK/GOTH/GRUNGE",
   "ESSENTIALS",
-  "LUXURY",
-  "MINIMALIST",
-  "GORPCORE", 
+  "LUXURY/VINTAGE",
+  "MINIMALISTIC",
+  "CRAZY EXPERIMENTAL", 
   "Y2K",
-  "VINTAGE",
-  "BASIC",
-  "GRUNGE",
-  "COWBOY",
-  "SELECTION BASED"
+  "JEWELERY",
+  "TECHWEAR"
 ];
 
 interface BrandPopupProps {
@@ -165,8 +134,8 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
             <h2 className="text-3xl font-bold mb-4">@{cleanBrandName}</h2>
             
             <div className="mb-6">
-              <span className={`px-3 py-1 rounded-full ${getGenreColor(brand.genre)}`}>
-                {brand.genre.toUpperCase()}
+              <span className={`px-3 py-1 rounded-full ${genreColors[brand.genre]?.bg || "bg-gray-500"} ${genreColors[brand.genre]?.text || "text-white"}`}>
+                {brand.genre}
               </span>
             </div>
             
@@ -204,8 +173,25 @@ const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: 
     onSelectCategory(newActive || "");
   };
   
+  // Define color classes for each category based on the image
+  const getCategoryColorClass = (category: string) => {
+    const colorMap: Record<string, string> = {
+      "STREET": "bg-red-700 text-white",
+      "PUNK/GOTH/GRUNGE": "bg-purple-800 text-white",
+      "ESSENTIALS": "bg-blue-700 text-white",
+      "LUXURY/VINTAGE": "bg-yellow-200 text-black",
+      "MINIMALISTIC": "bg-gray-500 text-white",
+      "CRAZY EXPERIMENTAL": "bg-yellow-300 text-black",
+      "Y2K": "bg-pink-200 text-black",
+      "JEWELERY": "bg-gray-700 text-white",
+      "TECHWEAR": "bg-green-700 text-white"
+    };
+    
+    return colorMap[category] || "bg-gray-100 text-gray-700";
+  };
+  
   return (
-    <div className="w-full overflow-hidden py-2 bg-gradient-to-r from-gray-50 to-white rounded-xl my-4">
+    <div className="w-full overflow-hidden py-2 bg-gradient-to-r from-gray-50 to-white rounded-xl my-2">
       <motion.div 
         className="flex whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
@@ -218,10 +204,10 @@ const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: 
         {duplicatedCategories.map((category, idx) => (
           <button
             key={`${category}-${idx}`}
-            className={`px-3 py-1.5 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
+            className={`px-2 py-1 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
               activeCategory === category 
                 ? "bg-black text-white" 
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                : getCategoryColorClass(category)
             }`}
             onClick={() => handleCategoryClick(category)}
           >
@@ -238,14 +224,14 @@ const FashionGrid = () => {
   const [selectedBrand, setSelectedBrand] = useState<typeof fashionItems[0] | null>(null);
   
   const filteredItems = selectedCategory
-    ? fashionItems.filter(item => item.genre.toLowerCase() === selectedCategory.toLowerCase())
+    ? fashionItems.filter(item => item.genre.toUpperCase() === selectedCategory.toUpperCase())
     : fashionItems;
 
   return (
     <div className="p-2 md:p-4 flex-1">
       <MarqueeCategories onSelectCategory={setSelectedCategory} />
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
         {filteredItems.map((item) => (
           <motion.div
             key={item.id}
@@ -255,14 +241,14 @@ const FashionGrid = () => {
             className="aspect-square bg-gray-50 rounded-lg overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
             <div className="p-2 border-b flex items-center">
-              <div className="w-6 h-6 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full overflow-hidden mr-1 bg-gray-200 flex items-center justify-center">
                 <span className="font-bold text-gray-500 text-xs">{item.title.charAt(0).toUpperCase()}</span>
               </div>
               <div className="overflow-hidden">
                 <div className="font-medium text-xs truncate">@{item.title.replace('@', '')}</div>
-                <div className="text-xxs mt-0.5">
-                  <span className={`px-1.5 py-0.5 rounded-full text-xxs ${getGenreColor(item.genre)}`}>
-                    {item.genre.toUpperCase()}
+                <div className="text-[10px] mt-0.5">
+                  <span className={`px-1 py-0.5 rounded-full text-[8px] ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}>
+                    {item.genre}
                   </span>
                 </div>
               </div>
@@ -284,7 +270,7 @@ const FashionGrid = () => {
                   
                   const iconContainer = document.createElement('div');
                   iconContainer.className = 'text-gray-400 flex items-center justify-center h-full';
-                  iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
+                  iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
                   container.appendChild(iconContainer);
                   
                   const websiteUrl = getBrandWebsiteUrl(item.title);

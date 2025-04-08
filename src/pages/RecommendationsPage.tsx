@@ -102,13 +102,13 @@ const RecommendationsPage = () => {
                 className="flex flex-col"
               >
                 <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="w-14 h-14 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
-                      <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
+                  <div className="flex flex-col items-center justify-center mb-6">
+                    <div className="w-20 h-20 rounded-full overflow-hidden mb-4 bg-gray-300 flex items-center justify-center">
+                      <span className="font-bold text-white text-2xl">{brand.name.charAt(0).toUpperCase()}</span>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-semibold text-center">@{cleanName}</h2>
-                      <div className="flex flex-wrap gap-2 mt-1 justify-center">
+                    <div className="text-center">
+                      <h2 className="text-2xl font-semibold">@{cleanName}</h2>
+                      <div className="flex flex-wrap gap-2 mt-3 justify-center">
                         {getBrandTags(brand).map((tag, i) => (
                           <span 
                             key={i} 
@@ -121,8 +121,8 @@ const RecommendationsPage = () => {
                     </div>
                   </div>
                   
-                  <div className="rounded-2xl overflow-hidden h-96">
-                    <div className="aspect-square w-full h-80">
+                  <div className="rounded-2xl overflow-hidden h-[400px]">
+                    <div className="aspect-square w-full h-full">
                       <iframe 
                         src={`https://www.instagram.com/${cleanName}/embed`}
                         className="w-full h-full border-none" 

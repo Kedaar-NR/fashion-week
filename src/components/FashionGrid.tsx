@@ -77,25 +77,23 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 10 }}
             onClick={() => onSelectBrand(item)}
-            className="aspect-[3/4] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
+            className="aspect-[3/5] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
-            <div className="p-2 border-b">
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-gray-200 flex items-center justify-center">
-                  <span className="font-bold text-gray-500 text-base">{item.title.charAt(0).toUpperCase()}</span>
-                </div>
-                <div className="flex-1">
-                  <div className="font-medium text-lg">@{item.title.replace('@', '')}</div>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {item.genre.split('/').map((genre, idx) => (
-                      <span 
-                        key={idx}
-                        className={`px-2 py-0.5 rounded-full text-xs ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
-                      >
-                        {genre.trim()}
-                      </span>
-                    ))}
-                  </div>
+            <div className="p-4 border-b flex flex-col items-center">
+              <div className="w-16 h-16 rounded-full overflow-hidden mb-3 bg-gray-200 flex items-center justify-center">
+                <span className="font-bold text-gray-500 text-xl">{item.title.charAt(0).toUpperCase()}</span>
+              </div>
+              <div className="text-center">
+                <div className="font-medium text-lg">@{item.title.replace('@', '')}</div>
+                <div className="flex flex-wrap gap-1 mt-2 justify-center">
+                  {item.genre.split('/').map((genre, idx) => (
+                    <span 
+                      key={idx}
+                      className={`px-2 py-0.5 rounded-full text-xs ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
+                    >
+                      {genre.trim()}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -156,3 +154,4 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
 };
 
 export default FashionGrid;
+

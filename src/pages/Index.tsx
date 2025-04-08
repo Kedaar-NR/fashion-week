@@ -1,8 +1,7 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { brands } from "@/data/brands";
 import { motion } from "framer-motion";
-import { SparklesText } from "@/components/ui/sparkles-text";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Heart, X, Shirt } from "lucide-react";
 import { toast } from "sonner";
@@ -13,6 +12,7 @@ import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
 import AISearchBar from "@/components/AISearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
+import { Button } from "@/components/ui/button";
 
 // Sort brands alphabetically
 const brandsData = [...brands].sort((a, b) => a.name.localeCompare(b.name));
@@ -112,54 +112,45 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen font-kanit">
+    <div className="flex h-screen font-kanit">
       <Sidebar />
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="min-h-screen flex flex-col font-kanit bg-white flex-1 ml-14"
+        className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-hidden"
       >
-        <div className="flex-grow">
-          <div className="mt-8 mb-6 px-6">
-            <div className="relative">
-              <SparklesText 
-                text="Your gateway to curated fashion brands"
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit"
-                colors={{ first: "#c0c0c0", second: "#333333" }}
-                sparklesCount={15}
-              />
-            </div>
+        <div className="flex flex-col h-full">
+          <div className="mt-4 mb-2 px-4">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center font-kanit">
+              GALLERY
+            </h1>
           </div>
           
-          <div className="flex justify-center mb-6">
-            <RainbowButton onClick={handleOpenStyleQuiz}>
+          <div className="flex justify-center mb-3">
+            <Button 
+              onClick={handleOpenStyleQuiz}
+              className="bg-black text-white hover:bg-gray-800"
+            >
               Discover Your Style
-            </RainbowButton>
+            </Button>
           </div>
           
-          <div className="px-4 mb-8 animate-scale-in">
+          <div className="px-4 mb-3 animate-scale-in">
             <AISearchBar onSearch={handleSearch} />
           </div>
           
           {selectedBrand ? (
             renderBrandPopup(selectedBrand)
           ) : (
-            <div id="fashion-grid" className="pb-8">
-              <h2 className="text-xl font-bold mb-2 px-6 font-kanit">Browse All Styles</h2>
+            <div className="flex-1 overflow-hidden">
               <FashionGrid />
             </div>
           )}
         </div>
         
-        <div className="relative z-10 transition-all duration-300">
-          <Footerdemo />
-        </div>
-        
-        <ExpandableChatDemo />
         <TallyEmailWidget />
-
         {showStyleQuiz && <StyleQuiz onClose={handleCloseStyleQuiz} />}
       </motion.div>
     </div>

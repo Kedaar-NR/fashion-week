@@ -52,7 +52,7 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
   };
   
   return (
-    <div className="w-full overflow-hidden py-2 bg-gradient-to-r from-gray-50 to-white rounded-xl my-2">
+    <div className="w-full overflow-hidden py-1 bg-gradient-to-r from-gray-50 to-white rounded-xl my-1">
       <motion.div 
         className="flex whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
@@ -65,7 +65,7 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
         {duplicatedCategories.map((category, idx) => (
           <button
             key={`${category}-${idx}`}
-            className={`px-2 py-1 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
+            className={`px-2 py-0.5 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
               activeCategory === category 
                 ? "bg-black text-white" 
                 : getCategoryColorClass(category)

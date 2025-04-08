@@ -3,43 +3,9 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { brands, genreColors } from "@/data/brands";
 import { Shirt } from "lucide-react";
+import MarqueeCategories from "./MarqueeCategories";
 
-// Function to get detailed brand descriptions
-const getBrandDescription = (brandName: string) => {
-  const descriptions: Record<string, string> = {
-    "shmuie": "Shmuie creates authentic streetwear with bold, unique designs that challenge conventional fashion norms.",
-    "berlinc.co": "Berlin C. offers essential pieces with a European design aesthetic, focusing on quality and durability.",
-    "heavenonearthstudios": "Heaven On Earth Studios crafts pieces that blend spiritual motifs with contemporary street design.",
-    "ssstufff.official": "Ssstufff pushes boundaries with their experimental approach to fashion, creating avant-garde pieces that defy categorization.",
-    "eternalloveworld": "Eternal Love brings gothic romance to modern fashion with their darkly poetic collections and intricate details.",
-    "hypedept.co": "Hype Department creates contemporary streetwear that captures the energy and attitude of urban culture.",
-    "roypubliclabel": "Roy Public combines punk aesthetics with ethical production practices, creating rebellious yet conscious fashion.",
-    "fourfour.jpg": "Four Four creates grunge-inspired pieces that blend 90s nostalgia with contemporary edge.",
-    "qbsay": "QB Say delivers street styles with distinctive graphics and innovative cuts that stand out in the crowd.",
-    "gospel.core": "Gospel Core fuses spiritual motifs with punk and grunge aesthetics to create unique, thought-provoking garments.",
-    "somar.us": "Somar blends street sensibilities with punk edge, creating distinctive pieces for the modern wardrobe.",
-    "vicinity_de": "Vicinity brings German precision to street fashion with clean lines and bold urban statements.",
-    "aliasonline.us": "Alias Online creates barrier-breaking street pieces that blur the lines between digital and physical aesthetics.",
-    "california.arts": "California Arts preserves vintage luxury through their carefully curated and restored collection pieces."
-  };
-  
-  if (descriptions[brandName]) {
-    return descriptions[brandName];
-  }
-  
-  const adjectives = ["innovative", "cutting-edge", "boundary-pushing", "trend-setting", "authentic", "visionary", "distinctive", "creative", "bold", "unique"];
-  const concepts = ["design philosophy", "aesthetic", "craftsmanship", "creativity", "cultural influences", "artistic vision", "technical expertise"];
-  const outcomes = ["garments that tell a story", "pieces that stand the test of time", "collections that challenge conventions", "designs that blur the lines between art and fashion", "creations that resonate with today's culture"];
-  
-  const seed = brandName.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  const randomAdjective = adjectives[seed % adjectives.length];
-  const randomConcept = concepts[(seed * 3) % concepts.length];
-  const randomOutcome = outcomes[(seed * 7) % outcomes.length];
-  
-  return `${brandName} represents ${randomAdjective} fashion through their unique ${randomConcept}, creating ${randomOutcome}. Their distinctive approach to design has garnered them a dedicated following in the fashion community.`;
-};
-
-// Function to get brand website URL if available
+// Get brand website URL if available
 const getBrandWebsiteUrl = (brandName: string) => {
   const websiteUrls: Record<string, string> = {
     "aliasonline.us": "https://aliasonline.us",
@@ -62,163 +28,6 @@ const fashionItems = brands.map((brand, index) => ({
   followers: brand.followers
 }));
 
-// Updated categories based on the provided image
-const categories = [
-  "STREET",
-  "PUNK/GOTH/GRUNGE",
-  "ESSENTIALS",
-  "LUXURY/VINTAGE",
-  "MINIMALISTIC",
-  "CRAZY EXPERIMENTAL", 
-  "Y2K",
-  "JEWELERY",
-  "TECHWEAR"
-];
-
-interface BrandPopupProps {
-  brand: typeof fashionItems[0];
-  onClose: () => void;
-}
-
-const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
-  const [instagramFailed, setInstagramFailed] = useState(false);
-  const websiteUrl = getBrandWebsiteUrl(brand.title);
-  const cleanBrandName = brand.title.replace('@', '');
-  
-  return (
-    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto relative">
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full"
-        >
-          ✕
-        </button>
-        
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="w-full md:w-1/2 aspect-square rounded-2xl overflow-hidden bg-gray-100">
-            <iframe 
-              src={`https://www.instagram.com/${cleanBrandName}/embed`}
-              className={`w-full h-full border-none ${instagramFailed ? 'hidden' : 'block'}`}
-              title={`${brand.title} Instagram Feed`}
-              scrolling="no"
-              loading="lazy"
-              onError={(e) => {
-                setInstagramFailed(true);
-              }}
-            />
-            {instagramFailed && (
-              <div className="w-full h-full flex flex-col">
-                <img 
-                  src={`https://source.unsplash.com/300x300/?fashion,clothing,${brand.genre}`}
-                  alt={brand.title}
-                  className="w-full h-full object-cover rounded-2xl"
-                />
-                {websiteUrl && (
-                  <div className="p-4 bg-black/80 text-white absolute bottom-0 left-0 right-0">
-                    <a 
-                      href={websiteUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-white hover:underline"
-                    >
-                      Visit {cleanBrandName} Website
-                    </a>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          
-          <div className="w-full md:w-1/2">
-            <h2 className="text-3xl font-bold mb-4">@{cleanBrandName}</h2>
-            
-            <div className="mb-6">
-              <span className={`px-3 py-1 rounded-full ${genreColors[brand.genre]?.bg || "bg-gray-500"} ${genreColors[brand.genre]?.text || "text-white"}`}>
-                {brand.genre}
-              </span>
-            </div>
-            
-            <p className="text-gray-700 mb-6">{getBrandDescription(brand.title)}</p>
-            
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold">About this brand</h3>
-              <p className="text-gray-600">
-                {getBrandDescription(brand.title)}
-              </p>
-            </div>
-            
-            <button className="mt-8 bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition">
-              Follow on Instagram
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Marquee component for categories with smaller width
-const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: string) => void }) => {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [duplicatedCategories, setDuplicatedCategories] = useState<string[]>([]);
-  
-  useEffect(() => {
-    setDuplicatedCategories([...categories, ...categories]);
-  }, []);
-
-  const handleCategoryClick = (category: string) => {
-    const newActive = activeCategory === category ? null : category;
-    setActiveCategory(newActive);
-    onSelectCategory(newActive || "");
-  };
-  
-  // Define color classes for each category based on the image
-  const getCategoryColorClass = (category: string) => {
-    const colorMap: Record<string, string> = {
-      "STREET": "bg-red-700 text-white",
-      "PUNK/GOTH/GRUNGE": "bg-purple-800 text-white",
-      "ESSENTIALS": "bg-blue-700 text-white",
-      "LUXURY/VINTAGE": "bg-yellow-200 text-black",
-      "MINIMALISTIC": "bg-gray-500 text-white",
-      "CRAZY EXPERIMENTAL": "bg-yellow-300 text-black",
-      "Y2K": "bg-pink-200 text-black",
-      "JEWELERY": "bg-gray-700 text-white",
-      "TECHWEAR": "bg-green-700 text-white"
-    };
-    
-    return colorMap[category] || "bg-gray-100 text-gray-700";
-  };
-  
-  return (
-    <div className="w-full overflow-hidden py-2 bg-gradient-to-r from-gray-50 to-white rounded-xl my-2">
-      <motion.div 
-        className="flex whitespace-nowrap"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ 
-          repeat: Infinity, 
-          duration: 20, 
-          ease: "linear" 
-        }}
-      >
-        {duplicatedCategories.map((category, idx) => (
-          <button
-            key={`${category}-${idx}`}
-            className={`px-2 py-1 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
-              activeCategory === category 
-                ? "bg-black text-white" 
-                : getCategoryColorClass(category)
-            }`}
-            onClick={() => handleCategoryClick(category)}
-          >
-            {category}
-          </button>
-        ))}
-      </motion.div>
-    </div>
-  );
-};
-
 const FashionGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState<typeof fashionItems[0] | null>(null);
@@ -228,33 +37,33 @@ const FashionGrid = () => {
     : fashionItems;
 
   return (
-    <div className="p-2 md:p-4 flex-1">
+    <div className="p-1 flex-1 overflow-hidden">
       <MarqueeCategories onSelectCategory={setSelectedCategory} />
       
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
+      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-1 overflow-hidden max-h-[calc(100vh-200px)]">
         {filteredItems.map((item) => (
           <motion.div
             key={item.id}
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
             onClick={() => setSelectedBrand(item)}
-            className="aspect-square bg-gray-50 rounded-lg overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
+            className="aspect-square bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
-            <div className="p-2 border-b flex items-center">
-              <div className="w-5 h-5 rounded-full overflow-hidden mr-1 bg-gray-200 flex items-center justify-center">
-                <span className="font-bold text-gray-500 text-xs">{item.title.charAt(0).toUpperCase()}</span>
+            <div className="p-1 border-b flex items-center">
+              <div className="w-4 h-4 rounded-full overflow-hidden mr-0.5 bg-gray-200 flex items-center justify-center">
+                <span className="font-bold text-gray-500 text-[8px]">{item.title.charAt(0).toUpperCase()}</span>
               </div>
               <div className="overflow-hidden">
-                <div className="font-medium text-xs truncate">@{item.title.replace('@', '')}</div>
-                <div className="text-[10px] mt-0.5">
-                  <span className={`px-1 py-0.5 rounded-full text-[8px] ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}>
+                <div className="font-medium text-[8px] truncate">@{item.title.replace('@', '')}</div>
+                <div className="text-[6px] mt-0.5">
+                  <span className={`px-1 py-0.5 rounded-full text-[6px] ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}>
                     {item.genre}
                   </span>
                 </div>
               </div>
             </div>
             
-            <div className="flex-1 overflow-hidden rounded-b-lg relative">
+            <div className="flex-1 overflow-hidden rounded-b-md relative">
               <iframe 
                 src={`https://www.instagram.com/${item.title.replace('@', '')}/embed`}
                 className="w-full h-full border-none" 
@@ -270,19 +79,19 @@ const FashionGrid = () => {
                   
                   const iconContainer = document.createElement('div');
                   iconContainer.className = 'text-gray-400 flex items-center justify-center h-full';
-                  iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
+                  iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
                   container.appendChild(iconContainer);
                   
                   const websiteUrl = getBrandWebsiteUrl(item.title);
                   if (websiteUrl) {
                     const linkContainer = document.createElement('div');
-                    linkContainer.className = 'absolute bottom-0 left-0 right-0 bg-black/70 p-1 text-white text-center text-xs';
+                    linkContainer.className = 'absolute bottom-0 left-0 right-0 bg-black/70 p-0.5 text-white text-center text-[6px]';
                     
                     const link = document.createElement('a');
                     link.href = websiteUrl;
                     link.target = '_blank';
                     link.rel = 'noopener noreferrer';
-                    link.className = 'text-white hover:underline text-xs';
+                    link.className = 'text-white hover:underline text-[6px]';
                     link.textContent = 'Visit Website';
                     
                     linkContainer.appendChild(link);
@@ -296,10 +105,6 @@ const FashionGrid = () => {
           </motion.div>
         ))}
       </div>
-      
-      {selectedBrand && (
-        <BrandPopup brand={selectedBrand} onClose={() => setSelectedBrand(null)} />
-      )}
     </div>
   );
 };

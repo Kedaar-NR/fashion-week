@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,10 @@ const Index = () => {
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+  };
+  
+  const resetSearch = () => {
+    setSearchQuery("");
   };
 
   const handleSelectBrand = (brand: any) => {
@@ -173,6 +178,7 @@ const Index = () => {
             <FashionGrid 
               searchQuery={searchQuery}
               onSelectBrand={handleSelectBrand}
+              onResetSearch={resetSearch}
             />
           </div>
         </div>

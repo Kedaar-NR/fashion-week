@@ -1,8 +1,7 @@
 
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Index from '@/pages/Index';
-import BrandsPage from '@/pages/BrandsPage';
 import LikedPage from '@/pages/LikedPage';
 import SignIn from '@/pages/SignIn';
 import NotFound from '@/pages/NotFound';
@@ -24,10 +23,10 @@ function AnimatedRoutes() {
         <Route path="/home" element={<Index />} />
         <Route path="/quiz" element={<QuizPage />} />
         <Route path="/recommendations" element={<RecommendationsPage />} />
-        <Route path="/brands" element={<BrandsPage />} />
         <Route path="/liked" element={<LikedPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/brands" element={<Navigate to="/home" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

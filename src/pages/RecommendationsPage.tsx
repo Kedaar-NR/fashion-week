@@ -116,26 +116,35 @@ const RecommendationsPage = () => {
               className="flex flex-col"
             >
               <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
-                <h2 className="text-2xl font-semibold mb-4 text-center">@{brand.name}</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-center">@{brand.name.replace('@', '')}</h2>
                 
-                <div className="rounded-2xl overflow-hidden">
+                <div className="rounded-2xl overflow-hidden h-96">
                   <div className="flex items-center p-3 border-b">
                     <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
                       <span className="font-bold text-white">{brand.name.charAt(0).toUpperCase()}</span>
                     </div>
                     <div>
-                      <div className="font-semibold">{brand.name}</div>
+                      <div className="font-semibold">{brand.name.replace('@', '')}</div>
                       <div className="text-gray-500">{brand.followers} followers</div>
                     </div>
                   </div>
                   
-                  <div className="aspect-square w-full">
+                  <div className="aspect-square w-full h-80">
                     <iframe 
-                      src={`https://www.instagram.com/${brand.name}/embed`}
+                      src={`https://www.instagram.com/${brand.name.replace('@', '')}/embed`}
                       className="w-full h-full border-none" 
                       title={`${brand.name} Instagram Feed`}
                       scrolling="no"
                       allowTransparency
+                      onError={(e) => {
+                        // If iframe fails to load, replace with fallback image
+                        const iframe = e.currentTarget;
+                        iframe.style.display = 'none';
+                        const img = document.createElement('img');
+                        img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
+                        img.className = 'w-full h-full object-cover rounded-xl';
+                        iframe.parentNode?.appendChild(img);
+                      }}
                     ></iframe>
                   </div>
                 </div>

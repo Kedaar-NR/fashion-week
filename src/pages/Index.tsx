@@ -1,4 +1,5 @@
-import { useState, useEffect, useId, useRef } from "react";
+
+import { useState, useEffect, useId, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { brands } from "@/data/brands";
@@ -9,12 +10,12 @@ import { SparklesText } from "@/components/ui/sparkles-text";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { Footerdemo } from "@/components/ui/footer-section";
 import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
-import StyleQuiz from "@/components/StyleQuiz";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { GlobeDemo } from "@/components/ui/GlobeDemo";
-import { Heart } from "lucide-react";
+import { Heart, X } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import FashionGrid from "@/components/FashionGrid";
 
 // Sort brands alphabetically
 const brandsWithRandomFollowers = [...brands].sort((a, b) => a.name.localeCompare(b.name));
@@ -134,7 +135,7 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
         }}
       >
         <div
-          className="absolute top-0 left-0 w-full h-full bg-[#1D1F2F] rounded-[1%] overflow-hidden transition-all duration-150 ease-out"
+          className="absolute top-0 left-0 w-full h-full bg-[#1D1F2F] rounded-xl overflow-hidden transition-all duration-150 ease-out"
           style={{
             transform:
               current === index
@@ -143,7 +144,7 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
           }}
         >
           <img
-            className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+            className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 rounded-xl transition-opacity duration-600 ease-in-out"
             style={{
               opacity: current === index ? 1 : 0.5,
             }}
@@ -154,7 +155,7 @@ const Slide = ({ slide, index, current, handleSlideClick, onButtonClick }: Slide
             decoding="sync"
           />
           {current === index && (
-            <div className="absolute inset-0 bg-black/30 transition-all duration-1000" />
+            <div className="absolute inset-0 bg-black/30 rounded-xl transition-all duration-1000" />
           )}
         </div>
 
@@ -278,6 +279,8 @@ const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [showStyleQuiz, setShowStyleQuiz] = useState(false);
   const [likedBrands, setLikedBrands] = useState<string[]>([]);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const commandRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -295,6 +298,18 @@ const Index = () => {
     setLikedBrands(saved);
   }, []);
 
+  // Handle clicking outside the search
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (commandRef.current && !commandRef.current.contains(event.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleSelect = (brandName: string) => {
     setSelectedBrand(brandName.replace('@', ''));
   };
@@ -304,7 +319,8 @@ const Index = () => {
   ) : [];
 
   const handleCarouselButtonClick = () => {
-    navigate('/brands');
+    // Scroll to the FashionGrid section
+    document.getElementById('fashion-grid')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleCloseStyleQuiz = () => {
@@ -385,11 +401,20 @@ const Index = () => {
           
           <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
             <iframe 
-              src={`https://www.instagram.com/${brandName}/embed`}
+              src={`https://www.instagram.com/${brandName.replace('@', '')}/embed`}
               className="w-full h-full border-none" 
               title={`${brandName} Instagram Feed`}
               allowTransparency={true}
               scrolling="no"
+              onError={(e) => {
+                // If iframe fails to load, replace with fallback image
+                const iframe = e.currentTarget;
+                iframe.style.display = 'none';
+                const img = document.createElement('img');
+                img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brandName}`;
+                img.className = 'w-full h-full object-cover rounded-xl';
+                iframe.parentNode?.appendChild(img);
+              }}
             />
           </div>
         </div>
@@ -465,15 +490,29 @@ const Index = () => {
             </div>
             
             <div className="px-8 mb-8 animate-scale-in">
-              <div className="relative w-full max-w-3xl mx-auto">
+              <div className="relative w-full max-w-3xl mx-auto" ref={commandRef}>
                 <Command className="rounded-lg border shadow-md">
-                  <CommandInput
-                    placeholder="Search brands"
-                    value={searchQuery}
-                    onValueChange={setSearchQuery}
-                    className="h-12 font-kanit"
-                  />
-                  {searchQuery.length > 0 && filteredBrands.length > 0 && (
+                  <div className="flex items-center px-3">
+                    <CommandInput
+                      placeholder="Search brands"
+                      value={searchQuery}
+                      onValueChange={setSearchQuery}
+                      onFocus={() => setIsSearchFocused(true)}
+                      className="h-12 font-kanit"
+                    />
+                    {searchQuery && (
+                      <button 
+                        onClick={() => {
+                          setSearchQuery('');
+                          setIsSearchFocused(false);
+                        }}
+                        className="p-1 rounded-full hover:bg-gray-100"
+                      >
+                        <X size={16} className="text-gray-500" />
+                      </button>
+                    )}
+                  </div>
+                  {isSearchFocused && searchQuery.length > 0 && filteredBrands.length > 0 && (
                     <CommandList>
                       <CommandGroup heading="Brands">
                         <ScrollArea className="h-64">
@@ -511,6 +550,10 @@ const Index = () => {
                   </div>
                 </div>
                 
+                <div id="fashion-grid">
+                  <FashionGrid />
+                </div>
+                
                 <div className="px-8 pb-8">
                   <GlobeDemo />
                 </div>
@@ -520,7 +563,7 @@ const Index = () => {
         </div>
       </div>
       
-      <div className="relative z-10">
+      <div className="relative z-10 ml-0 md:ml-48 transition-all duration-300">
         <Footerdemo />
       </div>
       

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,8 +10,9 @@ interface StyleImage {
   style: string;
 }
 
+// Using high-quality fashion images from Unsplash
 const styleImages: StyleImage[] = [
-  // First row
+  // First row - carefully selected fashion images
   { id: 1, url: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8", style: "MINIMALIST" },
   { id: 2, url: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2", style: "STREETWEAR" },
   { id: 3, url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f", style: "PUNK" },
@@ -20,7 +21,7 @@ const styleImages: StyleImage[] = [
   { id: 6, url: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7", style: "GRUNGE" },
   { id: 7, url: "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5", style: "VINTAGE" },
   
-  // Second row
+  // Second row - more diverse fashion styles
   { id: 8, url: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd", style: "ESSENTIALS" },
   { id: 9, url: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952", style: "LUXURY" },
   { id: 10, url: "https://images.unsplash.com/photo-1566206091558-7f218b696731", style: "COWBOY" },
@@ -36,7 +37,32 @@ interface StyleQuizProps {
 
 const StyleQuiz: React.FC<StyleQuizProps> = ({ onClose }) => {
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
+  const [loadedImages, setLoadedImages] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Preload all images when component mounts
+  useEffect(() => {
+    const imagePromises = styleImages.map((image) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          setLoadedImages((prev) => [...prev, image.id]);
+          resolve(image.id);
+        };
+        img.onerror = () => {
+          // If loading fails, still resolve but log an error
+          console.error(`Failed to load image: ${image.url}`);
+          resolve(image.id);
+        };
+        img.src = `${image.url}?w=300&h=400&fit=crop`;
+      });
+    });
+
+    Promise.all(imagePromises).then(() => {
+      setIsLoading(false);
+    });
+  }, []);
 
   const toggleImageSelection = (id: number) => {
     if (selectedImages.includes(id)) {
@@ -93,59 +119,68 @@ const StyleQuiz: React.FC<StyleQuizProps> = ({ onClose }) => {
           Select up to 5 outfits that match your style preferences.
         </p>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
-          {styleImages.slice(0, 7).map((image) => (
-            <div 
-              key={image.id}
-              className={`aspect-[3/4] rounded-lg overflow-hidden cursor-pointer relative ${
-                selectedImages.includes(image.id) ? 'ring-2 ring-offset-2 ring-purple-500' : ''
-              }`}
-              onClick={() => toggleImageSelection(image.id)}
-            >
-              <img 
-                src={`${image.url}?w=300&h=400&fit=crop`} 
-                alt={`Style ${image.id}`}
-                className="w-full h-full object-cover"
-              />
-              {selectedImages.includes(image.id) && (
-                <div className="absolute inset-0 bg-purple-500 bg-opacity-30 flex items-center justify-center">
-                  <div className="bg-white rounded-full p-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                  </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+            <span className="ml-3 text-gray-600">Loading style images...</span>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">
+              {styleImages.slice(0, 7).map((image) => (
+                <div 
+                  key={image.id}
+                  className={`aspect-[3/4] rounded-lg overflow-hidden cursor-pointer relative ${
+                    selectedImages.includes(image.id) ? 'ring-2 ring-offset-2 ring-purple-500' : ''
+                  } ${loadedImages.includes(image.id) ? '' : 'opacity-50'}`}
+                  onClick={() => loadedImages.includes(image.id) && toggleImageSelection(image.id)}
+                >
+                  <img 
+                    src={`${image.url}?w=300&h=400&fit=crop`} 
+                    alt={`Style ${image.id}`}
+                    className="w-full h-full object-cover"
+                  />
+                  {selectedImages.includes(image.id) && (
+                    <div className="absolute inset-0 bg-purple-500 bg-opacity-30 flex items-center justify-center">
+                      <div className="bg-white rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
-        
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
-          {styleImages.slice(7, 14).map((image) => (
-            <div 
-              key={image.id}
-              className={`aspect-[3/4] rounded-lg overflow-hidden cursor-pointer relative ${
-                selectedImages.includes(image.id) ? 'ring-2 ring-offset-2 ring-purple-500' : ''
-              }`}
-              onClick={() => toggleImageSelection(image.id)}
-            >
-              <img 
-                src={`${image.url}?w=300&h=400&fit=crop`} 
-                alt={`Style ${image.id}`}
-                className="w-full h-full object-cover"
-              />
-              {selectedImages.includes(image.id) && (
-                <div className="absolute inset-0 bg-purple-500 bg-opacity-30 flex items-center justify-center">
-                  <div className="bg-white rounded-full p-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                  </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
+              {styleImages.slice(7, 14).map((image) => (
+                <div 
+                  key={image.id}
+                  className={`aspect-[3/4] rounded-lg overflow-hidden cursor-pointer relative ${
+                    selectedImages.includes(image.id) ? 'ring-2 ring-offset-2 ring-purple-500' : ''
+                  } ${loadedImages.includes(image.id) ? '' : 'opacity-50'}`}
+                  onClick={() => loadedImages.includes(image.id) && toggleImageSelection(image.id)}
+                >
+                  <img 
+                    src={`${image.url}?w=300&h=400&fit=crop`} 
+                    alt={`Style ${image.id}`}
+                    className="w-full h-full object-cover"
+                  />
+                  {selectedImages.includes(image.id) && (
+                    <div className="absolute inset-0 bg-purple-500 bg-opacity-30 flex items-center justify-center">
+                      <div className="bg-white rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
         
         <div className="flex justify-between items-center">
           <div className="text-gray-600">
@@ -160,7 +195,7 @@ const StyleQuiz: React.FC<StyleQuizProps> = ({ onClose }) => {
             </Button>
             <Button 
               onClick={handleNext}
-              disabled={selectedImages.length === 0}
+              disabled={selectedImages.length === 0 || isLoading}
             >
               Next
             </Button>

@@ -71,6 +71,30 @@ const RecommendationsPage = () => {
     navigate('/home');
   };
 
+  // Function to get a unique description for each brand
+  const getBrandDescription = (brandName: string) => {
+    const descriptions = {
+      "kine.jkt": "Indonesian streetwear label known for minimalist designs with cultural influences",
+      "concrete_orchids": "Luxury brand blending architectural aesthetics with delicate natural motifs",
+      "shortsarchive": "Curated vintage shorts collection reviving classic styles from past decades",
+      "twopockets": "Functional essentials with innovative pocket designs for everyday utility",
+      "nihil.ny": "New York punk-inspired label featuring distressed elements and bold statements",
+      "babyev2k": "Y2K nostalgia reimagined with contemporary techniques and futuristic elements",
+      "friedrice_nyc": "NYC streetwear celebrating Asian-American cultural heritage and urban influences"
+    };
+    
+    const defaultDescriptions = [
+      "Cutting-edge brand known for innovative designs and cultural references",
+      "Distinctive label combining contemporary aesthetics with traditional craftsmanship",
+      "Underground favorite pushing boundaries with experimental techniques",
+      "Rising brand creating unique pieces that blend comfort with high fashion",
+      "Visionary label challenging conventional fashion with bold statements"
+    ];
+    
+    return descriptions[brandName as keyof typeof descriptions] || 
+      defaultDescriptions[Math.floor(Math.random() * defaultDescriptions.length)];
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}

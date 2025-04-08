@@ -7,7 +7,7 @@ import { Footer } from "@/components/ui/footer";
 
 export function Footerdemo() {
   return (
-    <div className="w-full ml-0 md:ml-14">
+    <div className="w-full">
       <Footer
         logo={<span className="text-lg font-semibold">FW</span>}
         brandName="Fashion Week"

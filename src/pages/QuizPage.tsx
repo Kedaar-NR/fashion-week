@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -58,7 +59,7 @@ const QuizPage = () => {
           console.error(`Failed to load image: ${image.url}`);
           resolve(image.id);
         };
-        img.src = image.url; // Local images don't need query parameters
+        img.src = image.url;
       });
     });
 
@@ -77,7 +78,7 @@ const QuizPage = () => {
     } else {
       if (selectedImagesPage2.includes(id)) {
         setSelectedImagesPage2(selectedImagesPage2.filter(imageId => imageId !== id));
-      } else if (selectedImagesPage2.length < 4) { // Allow up to 4 selections on page 2
+      } else if (selectedImagesPage2.length < 4) {
         setSelectedImagesPage2([...selectedImagesPage2, id]);
       }
     }

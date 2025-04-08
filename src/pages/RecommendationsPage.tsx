@@ -42,27 +42,9 @@ const RecommendationsPage = () => {
     setRecommendedBrands(brandsToRecommend);
   }, []);
 
-  // Sample brand descriptions
-  const brandBlurbs: Record<string, string> = {
-    "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
-    "isseymiyake": "Issey Miyake blends technology with tradition, creating innovative pleating techniques and architectural silhouettes that redefine modern fashion.",
-    "acnestudios": "Acne Studios combines Scandinavian minimalism with distinctive design elements, offering contemporary pieces with artistic sensibilities.",
-    "maisonmargiela": "Maison Margiela's avant-garde approach deconstructs and reimagines fashion conventions, creating conceptual designs with intellectual depth.",
-    "commedesgarcons": "Comme des Garçons challenges fashion norms with bold, architectural designs that blend art and fashion in unexpected ways.",
-    "rafsimons": "Raf Simons merges youth culture references with precise tailoring, creating collections that are both culturally relevant and impeccably crafted.",
-    "balenciaga": "Balenciaga delivers architectural silhouettes and street-inspired designs that define contemporary fashion through bold innovation.",
-    "vetements": "Vetements subverts fashion expectations with oversized proportions and street influences, creating statement pieces with cultural commentary.",
-    "rickowens": "Rick Owens crafts dark, architectural designs with a distinctive gothic aesthetic that balances brutalist forms with fluid draping.",
-  };
-
-  // Get a detailed blurb for a brand, fallback to generated description
-  const getBlurb = (brandName: string) => {
-    const normalizedName = brandName.toLowerCase().replace(/[^a-z0-9]/g, "");
-    return brandBlurbs[normalizedName] || 
-      "This cutting-edge brand combines innovative design with quality craftsmanship, offering distinctive pieces that reflect contemporary fashion sensibilities.";
-  };
-
   const handleNextClick = () => {
+    // Save recommended brands to localStorage
+    localStorage.setItem('recommendedBrands', JSON.stringify(recommendedBrands));
     navigate('/home');
   };
 
@@ -96,6 +78,25 @@ const RecommendationsPage = () => {
     localStorage.setItem('likedBrands', JSON.stringify(updatedLikedBrands));
   };
 
+  // Get tags for each brand based on index
+  const getBrandTags = (index: number) => {
+    if (index === 0) {
+      return [
+        { name: "punk", bgColor: "bg-pink-100", textColor: "text-pink-800" },
+        { name: "street", bgColor: "bg-red-100", textColor: "text-red-800" }
+      ];
+    } else if (index === 1) {
+      return [
+        { name: "basic", bgColor: "bg-blue-100", textColor: "text-blue-800" },
+        { name: "luxury", bgColor: "bg-yellow-100", textColor: "text-yellow-800" }
+      ];
+    } else {
+      return [
+        { name: "y2k", bgColor: "bg-green-100", textColor: "text-green-800" }
+      ];
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <div className="flex-grow">
@@ -103,11 +104,11 @@ const RecommendationsPage = () => {
           <Sidebar />
           
           <div className="flex-1 flex flex-col ml-14 md:ml-48 transition-all duration-300 p-6">
-            <h1 className="text-4xl font-bold text-center mb-6">CURATED FOR YOU:</h1>
+            <h1 className="text-5xl font-black text-center mb-8">CURATED FOR YOU:</h1>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {recommendedBrands.map((brandName, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+                <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                   <div className="p-4 flex justify-between items-center border-b">
                     <h2 className="text-xl font-semibold">@{brandName}</h2>
                     <button 
@@ -133,7 +134,7 @@ const RecommendationsPage = () => {
                     <div className="text-sm text-gray-500 mb-2">106 posts</div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-1">
+                  <div className="grid grid-cols-2 gap-0.5">
                     <img src={`/images/images1/IMG_495${index + 3}.JPG`} alt="Brand post" className="w-full aspect-square object-cover" />
                     <img src={`/images/images1/IMG_495${index + 5}.JPG`} alt="Brand post" className="w-full aspect-square object-cover" />
                     <img src={`/images/images2/IMG_497${index + 1}.JPG`} alt="Brand post" className="w-full aspect-square object-cover" />
@@ -145,29 +146,22 @@ const RecommendationsPage = () => {
                       href={`https://www.instagram.com/${brandName}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline text-sm"
+                      className="text-blue-500 hover:underline text-sm flex justify-center items-center"
                     >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      </svg>
                       View full profile on Instagram
                     </a>
                   </div>
                   
                   <div className="px-4 pb-4">
                     <div className="flex flex-wrap gap-2">
-                      {index === 0 && (
-                        <>
-                          <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">punk</span>
-                          <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs">street</span>
-                        </>
-                      )}
-                      {index === 1 && (
-                        <>
-                          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">basic</span>
-                          <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">luxury</span>
-                        </>
-                      )}
-                      {index === 2 && (
-                        <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs">y2k</span>
-                      )}
+                      {getBrandTags(index).map((tag, i) => (
+                        <span key={i} className={`px-3 py-1 ${tag.bgColor} ${tag.textColor} rounded-full text-xs`}>
+                          {tag.name}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>

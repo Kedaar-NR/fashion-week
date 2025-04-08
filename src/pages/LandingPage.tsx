@@ -2,7 +2,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { TextShimmerWave } from '@/components/ui/text-shimmer-wave';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -21,25 +20,12 @@ const LandingPage = () => {
     >
       <div className="text-center absolute transform translate-x-[-5%]">
         <h1 className="text-6xl md:text-8xl font-bold text-black text-center mb-12 tracking-tight">
-          <TextShimmerWave
-            className="[--base-color:#000000] [--base-gradient-color:#333333]"
-            duration={2}
-            spread={1.2}
-            zDistance={20}
-            scaleDistance={1.1}
-          >
+          <span className="block font-extrabold">
             WELCOME TO
-          </TextShimmerWave>
-          <br />
-          <TextShimmerWave
-            className="font-extrabold [--base-color:#000000] [--base-gradient-color:#333333]"
-            duration={2}
-            spread={1.2}
-            zDistance={20}
-            scaleDistance={1.1}
-          >
+          </span>
+          <span className="font-extrabold">
             FASHION:WEEK
-          </TextShimmerWave>
+          </span>
         </h1>
         <Button 
           onClick={handleBegin}

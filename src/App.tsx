@@ -1,5 +1,6 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import Index from '@/pages/Index';
 import BrandsPage from '@/pages/BrandsPage';
 import LikedPage from '@/pages/LikedPage';
@@ -13,21 +14,31 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import './App.css';
 import { Toaster } from '@/components/ui/sonner';
 
+function AnimatedRoutes() {
+  const location = useLocation();
+  
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<Index />} />
+        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/recommendations" element={<RecommendationsPage />} />
+        <Route path="/brands" element={<BrandsPage />} />
+        <Route path="/liked" element={<LikedPage />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
 function App() {
   return (
     <TooltipProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<Index />} />
-          <Route path="/quiz" element={<QuizPage />} />
-          <Route path="/recommendations" element={<RecommendationsPage />} />
-          <Route path="/brands" element={<BrandsPage />} />
-          <Route path="/liked" element={<LikedPage />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatedRoutes />
         <Toaster />
       </Router>
     </TooltipProvider>

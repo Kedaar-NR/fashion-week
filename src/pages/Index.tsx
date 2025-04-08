@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useId, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -15,6 +14,7 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { GlobeDemo } from "@/components/ui/GlobeDemo";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 // Sort brands alphabetically
 const brandsWithRandomFollowers = [...brands].sort((a, b) => a.name.localeCompare(b.name));
@@ -281,11 +281,12 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user has completed the quiz
+    // Check if user has completed the quiz or previously seen the style quiz
     const hasCompletedQuiz = localStorage.getItem('hasCompletedQuiz');
+    const hasSeenStyleQuiz = localStorage.getItem('hasSeenStyleQuiz');
     
-    // If not completed, show the quiz
-    if (!hasCompletedQuiz) {
+    // Only show the quiz if neither condition is met
+    if (!hasCompletedQuiz && !hasSeenStyleQuiz) {
       setShowStyleQuiz(true);
     }
     
@@ -308,6 +309,8 @@ const Index = () => {
 
   const handleCloseStyleQuiz = () => {
     setShowStyleQuiz(false);
+    // Mark as seen so it doesn't show again
+    localStorage.setItem('hasSeenStyleQuiz', 'true');
   };
 
   const handleOpenStyleQuiz = () => {
@@ -394,27 +397,27 @@ const Index = () => {
     );
   };
 
-  // Updated carousel images from the images folder
+  // Updated carousel images using uploaded fashion images
   const fashionSlides = [
     {
       title: "Modern Fashion",
       button: "Explore Collection",
-      src: "/images/images1/image1.jpg",
+      src: "/lovable-uploads/2826c26c-5666-46ec-8872-60b6f526e6a5.png",
     },
     {
       title: "Urban Streetwear",
       button: "View Style",
-      src: "/images/images2/image1.jpg",
+      src: "/lovable-uploads/c5e45c20-edf8-4052-9d18-b4293316d77f.png",
     },
     {
       title: "Designer Pieces",
       button: "Browse Designs",
-      src: "/images/images1/image2.jpg",
+      src: "/lovable-uploads/963420ec-8c53-43e3-91b3-b507a7d64bad.png",
     },
     {
       title: "Casual Elegance",
       button: "Shop Now",
-      src: "/images/images2/image2.jpg",
+      src: "/lovable-uploads/723635b7-5223-430c-a054-2a1ab7971a24.png",
     },
   ];
 
@@ -432,7 +435,13 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col font-kanit bg-white">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen flex flex-col font-kanit bg-white"
+    >
       <div className="flex-grow">
         <div className="flex min-h-screen">
           <Sidebar />
@@ -518,7 +527,7 @@ const Index = () => {
       <ExpandableChatDemo />
 
       {showStyleQuiz && <StyleQuiz onClose={handleCloseStyleQuiz} />}
-    </div>
+    </motion.div>
   );
 };
 

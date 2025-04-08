@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { brands } from '@/data/brands';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 // Function to get random brands
 const getRandomBrands = (count: number) => {
@@ -22,29 +23,35 @@ const RecommendationsPage = () => {
 
   // Tags with their corresponding colors
   const styleTags: Record<string, StyleTag> = {
-    'punk': { name: 'punk', color: 'bg-pink-200' },
-    'street': { name: 'street', color: 'bg-red-200' },
-    'basic': { name: 'basic', color: 'bg-blue-200' },
-    'luxury': { name: 'luxury', color: 'bg-yellow-100' },
-    'y2k': { name: 'y2k', color: 'bg-purple-200' },
+    'punk': { name: 'PUNK', color: 'bg-pink-200' },
+    'street': { name: 'STREETWEAR', color: 'bg-red-200' },
+    'basic': { name: 'BASIC', color: 'bg-blue-200' },
+    'luxury': { name: 'LUXURY', color: 'bg-yellow-100' },
+    'y2k': { name: 'Y2K', color: 'bg-purple-200' },
+    'essentials': { name: 'ESSENTIALS', color: 'bg-green-100' },
+    'vintage': { name: 'VINTAGE', color: 'bg-orange-100' },
+    'minimalist': { name: 'MINIMALIST', color: 'bg-gray-100' },
+    'gorpcore': { name: 'GORPCORE', color: 'bg-emerald-100' },
+    'grunge': { name: 'GRUNGE', color: 'bg-purple-100' },
+    'cowboy': { name: 'COWBOY', color: 'bg-amber-100' },
   };
 
-  // Get random style tags for each brand
-  const getRandomTags = (brandIndex: number) => {
-    const allTags = Object.values(styleTags);
-    const numberOfTags = brandIndex === 0 ? 2 : brandIndex === 1 ? 2 : 1;
+  // Get style tags for each brand based on their genre
+  const getBrandTags = (brand: (typeof brands)[0]) => {
+    if (!brand.genre) return [];
     
-    let selectedTags: StyleTag[] = [];
+    const genreLower = brand.genre.toLowerCase();
+    const tags: StyleTag[] = [];
     
-    if (brandIndex === 0) {
-      selectedTags = [styleTags.punk, styleTags.street];
-    } else if (brandIndex === 1) {
-      selectedTags = [styleTags.basic, styleTags.luxury];
+    if (styleTags[genreLower]) {
+      tags.push(styleTags[genreLower]);
     } else {
-      selectedTags = [styleTags.y2k];
+      // Fallback to random tags if genre not found
+      const allTags = Object.values(styleTags);
+      tags.push(allTags[Math.floor(Math.random() * allTags.length)]);
     }
     
-    return selectedTags;
+    return tags;
   };
 
   useEffect(() => {
@@ -64,13 +71,25 @@ const RecommendationsPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen flex flex-col bg-white"
+    >
       <div className="flex-grow p-4">
         <h1 className="text-5xl md:text-7xl font-bold text-black text-center my-12">CURATED FOR YOU:</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {recommendedBrands.map((brand, index) => (
-            <div key={index} className="flex flex-col">
+            <motion.div 
+              key={index}
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: index * 0.2 }}
+              className="flex flex-col"
+            >
               <div className="bg-gray-100 rounded-lg p-4 mb-4">
                 <h2 className="text-2xl font-semibold mb-4 text-center">@{brand.name}</h2>
                 
@@ -81,31 +100,30 @@ const RecommendationsPage = () => {
                     </div>
                     <div>
                       <div className="font-semibold">{brand.name}</div>
-                      <div className="text-gray-500">16.2K followers</div>
-                      <div className="text-gray-500">• 106 posts</div>
+                      <div className="text-gray-500">{brand.followers} followers</div>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-3 gap-1 aspect-square">
-                    {Array.from({ length: 9 }).map((_, i) => (
-                      <div key={i} className="bg-gray-200 aspect-square"></div>
-                    ))}
-                  </div>
-                  
-                  <div className="p-3 bg-blue-500 text-white text-center">
-                    View full profile on Instagram
+                  <div className="aspect-square w-full">
+                    <iframe 
+                      src={`https://www.instagram.com/${brand.name}/embed/captioned`}
+                      className="w-full h-full border-none" 
+                      title={`${brand.name} Instagram Feed`}
+                      scrolling="no"
+                      allowTransparency
+                    ></iframe>
                   </div>
                 </div>
                 
                 <div className="flex flex-wrap mt-4 gap-2">
-                  {getRandomTags(index).map((tag, i) => (
+                  {getBrandTags(brand).map((tag, i) => (
                     <span key={i} className={`px-4 py-1 rounded-full ${tag.color}`}>
                       {tag.name}
                     </span>
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
         
@@ -118,7 +136,7 @@ const RecommendationsPage = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

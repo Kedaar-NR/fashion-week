@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useId, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -280,8 +281,13 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Always show the quiz when loading the page
-    setShowStyleQuiz(true);
+    // Check if user has completed the quiz
+    const hasCompletedQuiz = localStorage.getItem('hasCompletedQuiz');
+    
+    // If not completed, show the quiz
+    if (!hasCompletedQuiz) {
+      setShowStyleQuiz(true);
+    }
     
     // Load liked brands from localStorage
     const saved = JSON.parse(localStorage.getItem('likedBrands') || '[]');
@@ -302,7 +308,6 @@ const Index = () => {
 
   const handleCloseStyleQuiz = () => {
     setShowStyleQuiz(false);
-    localStorage.setItem('hasSeenStyleQuiz', 'true');
   };
 
   const handleOpenStyleQuiz = () => {
@@ -389,26 +394,27 @@ const Index = () => {
     );
   };
 
+  // Updated carousel images from the images folder
   const fashionSlides = [
     {
       title: "Modern Fashion",
       button: "Explore Collection",
-      src: "https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images1/image1.jpg",
     },
     {
       title: "Urban Streetwear",
       button: "View Style",
-      src: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images2/image1.jpg",
     },
     {
       title: "Designer Pieces",
       button: "Browse Designs",
-      src: "https://images.unsplash.com/photo-1550614000-4895a10e1bfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images1/image2.jpg",
     },
     {
       title: "Casual Elegance",
       button: "Shop Now",
-      src: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      src: "/images/images2/image2.jpg",
     },
   ];
 

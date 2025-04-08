@@ -56,20 +56,25 @@ const RecommendationsPage = () => {
   };
 
   useEffect(() => {
-    // Get three random brands for recommendations
-    const randomBrands = getRandomBrands(3);
-    setRecommendedBrands(randomBrands);
-    
-    // Save the recommended brands to localStorage
-    localStorage.setItem('recommendedBrands', JSON.stringify(randomBrands.map(b => b.name)));
-    
-    // Auto-save recommended brands to liked brands
-    const existingLikedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
-    const brandNames = randomBrands.map(brand => brand.name);
-    
-    // Add only brands that aren't already in likedBrands
-    const newLikedBrands = [...new Set([...existingLikedBrands, ...brandNames])];
-    localStorage.setItem('likedBrands', JSON.stringify(newLikedBrands));
+    try {
+      // Get three random brands for recommendations
+      const randomBrands = getRandomBrands(3);
+      setRecommendedBrands(randomBrands);
+      
+      // Save the recommended brands to localStorage
+      localStorage.setItem('recommendedBrands', JSON.stringify(randomBrands.map(b => b.name)));
+      
+      // Auto-save recommended brands to liked brands
+      const existingLikedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
+      const brandNames = randomBrands.map(brand => brand.name);
+      
+      // Add only brands that aren't already in likedBrands
+      const newLikedBrands = [...new Set([...existingLikedBrands, ...brandNames])];
+      localStorage.setItem('likedBrands', JSON.stringify(newLikedBrands));
+    } catch (error) {
+      console.error("Error setting up recommendations:", error);
+      // Handle the error gracefully
+    }
   }, []);
 
   const handleFinish = () => {
@@ -130,13 +135,19 @@ const RecommendationsPage = () => {
                         scrolling="no"
                         loading="lazy"
                         onError={(e) => {
-                          // If iframe fails to load, replace with fallback image
-                          const iframe = e.currentTarget;
-                          iframe.style.display = 'none';
-                          const img = document.createElement('img');
-                          img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
-                          img.className = 'w-full h-full object-cover rounded-xl';
-                          iframe.parentNode?.appendChild(img);
+                          try {
+                            // If iframe fails to load, replace with fallback image
+                            const iframe = e.currentTarget;
+                            iframe.style.display = 'none';
+                            const img = document.createElement('img');
+                            img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
+                            img.className = 'w-full h-full object-cover rounded-xl';
+                            if (iframe.parentNode) {
+                              iframe.parentNode.appendChild(img);
+                            }
+                          } catch (error) {
+                            console.error("Error handling iframe error:", error);
+                          }
                         }}
                       ></iframe>
                     </div>

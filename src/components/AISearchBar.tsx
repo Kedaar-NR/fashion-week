@@ -61,6 +61,9 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
     handleSearch(suggestion);
   };
 
+  // Ensure suggestions is always an array before rendering
+  const validSuggestions = Array.isArray(suggestions) ? suggestions : [];
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="relative" ref={commandRef}>
@@ -71,7 +74,7 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
               value={searchQuery}
               onValueChange={setSearchQuery}
               onKeyDown={handleKeyPress}
-              onFocus={() => searchQuery && suggestions.length > 0 && setShowSuggestions(true)}
+              onFocus={() => searchQuery && validSuggestions.length > 0 && setShowSuggestions(true)}
               className="h-10 font-kanit"
             />
             {searchQuery && (
@@ -88,9 +91,9 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
             )}
           </div>
           
-          {showSuggestions && suggestions && Array.isArray(suggestions) && suggestions.length > 0 && (
+          {showSuggestions && validSuggestions.length > 0 && (
             <CommandList className="max-h-60 overflow-auto border-t">
-              {suggestions.map((suggestion) => (
+              {validSuggestions.map((suggestion) => (
                 <CommandItem
                   key={suggestion}
                   onSelect={() => handleSelectSuggestion(suggestion)}

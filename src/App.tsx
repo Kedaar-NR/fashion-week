@@ -9,6 +9,7 @@ import TermsPage from '@/pages/TermsPage';
 import LandingPage from '@/pages/LandingPage';
 import QuizPage from '@/pages/QuizPage';
 import RecommendationsPage from '@/pages/RecommendationsPage';
+import BrandsPage from '@/pages/BrandsPage';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import './App.css';
 import { Toaster } from '@/components/ui/sonner';
@@ -26,7 +27,7 @@ function AnimatedRoutes() {
         <Route path="/liked" element={<LikedPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/terms" element={<TermsPage />} />
-        <Route path="/brands" element={<Navigate to="/home" replace />} />
+        <Route path="/brands" element={<BrandsPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

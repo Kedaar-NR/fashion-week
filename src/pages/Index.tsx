@@ -14,7 +14,6 @@ import { GlobeDemo } from "@/components/ui/GlobeDemo";
 import { Heart, X } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import FashionGrid from "@/components/FashionGrid";
 import StyleQuiz from "@/components/StyleQuiz";
 
 // Sort brands alphabetically
@@ -319,8 +318,8 @@ const Index = () => {
   ) : [];
 
   const handleCarouselButtonClick = () => {
-    // Scroll to the FashionGrid section
-    document.getElementById('fashion-grid')?.scrollIntoView({ behavior: 'smooth' });
+    // Navigate to the brands page
+    navigate('/brands');
   };
 
   const handleCloseStyleQuiz = () => {
@@ -550,8 +549,16 @@ const Index = () => {
                   </div>
                 </div>
                 
-                <div id="fashion-grid">
-                  <FashionGrid />
+                <div className="px-8 pb-8">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold">Browse All Styles</h2>
+                    <button 
+                      onClick={() => navigate('/brands')} 
+                      className="text-gray-600 hover:text-black transition-colors flex items-center gap-1"
+                    >
+                      See more <IconArrowNarrowRight size={16} />
+                    </button>
+                  </div>
                 </div>
                 
                 <div className="px-8 pb-8">

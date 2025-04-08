@@ -30,6 +30,7 @@ export function Footerdemo() {
         ]}
         mainLinks={[
           { href: "/home", label: "Home" },
+          { href: "/brands", label: "Brands" },
           { href: "/liked", label: "Favorites" },
           { href: "/terms", label: "Terms" }
         ]}

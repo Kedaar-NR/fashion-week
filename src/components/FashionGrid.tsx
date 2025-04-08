@@ -32,6 +32,8 @@ const getBrandDescription = (brandName: string) => {
     "somar.us": "Luxury activewear designed for movement and performance while maintaining a sophisticated aesthetic. Their technical fabrics and innovative cuts bridge the gap between function and fashion.",
     "joy_divizn": "A tribute to post-punk aesthetics with modern sensibilities, featuring dark palettes, utilitarian details, and graphic elements inspired by iconic album artwork.",
     "derschutze_clo": "Military-inspired garments reinterpreted through a luxury lens, with attention to authentic details, premium materials, and precise construction.",
+    "vicinity.de": "Berlin-based label combining contemporary German design sensibility with urban attitude, featuring clean lines and avant-garde detailing.",
+    "aliasonline.us": "Ultra-modern streetwear with a digital-forward aesthetic, merging virtual culture with tangible fashion that pushes creative boundaries.",
   };
   
   // If we have a specific description for this brand, use it
@@ -72,6 +74,18 @@ const getGenreColor = (genre: string) => {
   return genreColors[genre.toLowerCase()] || 'bg-blue-500 text-white';
 };
 
+// Function to get brand website URL if available
+const getBrandWebsiteUrl = (brandName: string) => {
+  // This would ideally come from your data, but for demonstration:
+  const websiteUrls: Record<string, string> = {
+    "aliasonline.us": "https://aliasonline.us",
+    "vicinity.de": "https://vicinity.de",
+    // Add more websites as needed
+  };
+  
+  return websiteUrls[brandName] || null;
+};
+
 // Create fashion items from our brands data
 const fashionItems = brands.map((brand, index) => ({
   id: index + 1,
@@ -87,6 +101,9 @@ interface BrandPopupProps {
 }
 
 const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
+  const [instagramFailed, setInstagramFailed] = useState(false);
+  const websiteUrl = getBrandWebsiteUrl(brand.title);
+  
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
       <div className="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto relative">
@@ -101,22 +118,35 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
           <div className="w-full md:w-1/2 aspect-square rounded-2xl overflow-hidden bg-gray-100">
             <iframe 
               src={`https://www.instagram.com/${brand.title.replace('@', '')}/embed`}
-              className="w-full h-full border-none" 
+              className={`w-full h-full border-none ${instagramFailed ? 'hidden' : 'block'}`}
               title={`${brand.title} Instagram Feed`}
               scrolling="no"
-              allowTransparency={true}
+              loading="lazy"
               onError={(e) => {
-                // Try again without @ symbol if it fails
-                const iframe = e.currentTarget;
-                
-                // If iframe fails to load, replace with fallback image
-                iframe.style.display = 'none';
-                const img = document.createElement('img');
-                img.src = brand.image;
-                img.className = 'w-full h-full object-cover rounded-2xl';
-                iframe.parentNode?.appendChild(img);
+                setInstagramFailed(true);
               }}
             />
+            {instagramFailed && (
+              <div className="w-full h-full flex flex-col">
+                <img 
+                  src={`https://source.unsplash.com/300x300/?fashion,clothing,${brand.genre}`}
+                  alt={brand.title}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
+                {websiteUrl && (
+                  <div className="p-4 bg-black/80 text-white absolute bottom-0 left-0 right-0">
+                    <a 
+                      href={websiteUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-white hover:underline"
+                    >
+                      Visit {brand.title} Website
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           
           <div className="w-full md:w-1/2">
@@ -179,23 +209,47 @@ const FashionGrid = () => {
               </div>
             </div>
             
-            <div className="flex-1 overflow-hidden rounded-b-xl">
+            <div className="flex-1 overflow-hidden rounded-b-xl relative">
               <iframe 
                 src={`https://www.instagram.com/${item.title.replace('@', '')}/embed`}
                 className="w-full h-full border-none" 
                 title={`${item.title} Instagram Feed`}
                 scrolling="no"
-                allowTransparency={true}
+                loading="lazy"
                 onError={(e) => {
-                  // Try different formats if it fails
-                  const iframe = e.currentTarget;
-                  
                   // If iframe fails to load, replace with fallback image
+                  const iframe = e.currentTarget;
                   iframe.style.display = 'none';
+                  
+                  // Create container for the image
+                  const container = document.createElement('div');
+                  container.className = 'w-full h-full relative';
+                  
+                  // Add image from Unsplash related to fashion and the genre
                   const img = document.createElement('img');
-                  img.src = item.image;
+                  img.src = `https://source.unsplash.com/300x300/?fashion,${item.genre}`;
                   img.className = 'w-full h-full object-cover';
-                  iframe.parentNode?.appendChild(img);
+                  img.alt = item.title;
+                  container.appendChild(img);
+                  
+                  // Add website link if available
+                  const websiteUrl = getBrandWebsiteUrl(item.title);
+                  if (websiteUrl) {
+                    const linkContainer = document.createElement('div');
+                    linkContainer.className = 'absolute bottom-0 left-0 right-0 bg-black/70 p-2 text-white text-center';
+                    
+                    const link = document.createElement('a');
+                    link.href = websiteUrl;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.className = 'text-white hover:underline text-sm';
+                    link.textContent = 'Visit Website';
+                    
+                    linkContainer.appendChild(link);
+                    container.appendChild(linkContainer);
+                  }
+                  
+                  iframe.parentNode?.appendChild(container);
                 }}
               />
             </div>

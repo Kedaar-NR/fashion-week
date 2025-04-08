@@ -15,25 +15,26 @@ const getRandomBrands = (count: number) => {
 interface StyleTag {
   name: string;
   color: string;
+  textColor: string;
 }
 
 const RecommendationsPage = () => {
   const [recommendedBrands, setRecommendedBrands] = useState<typeof brands>([]);
   const navigate = useNavigate();
 
-  // Tags with their corresponding colors
+  // Tags with their corresponding colors - updated with vibrant colors and text colors
   const styleTags: Record<string, StyleTag> = {
-    'punk': { name: 'PUNK', color: 'bg-pink-200' },
-    'street': { name: 'STREETWEAR', color: 'bg-red-200' },
-    'basic': { name: 'BASIC', color: 'bg-blue-200' },
-    'luxury': { name: 'LUXURY', color: 'bg-yellow-100' },
-    'y2k': { name: 'Y2K', color: 'bg-purple-200' },
-    'essentials': { name: 'ESSENTIALS', color: 'bg-green-100' },
-    'vintage': { name: 'VINTAGE', color: 'bg-orange-100' },
-    'minimalist': { name: 'MINIMALIST', color: 'bg-gray-100' },
-    'gorpcore': { name: 'GORPCORE', color: 'bg-emerald-100' },
-    'grunge': { name: 'GRUNGE', color: 'bg-purple-100' },
-    'cowboy': { name: 'COWBOY', color: 'bg-amber-100' },
+    'punk': { name: 'PUNK', color: 'bg-pink-500', textColor: 'text-white' },
+    'street': { name: 'STREETWEAR', color: 'bg-red-500', textColor: 'text-white' },
+    'basic': { name: 'BASIC', color: 'bg-blue-500', textColor: 'text-white' },
+    'luxury': { name: 'LUXURY', color: 'bg-yellow-500', textColor: 'text-black' },
+    'y2k': { name: 'Y2K', color: 'bg-purple-500', textColor: 'text-white' },
+    'essentials': { name: 'ESSENTIALS', color: 'bg-green-500', textColor: 'text-white' },
+    'vintage': { name: 'VINTAGE', color: 'bg-orange-500', textColor: 'text-white' },
+    'minimalist': { name: 'MINIMALIST', color: 'bg-gray-500', textColor: 'text-white' },
+    'gorpcore': { name: 'GORPCORE', color: 'bg-emerald-500', textColor: 'text-white' },
+    'grunge': { name: 'GRUNGE', color: 'bg-purple-600', textColor: 'text-white' },
+    'cowboy': { name: 'COWBOY', color: 'bg-amber-500', textColor: 'text-white' },
   };
 
   // Get style tags for each brand based on their genre
@@ -90,10 +91,10 @@ const RecommendationsPage = () => {
               transition={{ delay: index * 0.2 }}
               className="flex flex-col"
             >
-              <div className="bg-gray-100 rounded-lg p-4 mb-4">
+              <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
                 <h2 className="text-2xl font-semibold mb-4 text-center">@{brand.name}</h2>
                 
-                <div className="rounded-lg overflow-hidden">
+                <div className="rounded-2xl overflow-hidden">
                   <div className="flex items-center p-3 border-b">
                     <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
                       <span className="font-bold text-white">{brand.name.charAt(0).toUpperCase()}</span>
@@ -106,7 +107,7 @@ const RecommendationsPage = () => {
                   
                   <div className="aspect-square w-full">
                     <iframe 
-                      src={`https://www.instagram.com/${brand.name}/embed/captioned`}
+                      src={`https://www.instagram.com/${brand.name}/embed`}
                       className="w-full h-full border-none" 
                       title={`${brand.name} Instagram Feed`}
                       scrolling="no"
@@ -115,9 +116,12 @@ const RecommendationsPage = () => {
                   </div>
                 </div>
                 
-                <div className="flex flex-wrap mt-4 gap-2">
+                <div className="flex justify-center mt-4 flex-wrap gap-2">
                   {getBrandTags(brand).map((tag, i) => (
-                    <span key={i} className={`px-4 py-1 rounded-full ${tag.color}`}>
+                    <span 
+                      key={i} 
+                      className={`px-4 py-1 rounded-full ${tag.color} ${tag.textColor} text-sm font-medium`}
+                    >
                       {tag.name}
                     </span>
                   ))}

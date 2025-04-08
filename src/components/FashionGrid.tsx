@@ -1,7 +1,6 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import MarqueeCategories from "./MarqueeCategories";
 import { brands } from "@/data/brands";
 
 // Function to get detailed brand descriptions
@@ -69,6 +68,7 @@ const getGenreColor = (genre: string) => {
     'gorpcore': 'bg-emerald-500 text-white',
     'grunge': 'bg-purple-600 text-white',
     'cowboy': 'bg-amber-500 text-white',
+    'selection based': 'bg-slate-500 text-white',
   };
   
   return genreColors[genre.toLowerCase()] || 'bg-blue-500 text-white';
@@ -80,6 +80,7 @@ const getBrandWebsiteUrl = (brandName: string) => {
   const websiteUrls: Record<string, string> = {
     "aliasonline.us": "https://aliasonline.us",
     "vicinity.de": "https://vicinity.de",
+    "gospel.core": "https://gospelcore.com",
     // Add more websites as needed
   };
   
@@ -94,6 +95,22 @@ const fashionItems = brands.map((brand, index) => ({
   image: `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`,
   followers: brand.followers
 }));
+
+// Marquee categories
+const categories = [
+  "STREETWEAR",
+  "PUNK",
+  "ESSENTIALS",
+  "LUXURY",
+  "MINIMALIST",
+  "GORPCORE", 
+  "Y2K",
+  "VINTAGE",
+  "BASIC",
+  "GRUNGE",
+  "COWBOY",
+  "SELECTION BASED"
+];
 
 interface BrandPopupProps {
   brand: typeof fashionItems[0];
@@ -163,7 +180,7 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
             <div className="space-y-4">
               <h3 className="text-xl font-semibold">About this brand</h3>
               <p className="text-gray-600">
-                {getBrandDescription(brand.title.replace('@', ''))}
+                {getBrandDescription(brand.title)}
               </p>
             </div>
             
@@ -173,6 +190,51 @@ const BrandPopup = ({ brand, onClose }: BrandPopupProps) => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+// Marquee component for categories
+const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: string) => void }) => {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [duplicatedCategories, setDuplicatedCategories] = useState<string[]>([]);
+  
+  // Duplicate categories to create infinite scroll effect
+  useEffect(() => {
+    setDuplicatedCategories([...categories, ...categories]);
+  }, []);
+
+  const handleCategoryClick = (category: string) => {
+    const newActive = activeCategory === category ? null : category;
+    setActiveCategory(newActive);
+    onSelectCategory(newActive || "");
+  };
+  
+  return (
+    <div className="w-full overflow-hidden py-4 bg-gradient-to-r from-gray-50 to-white rounded-xl my-4">
+      <motion.div 
+        className="flex whitespace-nowrap"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 30, 
+          ease: "linear" 
+        }}
+      >
+        {duplicatedCategories.map((category, idx) => (
+          <button
+            key={`${category}-${idx}`}
+            className={`px-6 py-3 mx-2 whitespace-nowrap rounded-full transition-colors text-sm font-medium ${
+              activeCategory === category 
+                ? "bg-black text-white" 
+                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+            }`}
+            onClick={() => handleCategoryClick(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </motion.div>
     </div>
   );
 };
@@ -205,7 +267,11 @@ const FashionGrid = () => {
               </div>
               <div>
                 <div className="font-medium">@{item.title.replace('@', '')}</div>
-                <div className="text-xs text-gray-500 capitalize">{item.genre}</div>
+                <div className="text-xs mt-1">
+                  <span className={`px-2 py-1 rounded-full text-xs ${getGenreColor(item.genre)}`}>
+                    {item.genre.toUpperCase()}
+                  </span>
+                </div>
               </div>
             </div>
             
@@ -217,7 +283,7 @@ const FashionGrid = () => {
                 scrolling="no"
                 loading="lazy"
                 onError={(e) => {
-                  // If iframe fails to load, replace with fallback image
+                  // If iframe fails to load, replace with fallback image and website link
                   const iframe = e.currentTarget;
                   iframe.style.display = 'none';
                   

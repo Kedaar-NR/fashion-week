@@ -7,7 +7,7 @@ import { Footer } from "@/components/ui/footer";
 
 export function Footerdemo() {
   return (
-    <div className="w-full ml-0 md:ml-0 transition-all duration-300">
+    <div className="w-full ml-0 md:ml-0 transition-all duration-300 mt-10">
       <Footer
         logo={<span className="text-lg font-semibold">FW</span>}
         brandName="Fashion Week"
@@ -30,7 +30,6 @@ export function Footerdemo() {
         ]}
         mainLinks={[
           { href: "/home", label: "Home" },
-          { href: "/brands", label: "Brands" },
           { href: "/liked", label: "Favorites" },
           { href: "/terms", label: "Terms" }
         ]}

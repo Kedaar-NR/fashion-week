@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useId, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -10,11 +11,11 @@ import { IconArrowNarrowRight } from "@tabler/icons-react";
 import { Footerdemo } from "@/components/ui/footer-section";
 import { ExpandableChatDemo } from "@/components/ExpandableChatDemo";
 import { RainbowButton } from "@/components/ui/rainbow-button";
-import { GlobeDemo } from "@/components/ui/GlobeDemo";
 import { Heart, X } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import StyleQuiz from "@/components/StyleQuiz";
+import FashionGrid from "@/components/FashionGrid";
 
 // Sort brands alphabetically
 const brandsWithRandomFollowers = [...brands].sort((a, b) => a.name.localeCompare(b.name));
@@ -318,8 +319,11 @@ const Index = () => {
   ) : [];
 
   const handleCarouselButtonClick = () => {
-    // Navigate to the brands page
-    navigate('/brands');
+    // Scroll to the fashion grid section
+    const fashionGridElement = document.getElementById('fashion-grid');
+    if (fashionGridElement) {
+      fashionGridElement.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleCloseStyleQuiz = () => {
@@ -549,20 +553,9 @@ const Index = () => {
                   </div>
                 </div>
                 
-                <div className="px-8 pb-8">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Browse All Styles</h2>
-                    <button 
-                      onClick={() => navigate('/brands')} 
-                      className="text-gray-600 hover:text-black transition-colors flex items-center gap-1"
-                    >
-                      See more <IconArrowNarrowRight size={16} />
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="px-8 pb-8">
-                  <GlobeDemo />
+                <div id="fashion-grid" className="px-8 pb-8">
+                  <h2 className="text-2xl font-bold mb-6">Browse All Styles</h2>
+                  <FashionGrid />
                 </div>
               </>
             )}

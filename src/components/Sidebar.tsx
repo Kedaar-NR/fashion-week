@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 const Sidebar = () => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true); // Set to true for auto-minimized
   const [user, setUser] = useState<{ email?: string, name?: string, photoURL?: string } | null>(null);
   
   useEffect(() => {
@@ -69,7 +69,7 @@ const Sidebar = () => {
             </h1>
             <button 
               onClick={toggleCollapse}
-              className="text-black hover:bg-gray-100 rounded-full p-1"
+              className="text-black hover:bg-gray-100 rounded-full p-1 mx-auto"
             >
               {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </button>
@@ -123,7 +123,7 @@ const Sidebar = () => {
           )}
         </div>
 
-        <div className="flex flex-col space-y-1 mt-3 px-2">
+        <div className="flex flex-col space-y-1 mt-3 px-2 items-center">
           <NavItem 
             icon={<Home size={18} className="text-green-600" />} 
             label="Home" 
@@ -165,7 +165,7 @@ const NavItem = ({
             to={path} 
             className={`flex items-center justify-center hover:bg-gray-100 transition-colors py-2 px-2 rounded-md ${
               isActive ? 'bg-gray-100 text-black font-semibold' : 'text-gray-700'
-            }`}
+            } w-full`}
           >
             <div className="flex items-center justify-center">
               <div>{icon}</div>
@@ -184,7 +184,7 @@ const NavItem = ({
       to={path} 
       className={`flex items-center justify-center hover:bg-gray-100 transition-colors py-2 px-2 rounded-md ${
         isActive ? 'bg-gray-100 text-black font-semibold' : 'text-gray-700'
-      }`}
+      } w-full`}
     >
       <div className="flex items-center justify-center">
         <div>{icon}</div>

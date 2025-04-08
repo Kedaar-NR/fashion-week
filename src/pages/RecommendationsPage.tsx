@@ -128,7 +128,6 @@ const RecommendationsPage = () => {
                         className="w-full h-full border-none" 
                         title={`${brand.name} Instagram Feed`}
                         scrolling="no"
-                        allowTransparency
                         onError={(e) => {
                           // If iframe fails to load, replace with fallback image
                           const iframe = e.currentTarget;

@@ -1,10 +1,8 @@
-
 import { Home, Heart, ChevronLeft, ChevronRight, LogIn, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
 import { toast } from "sonner";
 
 const Sidebar = () => {
@@ -55,17 +53,7 @@ const Sidebar = () => {
         <div className="flex flex-col border-b border-gray-200">
           <div className="flex items-center justify-center p-3">
             <h1 className={`text-lg font-kanit font-extrabold tracking-tighter ${collapsed ? 'hidden' : 'block'}`}>
-              {collapsed ? null : (
-                <TextShimmerWave
-                  className="[--base-color:#333333] [--base-gradient-color:#666666]"
-                  duration={2}
-                  spread={1.2}
-                  zDistance={20}
-                  scaleDistance={1.1}
-                >
-                  FASHION:WEEK
-                </TextShimmerWave>
-              )}
+              {collapsed ? null : "FASHION:WEEK"}
             </h1>
             <button 
               onClick={toggleCollapse}
@@ -123,7 +111,6 @@ const Sidebar = () => {
           )}
         </div>
 
-        {/* Center the navigation items vertically in the sidebar */}
         <div className="flex flex-col items-center justify-center flex-grow">
           <div className="flex flex-col space-y-6 items-center">
             <NavItem 

@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Search } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Command, CommandInput, CommandList, CommandItem } from '@/components/ui/command';
 import { brands } from '@/data/brands';
 
@@ -36,7 +36,7 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
         name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setSuggestions(filtered);
-      setShowSuggestions(true);
+      setShowSuggestions(filtered.length > 0); // Only show if we have suggestions
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
@@ -71,7 +71,7 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
               value={searchQuery}
               onValueChange={setSearchQuery}
               onKeyDown={handleKeyPress}
-              onFocus={() => searchQuery && setShowSuggestions(true)}
+              onFocus={() => searchQuery && suggestions.length > 0 && setShowSuggestions(true)}
               className="h-10 font-kanit"
             />
             {searchQuery && (
@@ -88,7 +88,7 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
             )}
           </div>
           
-          {showSuggestions && suggestions.length > 0 && (
+          {showSuggestions && suggestions && suggestions.length > 0 && (
             <CommandList className="max-h-60 overflow-auto border-t">
               {suggestions.map((suggestion) => (
                 <CommandItem
@@ -96,7 +96,6 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
                   onSelect={() => handleSelectSuggestion(suggestion)}
                   className="px-2 py-1.5 hover:bg-gray-100 cursor-pointer"
                 >
-                  <Search size={14} className="mr-2 text-gray-400" />
                   <span>{suggestion}</span>
                 </CommandItem>
               ))}

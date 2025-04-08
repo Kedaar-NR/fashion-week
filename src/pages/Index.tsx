@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useId, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -16,6 +15,7 @@ import { Heart, X } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import FashionGrid from "@/components/FashionGrid";
+import StyleQuiz from "@/components/StyleQuiz";
 
 // Sort brands alphabetically
 const brandsWithRandomFollowers = [...brands].sort((a, b) => a.name.localeCompare(b.name));

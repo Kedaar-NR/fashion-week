@@ -79,23 +79,24 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
             onClick={() => onSelectBrand(item)}
             className="aspect-[3/5] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
           >
-            <div className="p-4 border-b flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full overflow-hidden mb-3 bg-gray-200 flex items-center justify-center">
-                <span className="font-bold text-gray-500 text-xl">{item.title.charAt(0).toUpperCase()}</span>
-              </div>
-              <div className="text-center">
-                <div className="font-medium text-lg">@{item.title.replace('@', '')}</div>
-                <div className="flex flex-wrap gap-1 mt-2 justify-center">
-                  {item.genre.split('/').map((genre, idx) => (
-                    <span 
-                      key={idx}
-                      className={`px-2 py-0.5 rounded-full text-xs ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
-                    >
-                      {genre.trim()}
-                    </span>
-                  ))}
+            <div className="p-2 border-b flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
+                  <span className="font-bold text-gray-500 text-sm">{item.title.charAt(0).toUpperCase()}</span>
                 </div>
+                <div className="text-sm font-medium">@{item.title.replace('@', '')}</div>
               </div>
+              
+              <button 
+                onClick={(e) => toggleLike(item.title, e)}
+                className="p-1 rounded-full hover:bg-gray-200"
+                aria-label={likedBrands.includes(item.title) ? "Unlike" : "Like"}
+              >
+                <Heart 
+                  size={16} 
+                  className={likedBrands.includes(item.title) ? "fill-red-500 text-red-500" : "text-gray-500"}
+                />
+              </button>
             </div>
             
             <div className="flex-1 overflow-hidden rounded-b-md relative">
@@ -136,15 +137,19 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
                   iframe.parentNode?.appendChild(container);
                 }}
               />
-              <button 
-                onClick={(e) => toggleLike(item.title, e)}
-                className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
-              >
-                <Heart 
-                  size={18} 
-                  className={likedBrands.includes(item.title) ? "fill-red-500 text-red-500" : "text-gray-500"}
-                />
-              </button>
+            </div>
+            
+            <div className="px-1 py-0.5 flex justify-center">
+              <div className="flex flex-wrap gap-1 justify-center">
+                {item.genre.split('/').map((genre, idx) => (
+                  <span 
+                    key={idx}
+                    className={`px-1 py-0.5 rounded-full text-[10px] ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
+                  >
+                    {genre.trim()}
+                  </span>
+                ))}
+              </div>
             </div>
           </motion.div>
         ))}
@@ -154,4 +159,3 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
 };
 
 export default FashionGrid;
-

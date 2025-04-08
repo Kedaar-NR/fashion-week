@@ -92,7 +92,7 @@ const LikedPage = () => {
             <h2 className="text-xl font-semibold mb-2">No liked brands yet</h2>
             <p className="text-gray-500 mb-4">Start browsing and save your favorite brands</p>
             <a 
-              href="/brands"
+              href="/home"
               className="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
             >
               Browse Brands

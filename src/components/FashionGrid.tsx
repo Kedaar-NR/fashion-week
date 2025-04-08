@@ -1,12 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { brands } from "@/data/brands";
-import { TShirt } from "lucide-react";
+import { Shirt } from "lucide-react";
 
 // Function to get detailed brand descriptions
 const getBrandDescription = (brandName: string) => {
-  // Create unique descriptions for each brand
   const descriptions: Record<string, string> = {
     "kine.jkt": "KINE.JKT crafts minimalist streetwear with Indonesian influences, focusing on sustainable production and ethical sourcing. Their signature oversized silhouettes and muted color palette have garnered a dedicated following in Southeast Asia.",
     "concrete_orchids": "Blending brutalist architecture with delicate floral motifs, Concrete Orchids creates luxury pieces that challenge conventional fashion norms. Each garment is meticulously crafted with premium materials and innovative construction techniques.",
@@ -36,17 +34,14 @@ const getBrandDescription = (brandName: string) => {
     "aliasonline.us": "Ultra-modern streetwear with a digital-forward aesthetic, merging virtual culture with tangible fashion that pushes creative boundaries.",
   };
   
-  // If we have a specific description for this brand, use it
   if (descriptions[brandName]) {
     return descriptions[brandName];
   }
   
-  // Generate a randomized description based on brand name
   const adjectives = ["innovative", "cutting-edge", "boundary-pushing", "trend-setting", "authentic", "visionary", "distinctive", "creative", "bold", "unique"];
   const concepts = ["design philosophy", "aesthetic", "craftsmanship", "creativity", "cultural influences", "artistic vision", "technical expertise"];
   const outcomes = ["garments that tell a story", "pieces that stand the test of time", "collections that challenge conventions", "designs that blur the lines between art and fashion", "creations that resonate with today's culture"];
   
-  // Use the brand name to seed consistent random choices
   const seed = brandName.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
   const randomAdjective = adjectives[seed % adjectives.length];
   const randomConcept = concepts[(seed * 3) % concepts.length];
@@ -77,12 +72,10 @@ const getGenreColor = (genre: string) => {
 
 // Function to get brand website URL if available
 const getBrandWebsiteUrl = (brandName: string) => {
-  // This would ideally come from your data, but for demonstration:
   const websiteUrls: Record<string, string> = {
     "aliasonline.us": "https://aliasonline.us",
     "vicinity.de": "https://vicinity.de",
     "gospel.core": "https://gospelcore.com",
-    // Add more websites as needed
   };
   
   return websiteUrls[brandName] || null;
@@ -201,7 +194,6 @@ const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [duplicatedCategories, setDuplicatedCategories] = useState<string[]>([]);
   
-  // Duplicate categories to create infinite scroll effect
   useEffect(() => {
     setDuplicatedCategories([...categories, ...categories]);
   }, []);
@@ -219,7 +211,7 @@ const MarqueeCategories = ({ onSelectCategory }: { onSelectCategory: (category: 
         animate={{ x: ["0%", "-50%"] }}
         transition={{ 
           repeat: Infinity, 
-          duration: 20, // Faster scroll
+          duration: 20, 
           ease: "linear" 
         }}
       >
@@ -245,7 +237,6 @@ const FashionGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState<typeof fashionItems[0] | null>(null);
   
-  // Filter items based on selected category
   const filteredItems = selectedCategory
     ? fashionItems.filter(item => item.genre.toLowerCase() === selectedCategory.toLowerCase())
     : fashionItems;
@@ -285,21 +276,17 @@ const FashionGrid = () => {
                 scrolling="no"
                 loading="lazy"
                 onError={(e) => {
-                  // If iframe fails to load, replace with fallback image and website link
                   const iframe = e.currentTarget;
                   iframe.style.display = 'none';
                   
-                  // Create container for the image
                   const container = document.createElement('div');
                   container.className = 'w-full h-full flex items-center justify-center bg-gray-100';
                   
-                  // Add t-shirt icon as fallback
                   const iconContainer = document.createElement('div');
                   iconContainer.className = 'text-gray-400 flex items-center justify-center h-full';
                   iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
                   container.appendChild(iconContainer);
                   
-                  // Add website link if available
                   const websiteUrl = getBrandWebsiteUrl(item.title);
                   if (websiteUrl) {
                     const linkContainer = document.createElement('div');

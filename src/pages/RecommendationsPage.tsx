@@ -79,30 +79,6 @@ const RecommendationsPage = () => {
     navigate('/home');
   };
 
-  // Function to get a unique description for each brand
-  const getBrandDescription = (brandName: string) => {
-    const descriptions = {
-      "kine.jkt": "Indonesian streetwear label known for minimalist designs with cultural influences",
-      "concrete_orchids": "Luxury brand blending architectural aesthetics with delicate natural motifs",
-      "shortsarchive": "Curated vintage shorts collection reviving classic styles from past decades",
-      "twopockets": "Functional essentials with innovative pocket designs for everyday utility",
-      "nihil.ny": "New York punk-inspired label featuring distressed elements and bold statements",
-      "babyev2k": "Y2K nostalgia reimagined with contemporary techniques and futuristic elements",
-      "friedrice_nyc": "NYC streetwear celebrating Asian-American cultural heritage and urban influences"
-    };
-    
-    const defaultDescriptions = [
-      "Cutting-edge brand known for innovative designs and cultural references",
-      "Distinctive label combining contemporary aesthetics with traditional craftsmanship",
-      "Underground favorite pushing boundaries with experimental techniques",
-      "Rising brand creating unique pieces that blend comfort with high fashion",
-      "Visionary label challenging conventional fashion with bold statements"
-    ];
-    
-    return descriptions[brandName as keyof typeof descriptions] || 
-      defaultDescriptions[Math.floor(Math.random() * defaultDescriptions.length)];
-  };
-
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -124,19 +100,14 @@ const RecommendationsPage = () => {
               className="flex flex-col"
             >
               <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
-                <h2 className="text-2xl font-semibold mb-4 text-center">@{brand.name.replace('@', '')}</h2>
+                <div className="flex items-center mb-4 justify-center">
+                  <div className="w-14 h-14 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
+                    <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
+                  </div>
+                  <h2 className="text-2xl font-semibold">@{brand.name.replace('@', '')}</h2>
+                </div>
                 
                 <div className="rounded-2xl overflow-hidden h-96">
-                  <div className="flex items-center p-3 border-b">
-                    <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
-                      <span className="font-bold text-white">{brand.name.charAt(0).toUpperCase()}</span>
-                    </div>
-                    <div>
-                      <div className="font-semibold">{brand.name.replace('@', '')}</div>
-                      <div className="text-gray-500">{brand.followers} followers</div>
-                    </div>
-                  </div>
-                  
                   <div className="aspect-square w-full h-80">
                     <iframe 
                       src={`https://www.instagram.com/${brand.name.replace('@', '')}/embed`}

@@ -1,17 +1,21 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Heart } from "lucide-react";
 import FashionGrid from "@/components/FashionGrid";
 import AISearchBar from "@/components/AISearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [likedBrands, setLikedBrands] = useState<string[]>(
+    JSON.parse(localStorage.getItem('likedBrands') || '[]')
+  );
   const navigate = useNavigate();
   
   const handleSearch = (query: string) => {
@@ -32,6 +36,22 @@ const Index = () => {
     navigate('/quiz');
   };
   
+  // Toggle like status for a brand
+  const toggleLike = (brandTitle: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent triggering parent click
+    
+    const updatedLikes = likedBrands.includes(brandTitle)
+      ? likedBrands.filter(name => name !== brandTitle)
+      : [...likedBrands, brandTitle];
+    
+    setLikedBrands(updatedLikes);
+    localStorage.setItem('likedBrands', JSON.stringify(updatedLikes));
+    
+    if (!likedBrands.includes(brandTitle)) {
+      toast.success(`Added ${brandTitle} to your liked brands!`);
+    }
+  };
+  
   // Render brand detail modal with Instagram embed and description
   const renderBrandPopup = () => {
     if (!selectedBrand) return null;
@@ -42,13 +62,29 @@ const Index = () => {
       <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
         <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold font-kanit">@{cleanBrandName}</h2>
-            <button 
-              onClick={closeInstagramView}
-              className="p-2 hover:bg-gray-100 rounded-full"
-            >
-              <X size={20} />
-            </button>
+            <div className="flex items-center">
+              <div className="w-12 h-12 rounded-full overflow-hidden mr-3 bg-gray-300 flex items-center justify-center">
+                <span className="font-bold text-white text-lg">{cleanBrandName.charAt(0).toUpperCase()}</span>
+              </div>
+              <h2 className="text-2xl font-bold font-kanit">@{cleanBrandName}</h2>
+            </div>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={(e) => toggleLike(selectedBrand.title, e)}
+                className="bg-white p-2 rounded-full shadow-sm hover:bg-gray-100"
+              >
+                <Heart 
+                  size={20} 
+                  className={likedBrands.includes(selectedBrand.title) ? "fill-red-500 text-red-500" : "text-gray-500"}
+                />
+              </button>
+              <button 
+                onClick={closeInstagramView}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <X size={20} />
+              </button>
+            </div>
           </div>
           
           <div className="rounded-xl overflow-hidden aspect-square w-full h-[50vh]">
@@ -83,17 +119,8 @@ const Index = () => {
             />
           </div>
           
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-2">Description</h3>
-            <p className="text-gray-600">
-              {selectedBrand.title} is a cutting-edge fashion brand known for its distinctive {selectedBrand.genre.toLowerCase()} style and innovative designs.
-            </p>
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg text-center">
-              <h4 className="text-lg font-medium text-gray-800">More details coming soon</h4>
-              <p className="text-sm text-gray-500 mt-1">
-                We're working on bringing you more information about this brand.
-              </p>
-            </div>
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg text-center">
+            <h4 className="text-lg font-medium text-gray-800">Coming soon</h4>
           </div>
         </div>
       </div>

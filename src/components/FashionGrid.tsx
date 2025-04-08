@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { brands, genreColors } from "@/data/brands";
+import { Heart } from "lucide-react";
 import MarqueeCategories from "./MarqueeCategories";
 
 // Get brand website URL if available
@@ -34,6 +35,9 @@ interface FashionGridProps {
 
 const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [likedBrands, setLikedBrands] = useState<string[]>(
+    JSON.parse(localStorage.getItem('likedBrands') || '[]')
+  );
   
   // Filter items by category and search query if provided
   const filteredItems = fashionItems
@@ -45,6 +49,24 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
       // Then filter by search query if provided
       return searchQuery ? item.title.toLowerCase().includes(searchQuery.toLowerCase()) : true;
     });
+
+  // Toggle like status for a brand
+  const toggleLike = (brandTitle: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent triggering parent click
+    
+    const updatedLikes = likedBrands.includes(brandTitle)
+      ? likedBrands.filter(name => name !== brandTitle)
+      : [...likedBrands, brandTitle];
+    
+    setLikedBrands(updatedLikes);
+    localStorage.setItem('likedBrands', JSON.stringify(updatedLikes));
+    
+    if (!likedBrands.includes(brandTitle)) {
+      // Add toast notification
+      // (If you want to add toast, import toast from sonner and uncomment this)
+      // toast.success(`Added ${brandTitle} to your liked brands!`);
+    }
+  };
 
   return (
     <div className="p-1 flex-1 overflow-hidden">
@@ -61,22 +83,22 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
           >
             <div className="p-2 border-b">
               <div className="flex items-center">
-                <div className="w-7 h-7 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
-                  <span className="font-bold text-gray-500 text-xs">{item.title.charAt(0).toUpperCase()}</span>
+                <div className="w-10 h-10 rounded-full overflow-hidden mr-3 bg-gray-200 flex items-center justify-center">
+                  <span className="font-bold text-gray-500 text-base">{item.title.charAt(0).toUpperCase()}</span>
                 </div>
-                <div className="overflow-hidden flex-1">
-                  <div className="font-medium text-base truncate">@{item.title.replace('@', '')}</div>
+                <div className="flex-1 flex flex-col items-start">
+                  <div className="font-medium text-lg">@{item.title.replace('@', '')}</div>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {item.genre.split('/').map((genre, idx) => (
+                      <span 
+                        key={idx}
+                        className={`px-2 py-0.5 rounded-full text-xs ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
+                      >
+                        {genre.trim()}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="mt-2 flex flex-wrap gap-1 justify-center">
-                {item.genre.split('/').map((genre, idx) => (
-                  <span 
-                    key={idx}
-                    className={`px-2 py-0.5 rounded-full text-sm ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
-                  >
-                    {genre.trim()}
-                  </span>
-                ))}
               </div>
             </div>
             
@@ -118,6 +140,15 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand }: FashionGridProps) => {
                   iframe.parentNode?.appendChild(container);
                 }}
               />
+              <button 
+                onClick={(e) => toggleLike(item.title, e)}
+                className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full shadow-md hover:bg-white z-10"
+              >
+                <Heart 
+                  size={18} 
+                  className={likedBrands.includes(item.title) ? "fill-red-500 text-red-500" : "text-gray-500"}
+                />
+              </button>
             </div>
           </motion.div>
         ))}

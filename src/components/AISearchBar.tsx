@@ -96,7 +96,7 @@ const AISearchBar = ({ onSearch }: AISearchBarProps) => {
                   onSelect={() => handleSelectSuggestion(suggestion)}
                   className="px-2 py-1.5 hover:bg-gray-100 cursor-pointer"
                 >
-                  <span>{suggestion}</span>
+                  {suggestion}
                 </CommandItem>
               ))}
             </CommandList>

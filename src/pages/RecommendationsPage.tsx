@@ -107,7 +107,7 @@ const RecommendationsPage = () => {
                       <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
                     </div>
                     <div>
-                      <h2 className="text-2xl font-semibold">@{cleanName}</h2>
+                      <h2 className="text-2xl font-semibold text-center">@{cleanName}</h2>
                       <div className="flex flex-wrap gap-2 mt-1 justify-center">
                         {getBrandTags(brand).map((tag, i) => (
                           <span 

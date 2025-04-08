@@ -18,13 +18,13 @@ const LandingPage = () => {
       transition={{ duration: 0.5 }}
       className="h-screen w-screen flex flex-col items-center justify-center bg-white"
     >
-      <div className="text-center">
-        <h1 className="text-6xl md:text-8xl font-bold text-black text-center mb-12 tracking-tight">
+      <div className="text-center max-w-lg mx-auto">
+        <h1 className="text-6xl md:text-8xl font-bold text-black mb-12 tracking-tight transform -translate-x-4">
           WELCOME TO<br /><span className="font-extrabold">FASHION:WEEK</span>
         </h1>
         <Button 
           onClick={handleBegin}
-          className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none transition-all duration-300 font-bold"
+          className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none transition-all duration-300 font-bold mx-auto block"
         >
           BEGIN
         </Button>

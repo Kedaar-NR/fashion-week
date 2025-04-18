@@ -18,6 +18,14 @@ const BrandCollage = ({ brand }: BrandCollageProps) => {
     '/lovable-uploads/6e8fa05c-7020-4824-a736-4a787b45d9ca.png'
   ];
 
+  // Preload images
+  React.useEffect(() => {
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   if (!brand) return null;
 
   return (
@@ -47,13 +55,16 @@ const BrandCollage = ({ brand }: BrandCollageProps) => {
                 />
               </div>
             </div>
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center hover:bg-black/40 transition-all duration-300">
+              <span className="text-white font-bold text-lg">Click to see more</span>
+            </div>
           </motion.div>
         ) : (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-4 gap-4"
+            className="grid grid-cols-4 gap-4 h-[400px]"
             onClick={() => setShowDetails(false)}
           >
             {images.slice(0, 4).map((image, index) => (
@@ -65,6 +76,9 @@ const BrandCollage = ({ brand }: BrandCollageProps) => {
                 />
               </div>
             ))}
+            <div className="absolute inset-0 bg-black/10 flex items-center justify-center hover:bg-black/30 transition-all duration-300">
+              <span className="text-white font-bold text-lg">Click to go back</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

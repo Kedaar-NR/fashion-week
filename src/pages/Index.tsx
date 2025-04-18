@@ -18,7 +18,41 @@ const Index = () => {
   const [likedBrands, setLikedBrands] = useState<string[]>(
     JSON.parse(localStorage.getItem('likedBrands') || '[]')
   );
+  // Preload images for faster loading
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
   const navigate = useNavigate();
+  
+  // Preload images
+  useEffect(() => {
+    const imagesToPreload = [
+      "/lovable-uploads/c089b930-dc75-46ef-9215-b715c8db9998.png",
+      "/lovable-uploads/af6b43c2-1726-43e7-9f87-e05c62462654.png",
+      "/lovable-uploads/c31d83c0-c192-4591-9764-e23f7d781d15.png",
+      "/lovable-uploads/7f9f0c7c-ccf2-4d04-829b-15ebcd6016c9.png",
+      "/lovable-uploads/9936f1ac-b15f-4c46-ba42-28955f24eb6e.png",
+      "/lovable-uploads/08e7edfb-caf9-4f66-bfd0-eba0b62239a2.png",
+      // Add paths to the first image of each brand folder as well
+      "/src/brand_content/Badson/badson.us_1699473586_3231741135639083877_1432091644.jpg",
+      "/src/brand_content/Brotherly Love/brotherlylove_1664046007_2934553063320393525_35912611459.jpg",
+      "/src/brand_content/Derschutze Clo/derschutze_clo_1726419603_3457780706064379282_2999154756.jpg",
+      "/src/brand_content/nomaintenance/nomaintenance_1731181155_3497723502143598634_14713530917.jpg",
+      "/src/brand_content/outlaw xyz/outlw.usa_1711911948_3336081677266137878_44746425000.jpg"
+    ];
+    
+    const loadImage = (src: string) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+      });
+    };
+    
+    Promise.all(imagesToPreload.map(src => loadImage(src)))
+      .then(() => setImagesLoaded(true))
+      .catch(err => console.error("Failed to preload images:", err));
+  }, []);
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -169,16 +203,16 @@ const Index = () => {
             </Button>
           </div>
           
-          {/* Add the brand content collage component */}
-          <div className="px-4 overflow-auto">
-            <BrandContentCollage />
-          </div>
-          
           <div className="px-4 mb-3 animate-scale-in">
             <BrandSearchBar 
               onSearch={handleSearch} 
               onSelectBrand={handleSearchBrandSelect}
             />
+          </div>
+          
+          {/* Brand content collage */}
+          <div className="px-4 overflow-auto">
+            <BrandContentCollage />
           </div>
           
           <div className="flex-1 overflow-hidden">

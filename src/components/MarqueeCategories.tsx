@@ -1,81 +1,71 @@
 
-import { useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
-// Updated categories based on the provided image
-const categories = [
-  "STREET",
-  "PUNK/GOTH/GRUNGE",
-  "ESSENTIALS",
-  "LUXURY/VINTAGE",
-  "MINIMALISTIC",
-  "CRAZY EXPERIMENTAL",
-  "Y2K",
-  "JEWELERY",
-  "TECHWEAR"
-];
-
 interface MarqueeCategoriesProps {
-  onSelectCategory: (category: string) => void;
+  onSelectCategory?: (category: string) => void;
+  onSelectBrand?: (brand: string) => void;
+  brands?: string[];
 }
 
-const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [duplicatedCategories, setDuplicatedCategories] = useState<string[]>([]);
+const MarqueeCategories = ({ onSelectCategory, onSelectBrand, brands = [] }: MarqueeCategoriesProps) => {
+  const marqueeRef = useRef<HTMLDivElement>(null);
   
-  // Duplicate categories to create infinite scroll effect
+  // Determine if we're using the component for categories or brands
+  const isBrandMarquee = brands.length > 0 && onSelectBrand;
+  const items = isBrandMarquee ? brands : [
+    "STREET", "AVANT-GARDE", "TECH", "VINTAGE", "MINIMAL", 
+    "CLASSIC", "JAPANESE", "ARCHIVAL", "GOTHIC", "LUXURY"
+  ];
+  
   useEffect(() => {
-    setDuplicatedCategories([...categories, ...categories]);
-  }, []);
-
-  const handleCategoryClick = (category: string) => {
-    const newActive = activeCategory === category ? null : category;
-    setActiveCategory(newActive);
-    onSelectCategory(newActive || "");
-  };
-  
-  // Define color classes for each category based on the image
-  const getCategoryColorClass = (category: string) => {
-    const colorMap: Record<string, string> = {
-      "STREET": "bg-red-700 text-white",
-      "PUNK/GOTH/GRUNGE": "bg-purple-800 text-white",
-      "ESSENTIALS": "bg-blue-700 text-white",
-      "LUXURY/VINTAGE": "bg-yellow-200 text-black",
-      "MINIMALISTIC": "bg-gray-500 text-white",
-      "CRAZY EXPERIMENTAL": "bg-yellow-300 text-black",
-      "Y2K": "bg-pink-200 text-black",
-      "JEWELERY": "bg-gray-700 text-white",
-      "TECHWEAR": "bg-green-700 text-white"
-    };
+    if (!marqueeRef.current) return;
     
-    return colorMap[category] || "bg-gray-100 text-gray-700";
+    // Clone the items to create a seamless loop
+    const marqueeContainer = marqueeRef.current;
+    const originalContent = marqueeContainer.innerHTML;
+    marqueeContainer.innerHTML = originalContent + originalContent;
+    
+    // Start the animation
+    const animation = marqueeContainer.animate(
+      [
+        { transform: "translateX(0)" },
+        { transform: `translateX(-${originalContent.length * 0.5}px)` }
+      ],
+      {
+        duration: 30000,
+        iterations: Infinity
+      }
+    );
+    
+    return () => {
+      if (animation) animation.cancel();
+    };
+  }, [items]);
+
+  const handleClick = (item: string) => {
+    if (isBrandMarquee && onSelectBrand) {
+      onSelectBrand(item);
+    } else if (onSelectCategory) {
+      onSelectCategory(item);
+    }
   };
-  
+
   return (
-    <div className="w-full overflow-hidden py-1 bg-gradient-to-r from-gray-50 to-white rounded-xl my-1">
-      <motion.div 
-        className="flex whitespace-nowrap"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ 
-          repeat: Infinity, 
-          duration: 30, 
-          ease: "linear" 
-        }}
-      >
-        {duplicatedCategories.map((category, idx) => (
-          <button
-            key={`${category}-${idx}`}
-            className={`px-2 py-0.5 mx-1 whitespace-nowrap rounded-full transition-colors text-xs font-medium ${
-              activeCategory === category 
-                ? "bg-black text-white" 
-                : getCategoryColorClass(category)
-            }`}
-            onClick={() => handleCategoryClick(category)}
+    <div className="w-full overflow-hidden mb-4 py-4 bg-black">
+      <div ref={marqueeRef} className="whitespace-nowrap inline-block">
+        {items.map((item, index) => (
+          <motion.button
+            key={`${item}-${index}`}
+            onClick={() => handleClick(item)}
+            className="mx-4 px-4 py-1 rounded-full text-white font-medium hover:bg-white hover:text-black transition-colors duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            {category}
-          </button>
+            {isBrandMarquee ? `@${item}` : item}
+          </motion.button>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };

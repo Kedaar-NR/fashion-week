@@ -1,5 +1,5 @@
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 interface MarqueeCategoriesProps {
@@ -9,7 +9,7 @@ interface MarqueeCategoriesProps {
 }
 
 const MarqueeCategories = ({ onSelectCategory, onSelectBrand, brands = [] }: MarqueeCategoriesProps) => {
-  const marqueeRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   
   // Determine if we're using the component for categories or brands
   const isBrandMarquee = brands.length > 0 && onSelectBrand;
@@ -18,30 +18,8 @@ const MarqueeCategories = ({ onSelectCategory, onSelectBrand, brands = [] }: Mar
     "CLASSIC", "JAPANESE", "ARCHIVAL", "GOTHIC", "LUXURY"
   ];
   
-  useEffect(() => {
-    if (!marqueeRef.current) return;
-    
-    // Clone the items to create a seamless loop
-    const marqueeContainer = marqueeRef.current;
-    const originalContent = marqueeContainer.innerHTML;
-    marqueeContainer.innerHTML = originalContent + originalContent;
-    
-    // Start the animation
-    const animation = marqueeContainer.animate(
-      [
-        { transform: "translateX(0)" },
-        { transform: `translateX(-${originalContent.length * 0.5}px)` }
-      ],
-      {
-        duration: 30000,
-        iterations: Infinity
-      }
-    );
-    
-    return () => {
-      if (animation) animation.cancel();
-    };
-  }, [items]);
+  // For a smoother scrolling effect, we'll double the items
+  const scrollItems = [...items, ...items];
 
   const handleClick = (item: string) => {
     if (isBrandMarquee && onSelectBrand) {
@@ -51,10 +29,26 @@ const MarqueeCategories = ({ onSelectCategory, onSelectBrand, brands = [] }: Mar
     }
   };
 
+  // Use Framer Motion for the marquee animation instead of DOM manipulation
   return (
-    <div className="w-full overflow-hidden mb-4 py-4 bg-black">
-      <div ref={marqueeRef} className="whitespace-nowrap inline-block">
-        {items.map((item, index) => (
+    <div 
+      className="w-full overflow-hidden mb-4 py-4 bg-black"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <motion.div 
+        className="flex whitespace-nowrap"
+        animate={{
+          x: isHovered ? 0 : "-50%"
+        }}
+        transition={{
+          ease: "linear",
+          duration: isHovered ? 0 : 20,
+          repeat: Infinity,
+          repeatType: "loop"
+        }}
+      >
+        {scrollItems.map((item, index) => (
           <motion.button
             key={`${item}-${index}`}
             onClick={() => handleClick(item)}
@@ -65,7 +59,7 @@ const MarqueeCategories = ({ onSelectCategory, onSelectBrand, brands = [] }: Mar
             {isBrandMarquee ? `@${item}` : item}
           </motion.button>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -69,6 +69,7 @@ const Index = () => {
             <FashionGrid 
               searchQuery={searchQuery}
               onResetSearch={resetSearch}
+              onSelectBrand={(brand) => setSelectedBrand(brand)}
             />
           </div>
         </div>

@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Instagram } from 'lucide-react';
-import MarqueeCategories from './MarqueeCategories';
 
 // Define types for the brand content structure
 interface BrandContent {
@@ -14,25 +13,24 @@ interface BrandContent {
 const BrandContentCollage = () => {
   const [brandContents, setBrandContents] = useState<BrandContent[]>([]);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [showCollage, setShowCollage] = useState<boolean>(false);
-  
-  // Define the brand folders we want to display
-  const brandFolders = [
-    'Badson',
-    'Brotherly Love',
-    'Derschutze Clo',
-    'Droland Miller',
-    'Haveyoudiedbefore',
-    'california arts',
-    'era worldwide club',
-    'nomaintenance',
-    'outlaw xyz',
-    'poolhouse ny',
-    'the gv gallery'
-  ];
   
   // Function to load all brand content from the folders
   useEffect(() => {
+    // Define the brand folders we want to display
+    const brandFolders = [
+      'Badson',
+      'Brotherly Love',
+      'Derschutze Clo',
+      'Droland Miller',
+      'Haveyoudiedbefore',
+      'california arts',
+      'era worldwide club',
+      'nomaintenance',
+      'outlaw xyz',
+      'poolhouse ny',
+      'the gv gallery'
+    ];
+    
     // Create an array of brand content objects
     const contents: BrandContent[] = brandFolders.map(folder => {
       const brandName = folder.charAt(0).toUpperCase() + folder.slice(1);
@@ -82,7 +80,7 @@ const BrandContentCollage = () => {
       // Add more brand folders with their respective files here
       
       return {
-        name: brandName,
+        name: brandName.replace(/\b\w/g, l => l.toUpperCase()),
         images: imageFiles,
         videos: videoFiles
       };
@@ -101,10 +99,9 @@ const BrandContentCollage = () => {
     });
   }, [brandContents]);
   
-  // Handle brand selection from the marquee
+  // Handle brand selection to view Instagram embed
   const handleBrandSelect = (brandName: string) => {
-    setSelectedBrand(brandName);
-    setShowCollage(true);
+    setSelectedBrand(selectedBrand === brandName ? null : brandName);
   };
   
   // Convert brand name to Instagram handle format
@@ -113,11 +110,11 @@ const BrandContentCollage = () => {
     
     // Custom mappings for some brands
     const handleMap: Record<string, string> = {
-      'Badson': 'badson.us',
-      'Brotherly Love': 'brotherlylove',
-      'Derschutze Clo': 'derschutze_clo',
-      'Droland Miller': 'drolandmiller',
-      'Haveyoudiedbefore': 'haveyoudiedbefore',
+      'badson': 'badson.us',
+      'brotherly love': 'brotherlylove',
+      'derschutze clo': 'derschutze_clo',
+      'droland miller': 'drolandmiller',
+      'haveyoudiedbefore': 'haveyoudiedbefore',
       'california arts': 'california.arts',
       'era worldwide club': 'eraworldwideclub',
       'nomaintenance': 'nomaintenance',
@@ -126,132 +123,112 @@ const BrandContentCollage = () => {
       'the gv gallery': 'thegvgallery'
     };
     
-    return handleMap[name] || handle;
+    return handleMap[name.toLowerCase()] || handle;
   };
-  
-  // Get the selected brand content
-  const selectedBrandContent = selectedBrand 
-    ? brandContents.find(bc => bc.name.toLowerCase() === selectedBrand.toLowerCase())
-    : null;
-  
-  const brandNames = brandContents.map(bc => getBrandHandle(bc.name));
   
   return (
     <div className="w-full max-w-6xl mx-auto mb-8">
-      {/* Marquee of brand names */}
-      <MarqueeCategories 
-        brands={brandNames} 
-        onSelectBrand={handleBrandSelect} 
-      />
+      <h2 className="text-2xl md:text-3xl font-extrabold text-center font-kanit mb-6">FEATURED BRANDS</h2>
+      
+      {/* Brand selection bar */}
+      <div className="flex flex-wrap justify-center gap-2 mb-6">
+        {brandContents.map((brand, index) => (
+          <button
+            key={index}
+            onClick={() => handleBrandSelect(brand.name)}
+            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+              selectedBrand === brand.name 
+                ? 'bg-black text-white' 
+                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+            }`}
+          >
+            @{getBrandHandle(brand.name)}
+          </button>
+        ))}
+      </div>
       
       {/* Instagram embed when a brand is selected */}
-      {selectedBrand && showCollage && (
+      {selectedBrand && (
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="mb-8"
+          className="mb-8 rounded-xl overflow-hidden aspect-square max-h-[60vh] mx-auto"
         >
-          <div className="rounded-xl overflow-hidden aspect-video max-h-[60vh] w-full mx-auto mb-4">
-            <iframe 
-              src={`https://www.instagram.com/${getBrandHandle(selectedBrand)}/embed`}
-              className="w-full h-full border-none" 
-              title={`${selectedBrand} Instagram Feed`}
-              scrolling="no"
-              allowTransparency={true}
-              onError={(e) => {
-                const iframe = e.currentTarget;
-                iframe.style.display = 'none';
-                const container = document.createElement('div');
-                container.className = 'w-full h-full flex items-center justify-center bg-gray-100';
-                
-                const iconWrapper = document.createElement('div');
-                iconWrapper.className = 'flex flex-col items-center text-gray-500';
-                
-                const icon = document.createElement('div');
-                icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
-                iconWrapper.appendChild(icon);
-                
-                const text = document.createElement('p');
-                text.className = 'mt-2';
-                text.textContent = `@${getBrandHandle(selectedBrand)}`;
-                iconWrapper.appendChild(text);
-                
-                container.appendChild(iconWrapper);
-                iframe.parentNode?.appendChild(container);
-              }}
-            />
-          </div>
-          
-          {/* Product-like display of the first 4 images */}
-          {selectedBrandContent && selectedBrandContent.images.length > 0 && (
-            <div 
-              className="grid grid-cols-2 md:grid-cols-4 gap-2 cursor-pointer"
-              onClick={() => setShowCollage(!showCollage)}
-            >
-              {selectedBrandContent.images.slice(0, 4).map((image, idx) => (
-                <div key={idx} className="aspect-square overflow-hidden rounded-md bg-gray-100 hover:opacity-90 transition-opacity">
-                  <img 
-                    src={image} 
-                    alt={`${selectedBrand} product ${idx+1}`}
-                    className="w-full h-full object-cover"
-                    loading="eager" 
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          <iframe 
+            src={`https://www.instagram.com/${getBrandHandle(selectedBrand)}/embed`}
+            className="w-full h-full border-none" 
+            title={`${selectedBrand} Instagram Feed`}
+            scrolling="no"
+            allowTransparency={true}
+            onError={(e) => {
+              const iframe = e.currentTarget;
+              iframe.style.display = 'none';
+              const container = document.createElement('div');
+              container.className = 'w-full h-full flex items-center justify-center bg-gray-100';
+              
+              const iconWrapper = document.createElement('div');
+              iconWrapper.className = 'flex flex-col items-center text-gray-500';
+              
+              const icon = document.createElement('div');
+              icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
+              iconWrapper.appendChild(icon);
+              
+              const text = document.createElement('p');
+              text.className = 'mt-2';
+              text.textContent = `@${getBrandHandle(selectedBrand)}`;
+              iconWrapper.appendChild(text);
+              
+              container.appendChild(iconWrapper);
+              iframe.parentNode?.appendChild(container);
+            }}
+          />
         </motion.div>
       )}
       
-      {/* Collage of brand content when no brand is selected */}
-      {(!selectedBrand || !showCollage) && (
-        <div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-2 cursor-pointer" 
-          onClick={() => setShowCollage(false)}
-        >
-          <div className="col-span-1 aspect-[9/16] md:aspect-auto md:row-span-2">
-            {brandContents[0]?.images[0] && (
-              <img 
-                src={brandContents[0].images[0]} 
-                alt={brandContents[0].name}
-                className="w-full h-full object-cover rounded-lg"
-                loading="eager"
-              />
-            )}
-          </div>
-          
-          <div className="grid grid-cols-2 col-span-1 md:col-span-2 gap-2">
-            {brandContents.slice(1, 6).map((brand, index) => (
-              brand.images[0] && (
-                <div key={index} className={`${index === 0 ? 'col-span-2' : 'col-span-1'}`}>
-                  <img 
-                    src={brand.images[0]} 
-                    alt={brand.name}
-                    className="w-full h-full object-cover rounded-lg"
-                    loading="eager"
-                  />
-                </div>
-              )
-            ))}
-          </div>
-          
-          <div className="grid grid-cols-3 col-span-1 md:col-span-3 gap-2">
-            {brandContents.slice(6, 11).map((brand, index) => (
-              brand.images[0] && (
-                <div key={index} className={`${index === 1 || index === 3 ? 'col-span-2' : 'col-span-1'}`}>
-                  <img 
-                    src={brand.images[0]} 
-                    alt={brand.name}
-                    className="w-full h-full object-cover rounded-lg"
-                    loading="eager"
-                  />
-                </div>
-              )
-            ))}
-          </div>
+      {/* Collage of brand content */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <div className="col-span-1 aspect-[9/16] md:aspect-auto md:row-span-2">
+          {brandContents[0]?.images[0] && (
+            <img 
+              src={brandContents[0].images[0]} 
+              alt={brandContents[0].name}
+              className="w-full h-full object-cover rounded-lg"
+              loading="eager"
+            />
+          )}
         </div>
-      )}
+        
+        <div className="grid grid-cols-2 col-span-1 md:col-span-2 gap-2">
+          {brandContents.slice(1, 6).map((brand, index) => (
+            brand.images[0] && (
+              <div key={index} className={`${index === 0 ? 'col-span-2' : 'col-span-1'}`}>
+                <img 
+                  src={brand.images[0]} 
+                  alt={brand.name}
+                  className="w-full h-full object-cover rounded-lg"
+                  loading="eager"
+                />
+              </div>
+            )
+          ))}
+        </div>
+        
+        <div className="grid grid-cols-3 col-span-1 md:col-span-3 gap-2">
+          {brandContents.slice(6, 11).map((brand, index) => (
+            brand.images[0] && (
+              <div key={index} className={`${index === 1 || index === 3 ? 'col-span-2' : 'col-span-1'}`}>
+                <img 
+                  src={brand.images[0]} 
+                  alt={brand.name}
+                  className="w-full h-full object-cover rounded-lg"
+                  loading="eager"
+                />
+              </div>
+            )
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

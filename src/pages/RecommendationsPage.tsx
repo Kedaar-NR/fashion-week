@@ -55,6 +55,14 @@ const RecommendationsPage = () => {
     return tags;
   };
 
+  // Preload image placeholders
+  useEffect(() => {
+    recommendedBrands.forEach(brand => {
+      const img = new Image();
+      img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
+    });
+  }, [recommendedBrands]);
+
   useEffect(() => {
     try {
       // Get three random brands for recommendations
@@ -93,9 +101,9 @@ const RecommendationsPage = () => {
       className="min-h-screen flex flex-col bg-white"
     >
       <div className="flex-grow p-4">
-        <h1 className="text-5xl md:text-7xl font-bold text-black text-center my-12">CURATED FOR YOU:</h1>
+        <h1 className="text-5xl md:text-7xl font-bold text-black text-center my-8">CURATED FOR YOU:</h1>
         
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {recommendedBrands.map((brand, index) => {
             const cleanName = brand.name.replace('@', '');
             return (
@@ -106,18 +114,18 @@ const RecommendationsPage = () => {
                 transition={{ delay: index * 0.2 }}
                 className="flex flex-col"
               >
-                <div className="bg-gray-100 rounded-2xl p-4 mb-4 overflow-hidden">
-                  <div className="flex flex-col items-center justify-center mb-6">
-                    <div className="w-20 h-20 rounded-full overflow-hidden mb-4 bg-gray-300 flex items-center justify-center">
-                      <span className="font-bold text-white text-2xl">{brand.name.charAt(0).toUpperCase()}</span>
+                <div className="bg-gray-100 rounded-xl p-3 mb-2 overflow-hidden">
+                  <div className="flex flex-col items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-full overflow-hidden mb-3 bg-gray-300 flex items-center justify-center">
+                      <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
                     </div>
                     <div className="text-center">
-                      <h2 className="text-2xl font-semibold">@{cleanName}</h2>
-                      <div className="flex flex-wrap gap-2 mt-3 justify-center">
+                      <h2 className="text-xl font-semibold">@{cleanName}</h2>
+                      <div className="flex flex-wrap gap-1 mt-2 justify-center">
                         {getBrandTags(brand).map((tag, i) => (
                           <span 
                             key={i} 
-                            className={`px-3 py-1 rounded-full ${tag.color} ${tag.textColor} text-sm font-medium`}
+                            className={`px-2 py-0.5 rounded-full ${tag.color} ${tag.textColor} text-xs font-medium`}
                           >
                             {tag.name}
                           </span>
@@ -126,14 +134,14 @@ const RecommendationsPage = () => {
                     </div>
                   </div>
                   
-                  <div className="rounded-2xl overflow-hidden h-[400px]">
+                  <div className="rounded-xl overflow-hidden h-[300px]">
                     <div className="aspect-square w-full h-full">
                       <iframe 
                         src={`https://www.instagram.com/${cleanName}/embed`}
                         className="w-full h-full border-none" 
                         title={`${brand.name} Instagram Feed`}
                         scrolling="no"
-                        loading="lazy"
+                        loading="eager"
                         onError={(e) => {
                           try {
                             // If iframe fails to load, replace with fallback image
@@ -158,7 +166,7 @@ const RecommendationsPage = () => {
           })}
         </div>
         
-        <div className="flex justify-center mt-8 mb-12">
+        <div className="flex justify-center mt-6 mb-8">
           <Button 
             onClick={handleFinish}
             className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none"

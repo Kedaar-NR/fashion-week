@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,6 +35,15 @@ const QuizPage = () => {
   const [selectedFirstImages, setSelectedFirstImages] = useState<number[]>([]);
   const [selectedSecondImages, setSelectedSecondImages] = useState<number[]>([]);
   const navigate = useNavigate();
+
+  // Preload all quiz images
+  useEffect(() => {
+    const allImages = [...firstQuizImages, ...secondQuizImages];
+    allImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   const handleFirstQuizSelection = (index: number) => {
     if (selectedFirstImages.includes(index)) {
@@ -89,9 +98,9 @@ const QuizPage = () => {
         
         <p className="text-xl mb-8">select from the following</p>
         
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-3 max-w-4xl mx-auto">
           {step === 1 ? (
-            // First quiz with uploaded images
+            // First quiz with uploaded images (smaller size)
             firstQuizImages.map((image, index) => (
               <motion.div 
                 key={index}
@@ -107,6 +116,7 @@ const QuizPage = () => {
                   src={image} 
                   alt={`Style option ${index + 1}`}
                   className="w-full h-full object-cover"
+                  loading="eager"
                 />
                 {isImageSelected(index, 1) && (
                   <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
@@ -120,7 +130,7 @@ const QuizPage = () => {
               </motion.div>
             ))
           ) : (
-            // Second quiz with uploaded images
+            // Second quiz with uploaded images (smaller size)
             secondQuizImages.map((image, index) => (
               <motion.div 
                 key={index}
@@ -136,6 +146,7 @@ const QuizPage = () => {
                   src={image} 
                   alt={`Style option ${index + 1}`}
                   className="w-full h-full object-cover"
+                  loading="eager"
                 />
                 {isImageSelected(index, 2) && (
                   <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">

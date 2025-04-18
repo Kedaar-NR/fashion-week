@@ -7,6 +7,7 @@ import FashionGrid from "@/components/FashionGrid";
 import BrandSearchBar from "@/components/BrandSearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar from "@/components/Sidebar";
+import BrandContentCollage from "@/components/BrandContentCollage";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { brands } from "@/data/brands";
@@ -109,6 +110,7 @@ const Index = () => {
               title={`${selectedBrand.title} Instagram Feed`}
               allowTransparency={true}
               scrolling="no"
+              loading="eager"
               onError={(e) => {
                 const iframe = e.currentTarget;
                 iframe.style.display = 'none';
@@ -165,6 +167,11 @@ const Index = () => {
             >
               Discover Your Style
             </Button>
+          </div>
+          
+          {/* Add the brand content collage component */}
+          <div className="px-4 overflow-auto">
+            <BrandContentCollage />
           </div>
           
           <div className="px-4 mb-3 animate-scale-in">

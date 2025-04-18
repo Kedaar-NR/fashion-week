@@ -2,6 +2,17 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
+
+// List of important images to preload
+const imagesToPreload = [
+  "/lovable-uploads/2826c26c-5666-46ec-8872-60b6f526e6a5.png",
+  "/lovable-uploads/c5e45c20-edf8-4052-9d18-b4293316d77f.png",
+  "/lovable-uploads/963420ec-8c53-43e3-91b3-b507a7d64bad.png",
+  "/lovable-uploads/cc94c43a-db79-4499-9294-05627894354a.png",
+  "/lovable-uploads/200a1dfb-d9d8-49d2-8b01-89160bde0f75.png",
+  "/lovable-uploads/dfcb5746-f522-48dd-b19d-d5be29f59c01.png"
+];
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -9,6 +20,15 @@ const LandingPage = () => {
   const handleBegin = () => {
     navigate('/quiz');
   };
+
+  // Preload important images
+  useEffect(() => {
+    // Preload quiz images for faster loading later
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   return (
     <motion.div 

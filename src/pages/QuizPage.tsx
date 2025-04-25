@@ -63,7 +63,7 @@ const QuizPage = () => {
     }} transition={{
       duration: 0.5
     }} className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
-        <h1 className="text-5xl font-bold text-black mb-12 md:text-7xl">
+        <h1 className="text-5xl font-bold text-black mb-12 md:text-4xl">
           {step === 1 ? "WHO ARE YOU?" : "WHAT DO YOU LIKE?"}
         </h1>
         

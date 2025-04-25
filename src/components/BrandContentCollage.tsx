@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
@@ -9,12 +8,13 @@ interface BrandContent {
   videos: string[];
 }
 
-// Update the props interface to include brandName
+// Update the props interface to include both brandName and onSelectBrand
 interface BrandContentCollageProps {
-  brandName: string;
+  brandName?: string; // Make it optional
+  onSelectBrand?: (brandName: string) => void; // Add this prop to match Index.tsx usage
 }
 
-const BrandContentCollage = ({ brandName }: BrandContentCollageProps) => {
+const BrandContentCollage = ({ brandName, onSelectBrand }: BrandContentCollageProps) => {
   const [brandContents, setBrandContents] = useState<BrandContent[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -180,11 +180,7 @@ const BrandContentCollage = ({ brandName }: BrandContentCollageProps) => {
   }, [brandContents]);
 
   // Find the selected brand's content
-  const getSelectedBrandContent = () => {
-    return brandContents.find(brand => brand.name === brandName);
-  };
-  
-  const selectedContent = getSelectedBrandContent();
+  const selectedContent = brandContents.find(brand => brand.name === brandName);
   
   return (
     <div className="w-full max-w-6xl mx-auto mb-8">
@@ -231,7 +227,7 @@ const BrandContentCollage = ({ brandName }: BrandContentCollageProps) => {
         </motion.div>
       ) : (
         <div className="text-center text-gray-500 py-8">
-          <p>No content available for {brandName}</p>
+          <p>Select a brand to view content</p>
         </div>
       )}
     </div>

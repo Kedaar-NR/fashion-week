@@ -87,14 +87,10 @@ const BrandContentCollage = () => {
     return handleMap[name.toLowerCase()] || handle;
   };
   return <div className="w-full max-w-6xl mx-auto mb-8">
-      <h2 className="text-2xl md:text-3xl font-extrabold text-center font-kanit mb-6">FEATURED BRANDS</h2>
+      
       
       {/* Brand selection bar */}
-      <div className="flex flex-wrap justify-center gap-2 mb-6">
-        {brandContents.map((brand, index) => <button key={index} onClick={() => handleBrandSelect(brand.name)} className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${selectedBrand === brand.name ? 'bg-black text-white' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}>
-            @{getBrandHandle(brand.name)}
-          </button>)}
-      </div>
+      
       
       {/* Instagram embed when a brand is selected */}
       {selectedBrand && <motion.div initial={{

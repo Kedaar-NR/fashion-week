@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BrandCollageProps {
@@ -19,7 +19,7 @@ const BrandCollage = ({ brand }: BrandCollageProps) => {
   ];
 
   // Preload images
-  React.useEffect(() => {
+  useEffect(() => {
     images.forEach((src) => {
       const img = new Image();
       img.src = src;

@@ -1,9 +1,6 @@
 
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { Toaster } from '@/components/ui/sonner';
-import { AuthProvider } from '@/contexts/AuthContext';
 import Index from '@/pages/Index';
 import LikedPage from '@/pages/LikedPage';
 import SignIn from '@/pages/SignIn';
@@ -12,7 +9,9 @@ import TermsPage from '@/pages/TermsPage';
 import LandingPage from '@/pages/LandingPage';
 import QuizPage from '@/pages/QuizPage';
 import RecommendationsPage from '@/pages/RecommendationsPage';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import './App.css';
+import { Toaster } from '@/components/ui/sonner';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -35,14 +34,12 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <AuthProvider>
-      <TooltipProvider>
-        <Router>
-          <AnimatedRoutes />
-          <Toaster />
-        </Router>
-      </TooltipProvider>
-    </AuthProvider>
+    <TooltipProvider>
+      <Router>
+        <AnimatedRoutes />
+        <Toaster />
+      </Router>
+    </TooltipProvider>
   );
 }
 

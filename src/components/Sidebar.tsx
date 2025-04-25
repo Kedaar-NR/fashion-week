@@ -5,23 +5,45 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
 import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
 
 const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(true);
-  const { user, signOut } = useAuth();
+  const [user, setUser] = useState<{ email?: string, name?: string, photoURL?: string } | null>(null);
+  
+  useEffect(() => {
+    const checkUserAuth = () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          console.error('Failed to parse user data', e);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+    
+    checkUserAuth();
+    
+    window.addEventListener('storage', checkUserAuth);
+    
+    return () => {
+      window.removeEventListener('storage', checkUserAuth);
+    };
+  }, []);
   
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
   };
   
-  const handleLogout = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('Failed to sign out:', error);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('likedBrands');
+    setUser(null);
+    toast.success("Successfully logged out");
   };
   
   return (
@@ -64,12 +86,16 @@ const Sidebar = () => {
               >
                 <div className="flex items-center justify-center">
                   <Avatar className="h-7 w-7">
-                    <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white text-xs">
-                      {user.email?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
+                    {user.photoURL ? (
+                      <AvatarImage src={user.photoURL} alt={user.name || user.email} />
+                    ) : (
+                      <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white text-xs">
+                        {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                   <span className={`ml-3 font-kanit text-sm text-black ${collapsed ? 'hidden' : 'block'}`}>
-                    {user.email?.split('@')[0]}
+                    {user.name || user.email?.split('@')[0] || 'Profile'}
                   </span>
                 </div>
               </Link>

@@ -12,6 +12,7 @@ import Sidebar from '@/components/Sidebar';
 
 const RecommendationsPage = () => {
   const [recommendedBrands, setRecommendedBrands] = useState<typeof brands>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +40,11 @@ const RecommendationsPage = () => {
     navigate('/home');
   };
 
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    // You could add additional logic here to filter brands by category if needed
+  };
+
   return (
     <div className="min-h-screen flex bg-white">
       <Sidebar />
@@ -52,7 +58,7 @@ const RecommendationsPage = () => {
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold text-black text-center my-8">CURATED FOR YOU</h1>
           
-          <MarqueeCategories />
+          <MarqueeCategories onSelectCategory={handleCategorySelect} />
           <div className="mb-8">
             <ThreeDPhotoCarousel />
           </div>

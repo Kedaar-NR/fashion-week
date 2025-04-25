@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -64,14 +65,14 @@ const Index = () => {
         <div className="flex flex-col h-full">
           <h1 className="font-bold text-center mt-8 mb-4 text-black text-4xl">Gallery</h1>
           
-          <div className="px-4 mb-3 animate-scale-in">
-            <BrandSearchBar onSearch={handleSearch} onSelectBrand={handleBrandSelect} />
-          </div>
-
           <div className="flex justify-center mb-6">
             <Button onClick={handleDiscoverStyle} className="bg-black text-white hover:bg-gray-800 font-bold text-lg">
               Discover Your Style
             </Button>
+          </div>
+
+          <div className="px-4 mb-3 animate-scale-in">
+            <BrandSearchBar onSearch={handleSearch} onSelectBrand={handleBrandSelect} />
           </div>
 
           <div className="px-4 mb-4">

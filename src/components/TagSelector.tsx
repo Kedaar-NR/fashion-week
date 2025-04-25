@@ -1,18 +1,29 @@
 
 import { motion } from 'framer-motion';
-import { brands } from '@/data/brands';
 
 interface TagSelectorProps {
   onSelectBrand: (brandName: string) => void;
 }
 
 const TagSelector = ({ onSelectBrand }: TagSelectorProps) => {
-  const brandNames = brands.map(brand => brand.name.replace('@', ''));
+  const selectedBrands = [
+    'badson.us',
+    'brotherlylove',
+    'eraworldwideclub',
+    'outlw.usa',
+    'derschutze_clo',
+    'thegvgallery',
+    'haveyoudiedbefore',
+    'poolhousenewyork',
+    'nomaintenance',
+    'california.arts',
+    'drolandmiller'
+  ];
 
   return (
-    <div className="w-full overflow-x-auto">
-      <div className="flex space-x-3 px-2">
-        {brandNames.map((brand) => (
+    <div className="w-full">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+        {selectedBrands.map((brand) => (
           <button
             key={brand}
             onClick={() => onSelectBrand(brand)}

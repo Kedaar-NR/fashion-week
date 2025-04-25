@@ -5,21 +5,21 @@ import { brands } from '@/data/brands';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 
-// Function to get random brands
 const getRandomBrands = (count: number) => {
   const shuffled = [...brands].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 };
+
 interface StyleTag {
   name: string;
   color: string;
   textColor: string;
 }
+
 const RecommendationsPage = () => {
   const [recommendedBrands, setRecommendedBrands] = useState<typeof brands>([]);
   const navigate = useNavigate();
 
-  // Tags with their corresponding colors - updated with vibrant colors and text colors
   const styleTags: Record<string, StyleTag> = {
     'punk': {
       name: 'PUNK',
@@ -78,7 +78,6 @@ const RecommendationsPage = () => {
     }
   };
 
-  // Get style tags for each brand based on their genre
   const getBrandTags = (brand: (typeof brands)[0]) => {
     if (!brand.genre) return [];
     const genreLower = brand.genre.toLowerCase();
@@ -86,47 +85,42 @@ const RecommendationsPage = () => {
     if (styleTags[genreLower]) {
       tags.push(styleTags[genreLower]);
     } else {
-      // Fallback to random tags if genre not found
       const allTags = Object.values(styleTags);
       tags.push(allTags[Math.floor(Math.random() * allTags.length)]);
     }
     return tags;
   };
 
-  // Preload image placeholders
   useEffect(() => {
     recommendedBrands.forEach(brand => {
       const img = new Image();
       img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
     });
   }, [recommendedBrands]);
+
   useEffect(() => {
     try {
-      // Get three random brands for recommendations
       const randomBrands = getRandomBrands(3);
       setRecommendedBrands(randomBrands);
 
-      // Save the recommended brands to localStorage
       localStorage.setItem('recommendedBrands', JSON.stringify(randomBrands.map(b => b.name)));
 
-      // Auto-save recommended brands to liked brands
       const existingLikedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
       const brandNames = randomBrands.map(brand => brand.name);
 
-      // Add only brands that aren't already in likedBrands
       const newLikedBrands = [...new Set([...existingLikedBrands, ...brandNames])];
       localStorage.setItem('likedBrands', JSON.stringify(newLikedBrands));
     } catch (error) {
       console.error("Error setting up recommendations:", error);
-      // Handle the error gracefully
     }
   }, []);
+
   const handleFinish = () => {
-    // Save that the user has completed the quiz
     localStorage.setItem('hasCompletedQuiz', 'true');
     toast.success('Your brand recommendations have been saved to your liked brands!');
     navigate('/home');
   };
+
   return <motion.div initial={{
     opacity: 0
   }} animate={{
@@ -172,11 +166,10 @@ const RecommendationsPage = () => {
                     </div>
                   </div>
                   
-                  <div className="rounded-xl overflow-hidden h-[300px]">
+                  <div className="rounded-xl overflow-hidden h-[400px]">
                     <div className="aspect-square w-full h-full">
                       <iframe src={`https://www.instagram.com/${cleanName}/embed`} className="w-full h-full border-none" title={`${brand.name} Instagram Feed`} scrolling="no" loading="eager" onError={e => {
                     try {
-                      // If iframe fails to load, replace with fallback image
                       const iframe = e.currentTarget;
                       iframe.style.display = 'none';
                       const img = document.createElement('img');
@@ -204,4 +197,5 @@ const RecommendationsPage = () => {
       </div>
     </motion.div>;
 };
+
 export default RecommendationsPage;

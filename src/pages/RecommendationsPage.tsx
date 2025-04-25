@@ -154,7 +154,18 @@ const RecommendationsPage = () => {
                 <div className="rounded-xl p-3 mb-2 overflow-hidden bg-slate-300">
                   <div className="flex flex-col items-center justify-center mb-4">
                     <div className="w-16 h-16 rounded-full overflow-hidden mb-3 bg-gray-800 flex items-center justify-center">
-                      <span className="font-bold text-white text-xl">{brand.name.charAt(0).toUpperCase()}</span>
+                      <img 
+                        src={`/src/profile_pics /${cleanName}.jpg`} 
+                        alt={brand.name}
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = document.createElement('span');
+                          fallback.className = "font-bold text-white text-xl";
+                          fallback.textContent = brand.name.charAt(0).toUpperCase();
+                          e.currentTarget.parentElement?.appendChild(fallback);
+                        }}
+                      />
                     </div>
                     <div className="text-center">
                       <h2 className="text-xl font-semibold text-white">@{cleanName}</h2>

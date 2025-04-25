@@ -71,7 +71,7 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="px-4 mb-3 animate-scale-in">
+          <div className="px-4 mb-5 animate-scale-in">
             <BrandSearchBar onSearch={handleSearch} onSelectBrand={handleBrandSelect} />
           </div>
 
@@ -97,7 +97,7 @@ const Index = () => {
           )}
           
           <div className="px-4 overflow-auto">
-            <BrandContentCollage />
+            <BrandContentCollage onSelectBrand={handleBrandSelect} />
           </div>
           
           <div className="flex-1 overflow-hidden">
@@ -117,7 +117,9 @@ const Index = () => {
                 </button>
               </div>
               
-              <div className="rounded-xl overflow-hidden aspect-square w-full h-[60vh]">
+              <div className="rounded-xl overflow-hidden aspect-square w-full h-[60vh] relative">
+                {/* Add overlay to hide Instagram logo */}
+                <div className="absolute top-0 right-0 w-12 h-12 bg-white z-10"></div>
                 <iframe src={`https://www.instagram.com/${selectedBrand.title.replace('@', '')}/embed`} className="w-full h-full border-none" title={`${selectedBrand.title} Instagram Feed`} loading="eager" />
               </div>
             </div>

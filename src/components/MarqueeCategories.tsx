@@ -55,11 +55,12 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
     <div className="w-full overflow-hidden py-1 bg-gradient-to-r from-gray-50 to-white rounded-xl my-1">
       <motion.div 
         className="flex whitespace-nowrap"
-        animate={{ x: ["0%", "-50%"] }}
+        animate={{ x: ["0%", "-50%", "0%"] }}
         transition={{ 
-          repeat: Infinity, 
-          duration: 30, 
-          ease: "linear" 
+          repeat: 0, 
+          duration: 60, 
+          ease: "linear",
+          times: [0, 0.5, 1]
         }}
       >
         {duplicatedCategories.map((category, idx) => (

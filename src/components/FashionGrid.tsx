@@ -41,25 +41,17 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
     JSON.parse(localStorage.getItem('likedBrands') || '[]')
   );
   const [brandLogos, setBrandLogos] = useState<Record<string, string>>({});
-  
-  // Check if brand has Instagram account
+
+  // Load local brand logos
   useEffect(() => {
-    // Try to fetch Instagram profile pics for brands
-    const fetchBrandLogos = async () => {
+    const loadLocalLogos = () => {
       const logos: Record<string, string> = {};
       
       for (const item of fashionItems) {
+        const username = item.title.replace('@', '');
         try {
-          const username = item.title.replace('@', '');
-          const response = await fetch(`https://www.instagram.com/${username}/?__a=1&__d=dis`);
-          
-          if (response.ok) {
-            const data = await response.json();
-            const profilePic = data.graphql?.user?.profile_pic_url;
-            if (profilePic) {
-              logos[item.title] = profilePic;
-            }
-          }
+          // Import local logo from profile_pics directory
+          logos[item.title] = `/src/profile_pics /${username}.jpg`;
         } catch (error) {
           // Silently fail - we'll use default icon
         }
@@ -68,7 +60,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
       setBrandLogos(logos);
     };
     
-    fetchBrandLogos();
+    loadLocalLogos();
   }, []);
   
   // Filter items by category and search query if provided
@@ -115,7 +107,9 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
           </div>
         )}
         
-        <MarqueeCategories onSelectCategory={setSelectedCategory} />
+        <div className="mb-4">
+          <MarqueeCategories onSelectCategory={setSelectedCategory} />
+        </div>
         
         {/* Modified grid layout - 2 columns for mobile, higher aspect ratio */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 overflow-y-auto max-h-[calc(100vh-200px)] p-2 w-full">
@@ -130,15 +124,16 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
               <div className="p-2 border-b flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="w-8 h-8 rounded-full overflow-hidden mr-2 bg-gray-200 flex items-center justify-center">
-                    {brandLogos[item.title] ? (
-                      <img 
-                        src={brandLogos[item.title]} 
-                        alt={item.title} 
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <Instagram size={14} className="text-gray-500" />
-                    )}
+                    <img 
+                      src={`/src/profile_pics /${item.title.replace('@', '')}.jpg`} 
+                      alt={item.title} 
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.parentElement?.querySelector('.fallback-icon')?.classList.remove('hidden');
+                      }}
+                    />
+                    <Instagram size={14} className="text-gray-500 fallback-icon hidden" />
                   </div>
                   <div className="text-sm font-medium">@{item.title.replace('@', '')}</div>
                 </div>
@@ -156,6 +151,8 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
               </div>
               
               <div className="flex-1 overflow-hidden rounded-b-md relative">
+                {/* Add overlay to hide Instagram logo */}
+                <div className="absolute top-0 right-0 w-12 h-12 bg-white z-10"></div>
                 <iframe 
                   src={`https://www.instagram.com/${item.title.replace('@', '')}/embed`}
                   className="w-full h-full border-none" 

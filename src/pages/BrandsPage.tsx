@@ -8,6 +8,7 @@ import Brand from "@/components/Brand";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import BrandSearchBar from "@/components/BrandSearchBar";
+import BrandContentCollage from "@/components/BrandContentCollage";
 
 const brandBlurbs: Record<string, string> = {
   "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
@@ -166,20 +167,11 @@ const BrandsPage = () => {
                     </button>
                   </div>
                 </div>
-                
                 <p className="mb-4 text-gray-600 italic border-l-4 border-gray-300 pl-3 py-2 bg-gray-50">
                   {getBlurb(selectedBrand)}
                 </p>
-                
-                <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
-                  <iframe 
-                    src={`https://www.instagram.com/${selectedBrand}/embed`}
-                    className="w-full h-full border-none" 
-                    title={`${selectedBrand} Instagram Feed`}
-                    allowTransparency={true}
-                    scrolling="no"
-                  />
-                </div>
+                {/* Custom collage for brand */}
+                <BrandContentCollage brandName={selectedBrand} />
               </div>
             </div>
           ) : (
@@ -192,6 +184,7 @@ const BrandsPage = () => {
                   genre={brand.genre}
                   onClick={() => handleBrandClick(brand.name)}
                   isSaved={savedBrands.includes(brand.name)}
+                  isSelected={selectedBrand === brand.name}
                 />
               ))}
             </div>

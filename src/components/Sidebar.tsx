@@ -128,6 +128,20 @@ const Sidebar = () => {
               isActive={location.pathname === "/liked"} 
               collapsed={collapsed}
             />
+            <NavItem 
+              icon={<Shuffle size={18} className="text-blue-500" />} 
+              label="Swiper" 
+              path="/swiper" 
+              isActive={location.pathname === "/swiper"} 
+              collapsed={collapsed}
+            />
+            <NavItem 
+              icon={<Calendar size={18} className="text-purple-500" />} 
+              label="Drop Tracker" 
+              path="/drop-tracker" 
+              isActive={location.pathname === "/drop-tracker"} 
+              collapsed={collapsed}
+            />
           </div>
         </div>
       </div>

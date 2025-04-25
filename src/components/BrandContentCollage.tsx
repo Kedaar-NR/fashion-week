@@ -8,47 +8,164 @@ interface BrandContent {
   images: string[];
   videos: string[];
 }
-const BrandContentCollage = () => {
+
+interface BrandContentCollageProps {
+  onSelectBrand: (brandName: string) => void;
+}
+const BrandContentCollage = ({ onSelectBrand }: BrandContentCollageProps) => {
   const [brandContents, setBrandContents] = useState<BrandContent[]>([]);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // Function to load all brand content from the folders
   useEffect(() => {
-    // Define the brand folders we want to display
-    const brandFolders = ['Badson', 'Brotherly Love', 'Derschutze Clo', 'Droland Miller', 'Haveyoudiedbefore', 'california arts', 'era worldwide club', 'nomaintenance', 'outlaw xyz', 'poolhouse ny', 'the gv gallery'];
+    setLoading(true);
+    // Define the brand folders we want to display with their Instagram handles
+    const brandFolders = [
+      { folder: 'badson.us', handle: 'badson.us' },
+      { folder: 'brotherlylove', handle: 'brotherlylove' },
+      { folder: 'derschutze_clo', handle: 'derschutze_clo' },
+      { folder: 'drolandmiller', handle: 'drolandmiller' },
+      { folder: 'haveyoudiedbefore', handle: 'haveyoudiedbefore' },
+      { folder: 'california.arts', handle: 'california.arts' },
+      { folder: 'eraworldwideclub', handle: 'eraworldwideclub' },
+      { folder: 'nomaintenance', handle: 'nomaintenance' },
+      { folder: 'outlw.usa', handle: 'outlw.usa' },
+      { folder: 'poolhousenewyork', handle: 'poolhousenewyork' },
+      { folder: 'thegvgallery', handle: 'thegvgallery' }
+    ];
 
     // Create an array of brand content objects
-    const contents: BrandContent[] = brandFolders.map(folder => {
-      const brandName = folder.charAt(0).toUpperCase() + folder.slice(1);
-
+    const contents: BrandContent[] = brandFolders.map(({ folder, handle }) => {
       // Get all image files from the brand folder
       const imageFiles: string[] = [];
       const videoFiles: string[] = [];
 
-      // Manually add specific files from each brand folder
+      // Map folder names to actual content paths
       // This is a static implementation that references the actual files
-      if (folder === 'Badson') {
-        imageFiles.push('/src/brand_content/Badson/badson.us_1699473586_3231741135639083877_1432091644.jpg', '/src/brand_content/Badson/badson.us_1722106717_3421601599318493002_1432091644.jpg', '/src/brand_content/Badson/badson.us_1722106717_3421601599477840088_1432091644.jpg', '/src/brand_content/Badson/badson.us_1731527981_3500632892991125504_1432091644.jpg');
-        videoFiles.push('/src/brand_content/Badson/badson.us_1723057170_3429573505632039684_1432091644.mp4');
-      } else if (folder === 'Brotherly Love') {
-        imageFiles.push('/src/brand_content/Brotherly Love/brotherlylove_1664046007_2934553063320393525_35912611459.jpg', '/src/brand_content/Brotherly Love/brotherlylove_1677787329_3049394913502992918_35912611459.jpg', '/src/brand_content/Brotherly Love/brotherlylove_1677787329_3049394913503056113_35912611459.jpg');
-      } else if (folder === 'Derschutze Clo') {
-        imageFiles.push('/src/brand_content/Derschutze Clo/derschutze_clo_1726419603_3457780706064379282_2999154756.jpg', '/src/brand_content/Derschutze Clo/derschutze_clo_1729440411_3483121079615674640_2999154756.jpg', '/src/brand_content/Derschutze Clo/derschutze_clo_1730653240_3493295032112409900_2999154756.jpg');
+      if (folder === 'badson.us') {
+        imageFiles.push(
+          '/src/brand_content/badson.us/badsonclothing1.jpg',
+          '/src/brand_content/badson.us/badsonclothing2.jpg',
+          '/src/brand_content/badson.us/badsonclothing3.jpg',
+          '/src/brand_content/badson.us/fitpic1.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/badson.us/video.mp4',
+          '/src/brand_content/badson.us/video2.mp4'
+        );
+      } else if (folder === 'brotherlylove') {
+        imageFiles.push(
+          '/src/brand_content/brotherlylove/brotherlylove_1664046007_2934553063320393525_35912611459.jpg',
+          '/src/brand_content/brotherlylove/brotherlylove_1677787329_3049394913502992918_35912611459.jpg',
+          '/src/brand_content/brotherlylove/brotherlylove_1677787329_3049394913503056113_35912611459.jpg',
+          '/src/brand_content/brotherlylove/brotherlylove_1740763306_3578103949422478017_35912611459 (1).jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/brotherlylove/brotherlylove_1664650865_2939625923504481060_35912611459.mp4',
+          '/src/brand_content/brotherlylove/brotherlylove_1679770854_3066439708520407000_35912611459.mp4'
+        );
+      } else if (folder === 'derschutze_clo') {
+        imageFiles.push(
+          '/src/brand_content/derschutze_clo/derschutze_clo_1726419603_3457780706064379282_2999154756.jpg',
+          '/src/brand_content/derschutze_clo/derschutze_clo_1729440411_3483121079615674640_2999154756.jpg',
+          '/src/brand_content/derschutze_clo/derschutze_clo_1730653240_3493295032112409900_2999154756.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/derschutze_clo/derschutze_clo_1730653240_3493287896854781068_2999154756.mp4',
+          '/src/brand_content/derschutze_clo/derschutze_clo_1732813918_3511419931263194906_2999154756.mp4'
+        );
       } else if (folder === 'nomaintenance') {
-        imageFiles.push('/src/brand_content/nomaintenance/nomaintenance_1731181155_3497723502143598634_14713530917.jpg', '/src/brand_content/nomaintenance/nomaintenance_1743281181_3599225877483459256_14713530917.jpg', '/src/brand_content/nomaintenance/nomaintenance_1743447001_3599225877483459256_14713530917.jpg');
-      } else if (folder === 'outlaw xyz') {
-        imageFiles.push('/src/brand_content/outlaw xyz/outlw.usa_1711911948_3336081677266137878_44746425000.jpg', '/src/brand_content/outlaw xyz/outlw.usa_1728237639_3473031503831846398_44746425000.jpg', '/src/brand_content/outlaw xyz/outlw.usa_1728415952_3474527297397457205_44746425000.jpg');
+        imageFiles.push(
+          '/src/brand_content/nomaintenance/nomaintenance_1731181155_3497723502143598634_14713530917.jpg',
+          '/src/brand_content/nomaintenance/nomaintenance_1743281181_3599225877483459256_14713530917.jpg',
+          '/src/brand_content/nomaintenance/nomaintenance_1743447001_3600616875254000951_14713530917.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/nomaintenance/nomaintenance_1724433735_3441121480208034927_14713530917.mp4',
+          '/src/brand_content/nomaintenance/nomaintenance_1741875656_3587435150591258684_14713530917.mp4'
+        );
+      } else if (folder === 'outlw.usa') {
+        imageFiles.push(
+          '/src/brand_content/outlw.usa/outlw.usa_1711911948_3336081677266137878_44746425000.jpg',
+          '/src/brand_content/outlw.usa/outlw.usa_1728237639_3473031503831846398_44746425000.jpg',
+          '/src/brand_content/outlw.usa/outlw.usa_1728415952_3474527297397457205_44746425000.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/outlw.usa/outlw.usa_1711998039_3336803474856844468_44746425000.mp4',
+          '/src/brand_content/outlw.usa/outlw.usa_1712412338_3340277463214399462_44746425000.mp4'
+        );
+      } else if (folder === 'california.arts') {
+        imageFiles.push(
+          '/src/brand_content/california.arts/california.arts_1728226411_3472937314143839348_48483968107.jpg',
+          '/src/brand_content/california.arts/california.arts_1728226411_3472937314194158105_48483968107.jpg',
+          '/src/brand_content/california.arts/california.arts_1736183206_3539683744023456270_48483968107.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/california.arts/california.arts_1724173374_3438936397811838173_48483968107.mp4',
+          '/src/brand_content/california.arts/california.arts_1727455753_3466472295034117471_48483968107.mp4'
+        );
+      } else if (folder === 'eraworldwideclub') {
+        imageFiles.push(
+          '/src/brand_content/eraworldwideclub/eraworldwideclub_1711816186_3335278371531741824_5050989260.jpg',
+          '/src/brand_content/eraworldwideclub/eraworldwideclub_1731604641_3501275958738001264_5050989260.jpg',
+          '/src/brand_content/eraworldwideclub/eraworldwideclub_1732633645_3509907874177546050_5050989260.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/eraworldwideclub/Download (2).mp4',
+          '/src/brand_content/eraworldwideclub/Download (3).mp4'
+        );
+      } else if (folder === 'haveyoudiedbefore') {
+        imageFiles.push(
+          '/src/brand_content/haveyoudiedbefore/haveyoudiedbefore_1717873259_3386088780670284580_197862798.jpg',
+          '/src/brand_content/haveyoudiedbefore/haveyoudiedbefore_1731441695_3499909070206134087_197862798.jpg',
+          '/src/brand_content/haveyoudiedbefore/haveyoudiedbefore_1735071172_3530355332268842358_197862798.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/haveyoudiedbefore/haveyoudiedbefore_1744400417_3608614580894412189_197862798.mp4',
+          '/src/brand_content/haveyoudiedbefore/xu_tokyo_1739188804_3564896272881908827_2057095195.mp4'
+        );
+      } else if (folder === 'poolhousenewyork') {
+        imageFiles.push(
+          '/src/brand_content/poolhousenewyork/poolhousenewyork_1739143070_3564512883298111125_6507428546.jpg',
+          '/src/brand_content/poolhousenewyork/poolhousenewyork_1739931310_3571125122811444179_6507428546.jpg',
+          '/src/brand_content/poolhousenewyork/poolhousenewyork_1741656635_3585598197533036298_6507428546.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/poolhousenewyork/poolhousenewyork_1738002753_3554944888771017969_6507428546.mp4',
+          '/src/brand_content/poolhousenewyork/poolhousenewyork_1740785403_3578289499048369644_6507428546.mp4'
+        );
+      } else if (folder === 'thegvgallery') {
+        imageFiles.push(
+          '/src/brand_content/thegvgallery/thegvgallery_1687388177_3130361377764292647_1766339506.jpg',
+          '/src/brand_content/thegvgallery/thegvgallery_1707688024_3300648834811556022_1766339506.jpg',
+          '/src/brand_content/thegvgallery/thegvgallery_1719613040_3400683123791920872_1766339506.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/thegvgallery/thegvgallery_1700669915_3241774221536147695_1766339506.mp4',
+          '/src/brand_content/thegvgallery/thegvgallery_1715814142_3368813990611006670_1766339506.mp4'
+        );
+      } else if (folder === 'drolandmiller') {
+        imageFiles.push(
+          '/src/brand_content/drolandmiller/drolandmiller_1692723090_3175113868220891602_53424805481.jpg',
+          '/src/brand_content/drolandmiller/drolandmiller_1695686439_3199972242833929410_53424805481 (1).jpg',
+          '/src/brand_content/drolandmiller/drolandmiller_1709404302_3315046022618282267_53424805481.jpg'
+        );
+        videoFiles.push(
+          '/src/brand_content/drolandmiller/Download (1).mp4',
+          '/src/brand_content/drolandmiller/Download.mp4'
+        );
       }
 
-      // Add more brand folders with their respective files here
-
       return {
-        name: brandName.replace(/\b\w/g, l => l.toUpperCase()),
+        name: handle,
         images: imageFiles,
         videos: videoFiles
       };
     });
+    
     setBrandContents(contents);
+    setLoading(false);
   }, []);
 
   // Preload all images to improve performance
@@ -61,15 +178,25 @@ const BrandContentCollage = () => {
     });
   }, [brandContents]);
 
-  // Handle brand selection to view Instagram embed
+  // Handle brand selection to view content collage
+  // Ensure the brand selection logic correctly fetches and displays the content
   const handleBrandSelect = (brandName: string) => {
     setSelectedBrand(selectedBrand === brandName ? null : brandName);
+    onSelectBrand(brandName);
   };
-
+  
+  // Update UI to visually indicate the selected brand with a color change
+  const getSelectedBrandContent = () => {
+    if (!selectedBrand) return null;
+    return brandContents.find(brand => brand.name === selectedBrand);
+  };
+  
+  const selectedContent = getSelectedBrandContent();
+  
   // Convert brand name to Instagram handle format
   const getBrandHandle = (name: string): string => {
     let handle = name.toLowerCase().replace(/\s+/g, '');
-
+    
     // Custom mappings for some brands
     const handleMap: Record<string, string> = {
       'badson': 'badson.us',
@@ -84,45 +211,63 @@ const BrandContentCollage = () => {
       'poolhouse ny': 'poolhousenewyork',
       'the gv gallery': 'thegvgallery'
     };
+    
     return handleMap[name.toLowerCase()] || handle;
   };
-  return <div className="w-full max-w-6xl mx-auto mb-8">
-      
-      
-      {/* Brand selection bar */}
-      
-      
-      {/* Instagram embed when a brand is selected */}
-      {selectedBrand && <motion.div initial={{
-      opacity: 0,
-      y: -20
-    }} animate={{
-      opacity: 1,
-      y: 0
-    }} exit={{
-      opacity: 0
-    }} className="mb-8 rounded-xl overflow-hidden aspect-square max-h-[60vh] mx-auto">
-          <iframe src={`https://www.instagram.com/${getBrandHandle(selectedBrand)}/embed`} className="w-full h-full border-none" title={`${selectedBrand} Instagram Feed`} scrolling="no" allowTransparency={true} onError={e => {
-        const iframe = e.currentTarget;
-        iframe.style.display = 'none';
-        const container = document.createElement('div');
-        container.className = 'w-full h-full flex items-center justify-center bg-gray-100';
-        const iconWrapper = document.createElement('div');
-        iconWrapper.className = 'flex flex-col items-center text-gray-500';
-        const icon = document.createElement('div');
-        icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>';
-        iconWrapper.appendChild(icon);
-        const text = document.createElement('p');
-        text.className = 'mt-2';
-        text.textContent = `@${getBrandHandle(selectedBrand)}`;
-        iconWrapper.appendChild(text);
-        container.appendChild(iconWrapper);
-        iframe.parentNode?.appendChild(container);
-      }} />
-        </motion.div>}
-      
-      {/* Collage of brand content */}
-      
-    </div>;
+
+
+
+
+  const selectedContent = getSelectedBrandContent();
+  return (
+    <div className="w-full max-w-6xl mx-auto mb-8">
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+        </div>
+      ) : selectedContent ? (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="mb-8"
+        >
+          <h3 className="text-xl font-bold mb-4 text-center">@{selectedContent.name}</h3>
+          
+          {/* Symmetric grid layout for brand content */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {/* Videos first - they autoplay */}
+            {selectedContent.videos.map((video, index) => (
+              <div key={`video-${index}`} className="aspect-square overflow-hidden rounded-lg shadow-md bg-black">
+                <video 
+                  src={video} 
+                  className="w-full h-full object-cover" 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline
+                />
+              </div>
+            ))}
+            
+            {/* Then images */}
+            {selectedContent.images.map((image, index) => (
+              <div key={`image-${index}`} className="aspect-square overflow-hidden rounded-lg shadow-md">
+                <img 
+                  src={image} 
+                  alt={`${selectedContent.name} content ${index + 1}`} 
+                  className="w-full h-full object-cover transition-transform hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      ) : (
+        <div className="text-center text-gray-500 py-8">
+          <p>Select a brand above to view their content</p>
+        </div>
+      )}
+    </div>
+  );
 };
 export default BrandContentCollage;

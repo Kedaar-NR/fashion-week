@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,6 @@ import BrandContentCollage from "@/components/BrandContentCollage";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { brands } from "@/data/brands";
-import MarqueeSlider from '@/components/MarqueeSlider';
 
 const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
@@ -155,7 +155,9 @@ const Index = () => {
       >
         <div className="flex flex-col h-full">
           <div className="mt-4 mb-2 px-4 flex justify-center">
-            <MarqueeSlider />
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center font-kanit">
+              <span className="font-extrabold">GALLERY</span>
+            </h1>
           </div>
           
           <div className="flex justify-center mb-3">
@@ -167,6 +169,7 @@ const Index = () => {
             </Button>
           </div>
           
+          {/* Add the brand content collage component */}
           <div className="px-4 overflow-auto">
             <BrandContentCollage />
           </div>

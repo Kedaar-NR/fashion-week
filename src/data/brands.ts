@@ -1,4 +1,3 @@
-
 export interface Brand {
   name: string;
   followers: string;
@@ -6,13 +5,13 @@ export interface Brand {
 }
 
 // Define colors for the new genre categories based on the provided image
-const genreColors: Record<string, { bg: string, text: string }> = {
-  "STREET": { bg: "bg-red-700", text: "text-white" },
-  "PUNK/GOTH/GRUNGE": { bg: "bg-purple-800", text: "text-white" },
+const genreColors: Record<string, { bg: string, text: string, border?: string }> = {
+  "STREET": { bg: "bg-red-500", text: "text-black", border: "border-red-400" },
+  "PUNK/GOTH/GRUNGE": { bg: "bg-purple-600", text: "text-black", border: "border-purple-500" },
   "ESSENTIALS": { bg: "bg-blue-700", text: "text-white" },
   "LUXURY/VINTAGE": { bg: "bg-yellow-200", text: "text-black" },
   "MINIMALISTIC": { bg: "bg-gray-500", text: "text-white" },
-  "CRAZY EXPERIMENTAL": { bg: "bg-yellow-300", text: "text-black" },
+  "CRAZY EXPERIMENTAL": { bg: "bg-green-500", text: "text-black", border: "border-green-400" },
   "Y2K": { bg: "bg-pink-200", text: "text-black" },
   "JEWELERY": { bg: "bg-gray-700", text: "text-white" },
   "TECHWEAR": { bg: "bg-green-700", text: "text-white" }

@@ -1,6 +1,5 @@
-
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 interface TagSelectorProps {
   onSelectBrand: (brandName: string) => void;
@@ -8,24 +7,25 @@ interface TagSelectorProps {
 
 const TagSelector = ({ onSelectBrand }: TagSelectorProps) => {
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
-  
+
   const selectedBrands = [
-    'badson.us',
-    'brotherlylove',
-    'eraworldwideclub',
-    'outlw.usa',
-    'derschutze_clo',
-    'thegvgallery',
-    'haveyoudiedbefore',
-    'poolhousenewyork',
-    'nomaintenance',
-    'california.arts',
-    'drolandmiller'
+    "badson.us",
+    "brotherlylove",
+    "eraworldwideclub",
+    "outlw.usa",
+    "derschutze_clo",
+    "thegvgallery",
+    "haveyoudiedbefore",
+    "poolhousenewyork",
+    "nomaintenance",
+    "california.arts",
+    "drolandmiller",
   ];
 
   const handleBrandClick = (brand: string) => {
-    setActiveBrand(activeBrand === brand ? null : brand);
-    // Removed onSelectBrand call to disable Instagram embed functionality
+    const newBrand = activeBrand === brand ? null : brand;
+    setActiveBrand(newBrand);
+    onSelectBrand(brand);
   };
 
   return (
@@ -35,7 +35,11 @@ const TagSelector = ({ onSelectBrand }: TagSelectorProps) => {
           <button
             key={brand}
             onClick={() => handleBrandClick(brand)}
-            className={`px-4 py-1.5 text-sm whitespace-nowrap rounded-full border transition-colors ${activeBrand === brand ? 'bg-black text-white border-black' : 'border-gray-300 hover:bg-gray-100'}`}
+            className={`px-4 py-1.5 text-sm whitespace-nowrap rounded-full border transition-colors ${
+              activeBrand === brand
+                ? "bg-black text-white border-black"
+                : "border-gray-300 hover:bg-gray-100"
+            }`}
           >
             {brand}
           </button>

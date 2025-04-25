@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import FashionGrid from "@/components/FashionGrid";
@@ -30,16 +30,36 @@ const Index = () => {
   };
 
   const handleBrandSelect = (brandName: string) => {
-    setExpandedBrand(brandName === expandedBrand ? null : brandName);
-    const brand = brands.find(b => b.name === `@${brandName}`);
+    const cleanBrandName = brandName.replace("@", "");
+    setExpandedBrand(cleanBrandName === expandedBrand ? null : cleanBrandName);
+
+    // If we're closing the current brand, scroll to top
+    if (cleanBrandName === expandedBrand) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    const brand = brands.find((b) => b.name === `@${cleanBrandName}`);
     if (brand) {
       setSelectedBrand({
         id: brands.indexOf(brand) + 1,
         title: brand.name,
         genre: brand.genre?.toUpperCase() || "STREET",
-        image: `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`,
-        followers: brand.followers
+        image: `/profile_pics/${brand.name.replace("@", "")}.jpg`,
+        followers: brand.followers,
       });
+
+      // If opening a new brand, scroll to the collage after a brief delay
+      if (cleanBrandName !== expandedBrand) {
+        setTimeout(() => {
+          const collageElement = document.getElementById("brand-collage");
+          if (collageElement) {
+            collageElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 100);
+      }
     }
   };
 
@@ -48,77 +68,98 @@ const Index = () => {
   };
 
   const handleDiscoverStyle = () => {
-    navigate('/quiz');
+    navigate("/quiz");
   };
 
   return (
-    <div className="flex h-screen font-kanit">
+    <div className="flex min-h-screen font-kanit">
       <Sidebar />
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-y-auto"
+        className="flex-1 p-8 bg-white overflow-y-auto"
       >
-        <div className="flex flex-col h-full">
-          <h1 className="font-bold text-center mt-8 mb-4 text-black text-4xl">Gallery</h1>
-          
+        <div className="max-w-7xl mx-auto">
+          <h1 className="font-bold text-center mb-6 text-black text-4xl">
+            Gallery
+          </h1>
+
           <div className="flex justify-center mb-6">
-            <Button onClick={handleDiscoverStyle} className="bg-black text-white hover:bg-gray-800 font-bold text-lg">
+            <Button
+              onClick={handleDiscoverStyle}
+              className="bg-black text-white hover:bg-gray-800 font-bold text-lg"
+            >
               Discover Your Style
             </Button>
           </div>
 
-          <div className="px-4 mb-5 animate-scale-in">
-            <BrandSearchBar onSearch={handleSearch} onSelectBrand={handleBrandSelect} />
+          <div className="mb-5">
+            <BrandSearchBar
+              onSearch={handleSearch}
+              onSelectBrand={handleBrandSelect}
+            />
           </div>
 
-          <div className="px-4 mb-4">
+          <div className="mb-6">
             <TagSelector onSelectBrand={handleBrandSelect} />
           </div>
 
-          {expandedBrand && (
-            <motion.div 
-              initial={{ height: 0 }}
-              animate={{ height: "auto" }}
-              exit={{ height: 0 }}
-              className="px-4 mb-4"
-            >
-              <div className="bg-gray-50 rounded-lg p-4">
-                <iframe 
-                  src={`https://www.instagram.com/${expandedBrand}/embed`}
-                  className="w-full h-[400px] border-none rounded-lg"
-                  title={`${expandedBrand} Instagram Feed`}
+          <AnimatePresence>
+            {expandedBrand && (
+              <motion.div
+                id="brand-collage"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden mb-8 bg-white rounded-lg"
+              >
+                <BrandContentCollage
+                  brandName={expandedBrand}
+                  onSelectBrand={handleBrandSelect}
                 />
-              </div>
-            </motion.div>
-          )}
-          
-          <div className="px-4 overflow-auto">
-            <BrandContentCollage onSelectBrand={handleBrandSelect} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="mb-8">
+            <FashionGrid
+              searchQuery={searchQuery}
+              onSelectBrand={setSelectedBrand}
+              onResetSearch={resetSearch}
+            />
           </div>
-          
-          <div className="flex-1 overflow-hidden">
-            <FashionGrid searchQuery={searchQuery} onSelectBrand={setSelectedBrand} onResetSearch={resetSearch} />
-          </div>
+
+          <TallyEmailWidget />
         </div>
-        
-        <TallyEmailWidget />
-        
+
         {selectedBrand && (
           <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
             <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">@{selectedBrand.title.replace('@', '')}</h2>
-                <button onClick={closeInstagramView} className="p-2 hover:bg-gray-100 rounded-full">
+                <h2 className="text-2xl font-bold">
+                  @{selectedBrand.title.replace("@", "")}
+                </h2>
+                <button
+                  onClick={closeInstagramView}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
                   <X size={20} />
                 </button>
               </div>
-              
-              <div className="rounded-xl overflow-hidden aspect-square w-full h-[60vh] relative">
-                <div className="absolute top-0 right-0 w-12 h-12 bg-white z-10"></div>
-                <iframe src={`https://www.instagram.com/${selectedBrand.title.replace('@', '')}/embed`} className="w-full h-full border-none" title={`${selectedBrand.title} Instagram Feed`} loading="eager" />
+
+              <div className="rounded-xl overflow-hidden aspect-square w-full relative">
+                <iframe
+                  src={`https://www.instagram.com/${selectedBrand.title.replace(
+                    "@",
+                    ""
+                  )}/embed`}
+                  className="w-full h-full border-none"
+                  title={`${selectedBrand.title} Instagram Feed`}
+                  loading="eager"
+                />
               </div>
             </div>
           </div>

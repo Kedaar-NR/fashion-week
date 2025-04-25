@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -49,7 +50,7 @@ const LikedPage = () => {
     <div className="flex min-h-screen bg-white">
       <Sidebar />
       <div className="flex-1 ml-14 md:ml-48 pt-8">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="mx-8 lg:mx-12 xl:mx-16">
           <h1 className="text-3xl font-bold mb-6 text-center">Liked Brands</h1>
           
           {!isLoggedIn && (
@@ -80,7 +81,7 @@ const LikedPage = () => {
           )}
           
           {isLoggedIn && filteredBrands.length > 0 && !selectedBrand && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
               {filteredBrands.map((brand) => (
                 <div 
                   key={brand.name}
@@ -96,12 +97,12 @@ const LikedPage = () => {
                     </AvatarFallback>
                   </Avatar>
                   <h3 className="font-semibold text-gray-800 mb-2">{brand.name}</h3>
-                  <div className="flex flex-wrap gap-2 justify-center">
+                  <div className="flex flex-wrap gap-1.5 justify-center">
                     {brand.genre?.split('/').map((genre, idx) => (
                       <Badge 
                         key={idx}
                         className={`${genreColors[genre.trim()]?.bg || "bg-gray-500"} ${genreColors[genre.trim()]?.text || "text-white"} 
-                        text-xs px-2 py-0.5`}
+                        text-xs px-1.5 py-0.5`}
                       >
                         {genre.trim()}
                       </Badge>

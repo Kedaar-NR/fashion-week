@@ -1,3 +1,4 @@
+
 import Sidebar from '@/components/Sidebar';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -10,7 +11,7 @@ const DropTracker = () => {
     <div className="flex min-h-screen bg-white">
       <Sidebar />
       <div className="flex-1 ml-14 md:ml-48 pt-8">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="mx-8 lg:mx-12 xl:mx-16">
           <h1 className="text-3xl font-bold mb-6 text-center 
             bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 
             text-transparent bg-clip-text">

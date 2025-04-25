@@ -1,10 +1,12 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { brands, genreColors } from "@/data/brands";
 import { Heart, Instagram, RefreshCw, Shirt } from "lucide-react";
-import MarqueeGenres from "./MarqueeGenres";
+import MarqueeCategories from "./MarqueeCategories";
 import { Button } from "./ui/button";
 
+// Get brand website URL if available
 const getBrandWebsiteUrl = (brandName: string) => {
   const websiteUrls: Record<string, string> = {
     "aliasonline.us": "https://aliasonline.us",
@@ -18,6 +20,7 @@ const getBrandWebsiteUrl = (brandName: string) => {
   return websiteUrls[brandName] || null;
 };
 
+// Create fashion items from our brands data
 const fashionItems = brands.map((brand, index) => ({
   id: index + 1,
   title: brand.name,
@@ -39,6 +42,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
   );
   const [brandLogos, setBrandLogos] = useState<Record<string, string>>({});
 
+  // Load local brand logos
   useEffect(() => {
     const loadLocalLogos = () => {
       const logos: Record<string, string> = {};
@@ -46,6 +50,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
       for (const item of fashionItems) {
         const username = item.title.replace('@', '');
         try {
+          // Import local logo from profile_pics directory
           logos[item.title] = `/src/profile_pics /${username}.jpg`;
         } catch (error) {
           // Silently fail - we'll use default icon
@@ -58,16 +63,20 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
     loadLocalLogos();
   }, []);
   
+  // Filter items by category and search query if provided
   const filteredItems = fashionItems
     .filter(item => {
+      // First filter by category if selected
       return selectedCategory ? item.genre.toUpperCase() === selectedCategory.toUpperCase() : true;
     })
     .filter(item => {
+      // Then filter by search query if provided
       return searchQuery ? item.title.toLowerCase().includes(searchQuery.toLowerCase()) : true;
     });
 
+  // Toggle like status for a brand
   const toggleLike = (brandTitle: string, event: React.MouseEvent) => {
-    event.stopPropagation();
+    event.stopPropagation(); // Prevent triggering parent click
     
     const updatedLikes = likedBrands.includes(brandTitle)
       ? likedBrands.filter(name => name !== brandTitle)
@@ -77,6 +86,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
     localStorage.setItem('likedBrands', JSON.stringify(updatedLikes));
     
     if (!likedBrands.includes(brandTitle)) {
+      // Toast notification is handled in the parent component
     }
   };
 
@@ -97,10 +107,11 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
           </div>
         )}
         
-        <div className="mb-4 w-full">
-          <MarqueeGenres onSelectCategory={setSelectedCategory} />
+        <div className="mb-4">
+          <MarqueeCategories onSelectCategory={setSelectedCategory} />
         </div>
         
+        {/* Modified grid layout - 2 columns for mobile, higher aspect ratio */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 overflow-y-auto max-h-[calc(100vh-200px)] p-2 w-full">
           {filteredItems.map((item) => (
             <motion.div
@@ -140,6 +151,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
               </div>
               
               <div className="flex-1 overflow-hidden rounded-b-md relative">
+                {/* Add overlay to hide Instagram logo */}
                 <div className="absolute top-0 right-0 w-12 h-12 bg-white z-10"></div>
                 <iframe 
                   src={`https://www.instagram.com/${item.title.replace('@', '')}/embed`}
@@ -180,16 +192,12 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
                 />
               </div>
               
-              <div className="px-2 py-1 flex justify-center mt-auto">
+              <div className="px-1 py-0.5 flex justify-center">
                 <div className="flex flex-wrap gap-1 justify-center">
                   {item.genre.split('/').map((genre, idx) => (
                     <span 
                       key={idx}
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        genreColors[item.genre]?.bg || "bg-gray-500"
-                      } ${
-                        genreColors[item.genre]?.text || "text-white"
-                      } transform hover:scale-105 transition-transform`}
+                      className={`px-1 py-0.5 rounded-full text-[10px] ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
                     >
                       {genre.trim()}
                     </span>

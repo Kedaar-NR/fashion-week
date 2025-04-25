@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -59,9 +60,9 @@ const Index = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-x-hidden overflow-y-auto"
+        className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-hidden"
       >
-        <div className="flex flex-col min-h-full">
+        <div className="flex flex-col h-full">
           <h1 className="font-bold text-center mt-8 mb-4 text-black text-4xl">Gallery</h1>
           
           <div className="flex justify-center mb-6">
@@ -78,6 +79,27 @@ const Index = () => {
             <TagSelector onSelectBrand={handleBrandSelect} />
           </div>
 
+          {expandedBrand && (
+            <motion.div 
+              initial={{ height: 0 }}
+              animate={{ height: "auto" }}
+              exit={{ height: 0 }}
+              className="px-4 mb-4"
+            >
+              <div className="bg-gray-50 rounded-lg p-4">
+                <iframe 
+                  src={`https://www.instagram.com/${expandedBrand}/embed`}
+                  className="w-full h-[400px] border-none rounded-lg"
+                  title={`${expandedBrand} Instagram Feed`}
+                />
+              </div>
+            </motion.div>
+          )}
+          
+          <div className="px-4 overflow-auto">
+            <BrandContentCollage onSelectBrand={handleBrandSelect} />
+          </div>
+          
           <div className="flex-1 overflow-hidden">
             <FashionGrid searchQuery={searchQuery} onSelectBrand={setSelectedBrand} onResetSearch={resetSearch} />
           </div>
@@ -96,6 +118,7 @@ const Index = () => {
               </div>
               
               <div className="rounded-xl overflow-hidden aspect-square w-full h-[60vh] relative">
+                {/* Add overlay to hide Instagram logo */}
                 <div className="absolute top-0 right-0 w-12 h-12 bg-white z-10"></div>
                 <iframe src={`https://www.instagram.com/${selectedBrand.title.replace('@', '')}/embed`} className="w-full h-full border-none" title={`${selectedBrand.title} Instagram Feed`} loading="eager" />
               </div>

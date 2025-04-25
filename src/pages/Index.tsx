@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -18,6 +17,10 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
@@ -27,20 +30,16 @@ const Index = () => {
   };
 
   const handleBrandSelect = (brandName: string) => {
-    if (expandedBrand === brandName) {
-      setExpandedBrand(null);
-    } else {
-      setExpandedBrand(brandName);
-      const brand = brands.find(b => b.name === `@${brandName}`);
-      if (brand) {
-        setSelectedBrand({
-          id: brands.indexOf(brand) + 1,
-          title: brand.name,
-          genre: brand.genre?.toUpperCase() || "STREET",
-          image: `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`,
-          followers: brand.followers
-        });
-      }
+    setExpandedBrand(brandName === expandedBrand ? null : brandName);
+    const brand = brands.find(b => b.name === `@${brandName}`);
+    if (brand) {
+      setSelectedBrand({
+        id: brands.indexOf(brand) + 1,
+        title: brand.name,
+        genre: brand.genre?.toUpperCase() || "STREET",
+        image: `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`,
+        followers: brand.followers
+      });
     }
   };
 
@@ -60,7 +59,7 @@ const Index = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-hidden"
+        className="h-screen flex flex-col font-kanit bg-white flex-1 ml-14 overflow-y-auto"
       >
         <div className="flex flex-col h-full">
           <h1 className="font-bold text-center mt-8 mb-4 text-black text-4xl">Gallery</h1>
@@ -118,7 +117,6 @@ const Index = () => {
               </div>
               
               <div className="rounded-xl overflow-hidden aspect-square w-full h-[60vh] relative">
-                {/* Add overlay to hide Instagram logo */}
                 <div className="absolute top-0 right-0 w-12 h-12 bg-white z-10"></div>
                 <iframe src={`https://www.instagram.com/${selectedBrand.title.replace('@', '')}/embed`} className="w-full h-full border-none" title={`${selectedBrand.title} Instagram Feed`} loading="eager" />
               </div>

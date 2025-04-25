@@ -136,8 +136,8 @@ const RecommendationsPage = () => {
   }} transition={{
     duration: 0.5
   }} className="min-h-screen flex flex-col bg-white">
-      <div className="flex-grow p-4">
-        <h1 className="text-5xl font-bold text-black text-center my-8 md:text-4xl">CURATED FOR YOU:</h1>
+      <div className="flex-grow p-4 bg-zinc-900">
+        <h1 className="text-5xl font-bold text-center my-8 md:text-4xl text-slate-50">CURATED FOR YOU:</h1>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {recommendedBrands.map((brand, index) => {
@@ -191,7 +191,7 @@ const RecommendationsPage = () => {
         </div>
         
         <div className="flex justify-center mt-6 mb-8">
-          <Button onClick={handleFinish} className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none">
+          <Button onClick={handleFinish} className="text-xl px-10 py-6 h-auto rounded-none text-slate-900 bg-zinc-50">
             Next
           </Button>
         </div>

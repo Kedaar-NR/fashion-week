@@ -72,7 +72,7 @@ const QuizPage = () => {
           
           <p className="text-xl mb-8">select from the following</p>
           
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
             {step === 1 ? firstQuizImages.map((image, index) => <motion.div key={index} initial={{
             scale: 0.9,
             opacity: 0

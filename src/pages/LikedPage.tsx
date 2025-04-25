@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -102,27 +101,27 @@ const LikedPage = () => {
               {filteredBrands.map((brand) => (
                 <div 
                   key={brand.name}
-                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow p-4 flex flex-col items-center cursor-pointer"
-                  onClick={() => handleBrandClick(brand.name)}
+                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow p-4 flex flex-col items-center"
                 >
                   <Avatar className="w-16 h-16 mb-3">
                     <AvatarImage 
-                      src={`/src/profile_pics/${brand.name}.jpg`}
+                      src={`/src/profile_pics /${brand.name}.jpg`}
                       alt={brand.name}
                     />
-                    <AvatarFallback className="bg-gray-100">
-                      {brand.name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
+                    <AvatarFallback>{brand.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                   <h3 className="font-semibold text-gray-800 mb-2">{brand.name}</h3>
-                  {brand.genre && (
-                    <Badge 
-                      className={`${genreColors[brand.genre].bg} ${genreColors[brand.genre].text} 
-                      font-medium px-3 py-1`}
-                    >
-                      {brand.genre}
-                    </Badge>
-                  )}
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {brand.genre?.split('/').map((genre, idx) => (
+                      <Badge 
+                        key={idx}
+                        className={`${genreColors[genre.trim()]?.bg || "bg-gray-500"} ${genreColors[genre.trim()]?.text || "text-white"} 
+                        text-xs px-2 py-0.5`}
+                      >
+                        {genre.trim()}
+                      </Badge>
+                    ))}
+                  </div>
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();

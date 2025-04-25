@@ -2,7 +2,11 @@
 import { motion } from 'framer-motion';
 import { brands } from '@/data/brands';
 
-const MarqueeSlider = () => {
+interface MarqueeSliderProps {
+  onSelectBrand: (brandName: string) => void;
+}
+
+const MarqueeSlider = ({ onSelectBrand }: MarqueeSliderProps) => {
   const brandNames = brands.map(brand => brand.name.replace('@', ''));
   const duplicatedBrands = [...brandNames, ...brandNames];
 
@@ -18,12 +22,13 @@ const MarqueeSlider = () => {
         }}
       >
         {duplicatedBrands.map((brand, idx) => (
-          <span
+          <button
             key={`${brand}-${idx}`}
-            className="mx-8 text-lg font-bold uppercase"
+            onClick={() => onSelectBrand(brand)}
+            className="mx-8 px-4 py-1 text-lg font-bold uppercase bg-transparent border border-white rounded-full hover:bg-white hover:text-black transition-colors"
           >
             {brand}
-          </span>
+          </button>
         ))}
       </motion.div>
     </div>

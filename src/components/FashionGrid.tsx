@@ -96,16 +96,17 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
           </div>
         )}
         
-        <div className="mb-2 w-full">
+        <div className="mb-4 w-full">
           <MarqueeCategories onSelectCategory={setSelectedCategory} />
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-2 p-2 w-full overflow-y-auto max-h-[calc(100vh-220px)]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 p-2 w-full overflow-y-auto max-h-[calc(100vh-220px)]">
           {filteredItems.map((item) => (
             <motion.div
               key={item.id}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
+              onClick={() => onSelectBrand(item)}
               className="aspect-[3/5] md:aspect-[3/5] bg-gray-50 rounded-md overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
             >
               <div className="p-2 border-b flex items-center justify-between">
@@ -137,8 +138,45 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
                 </button>
               </div>
               
-              <div className="flex-1 overflow-hidden relative">
+              <div className="flex-1 overflow-hidden rounded-b-md relative">
                 <div className="absolute top-0 right-0 w-12 h-12 bg-white z-10"></div>
+                <iframe 
+                  src={`https://www.instagram.com/${item.title.replace('@', '')}/embed`}
+                  className="w-full h-full border-none" 
+                  title={`${item.title} Instagram Feed`}
+                  scrolling="no"
+                  loading="lazy"
+                  onError={(e) => {
+                    const iframe = e.currentTarget;
+                    iframe.style.display = 'none';
+                    
+                    const container = document.createElement('div');
+                    container.className = 'w-full h-full flex items-center justify-center bg-gray-100';
+                    
+                    const iconContainer = document.createElement('div');
+                    iconContainer.className = 'text-gray-400 flex items-center justify-center h-full';
+                    iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
+                    container.appendChild(iconContainer);
+                    
+                    const websiteUrl = getBrandWebsiteUrl(item.title);
+                    if (websiteUrl) {
+                      const linkContainer = document.createElement('div');
+                      linkContainer.className = 'absolute bottom-0 left-0 right-0 bg-black/70 p-0.5 text-white text-center text-[6px]';
+                      
+                      const link = document.createElement('a');
+                      link.href = websiteUrl;
+                      link.target = '_blank';
+                      link.rel = 'noopener noreferrer';
+                      link.className = 'text-white hover:underline text-[6px]';
+                      link.textContent = 'Visit Website';
+                      
+                      linkContainer.appendChild(link);
+                      container.appendChild(linkContainer);
+                    }
+                    
+                    iframe.parentNode?.appendChild(container);
+                  }}
+                />
               </div>
               
               <div className="px-2 py-2 flex justify-center w-full">
@@ -146,7 +184,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
                   {item.genre.split('/').map((genre, idx) => (
                     <span 
                       key={idx}
-                      className={`px-2 py-1 rounded-full text-xs font-bold ${genreColors[genre.trim()]?.bg || "bg-gray-500"} ${genreColors[genre.trim()]?.text || "text-white"}`}
+                      className={`px-4 py-2 rounded-full text-sm font-bold w-full text-center transition-all hover:scale-105 ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
                     >
                       {genre.trim()}
                     </span>

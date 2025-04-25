@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { brands, genreColors } from "@/data/brands";
 import { Heart, Instagram, RefreshCw, Shirt } from "lucide-react";
 import MarqueeCategories from "./MarqueeCategories";
+import MarqueeGenres from './MarqueeGenres';
 import { Button } from "./ui/button";
 
 const getBrandWebsiteUrl = (brandName: string) => {
@@ -98,7 +99,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
         )}
         
         <div className="mb-4">
-          <MarqueeCategories onSelectCategory={setSelectedCategory} />
+          <MarqueeGenres onSelectCategory={setSelectedCategory} />
         </div>
         
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 overflow-y-auto max-h-[calc(100vh-200px)] p-2 w-full">

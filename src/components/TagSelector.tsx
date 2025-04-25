@@ -25,7 +25,7 @@ const TagSelector = ({ onSelectBrand }: TagSelectorProps) => {
 
   const handleBrandClick = (brand: string) => {
     setActiveBrand(activeBrand === brand ? null : brand);
-    onSelectBrand(brand);
+    // Removed onSelectBrand call to disable Instagram embed functionality
   };
 
   return (

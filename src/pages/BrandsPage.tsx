@@ -8,7 +8,7 @@ import Brand from "@/components/Brand";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import BrandSearchBar from "@/components/BrandSearchBar";
-import BrandContentCollage from "@/components/BrandContentCollage";
+import TagSelector from "@/components/TagSelector";
 
 const brandBlurbs: Record<string, string> = {
   "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
@@ -84,7 +84,7 @@ const BrandsPage = () => {
     setSelectedBrand(brandName);
   };
 
-  const handleBrandClick = (brandName: string) => {
+  const handleBrandSelect = (brandName: string) => {
     setSelectedBrand(brandName);
   };
 
@@ -119,7 +119,7 @@ const BrandsPage = () => {
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Brands</h1>
           
-          <div className="flex flex-wrap items-center gap-4 mb-8">
+          <div className="flex flex-wrap items-center gap-4 mb-4">
             <div className="w-64">
               <Select value={activeCategory} onValueChange={handleCategoryChange}>
                 <SelectTrigger className="w-full bg-white">
@@ -143,52 +143,37 @@ const BrandsPage = () => {
             </div>
           </div>
           
-          {selectedBrand ? (
-            <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center ml-14 md:ml-48">
-              <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-2xl font-bold">{selectedBrand}</h2>
-                  <div className="flex items-center gap-2">
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      onClick={() => toggleSaveBrand(selectedBrand)}
-                      className="hover:bg-gray-100 rounded-full"
-                    >
-                      <Heart 
-                        className={`h-5 w-5 ${savedBrands.includes(selectedBrand) ? 'fill-red-500 text-red-500' : ''}`} 
-                      />
-                    </Button>
-                    <button 
-                      onClick={closeInstagramView}
-                      className="p-2 hover:bg-gray-100 rounded-full"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-                <p className="mb-4 text-gray-600 italic border-l-4 border-gray-300 pl-3 py-2 bg-gray-50">
-                  {getBlurb(selectedBrand)}
-                </p>
-                {/* Custom collage for brand */}
-                <BrandContentCollage brandName={selectedBrand} />
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              {filteredBrands.map((brand) => (
-                <Brand
-                  key={brand.name}
-                  name={brand.name}
-                  followers={brand.followers}
-                  genre={brand.genre}
-                  onClick={() => handleBrandClick(brand.name)}
-                  isSaved={savedBrands.includes(brand.name)}
-                  isSelected={selectedBrand === brand.name}
-                />
-              ))}
-            </div>
-          )}
+          <div className="mb-2">
+            <TagSelector onSelectBrand={handleBrandSelect} />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {filteredBrands.slice(0, 9).map((brand) => (
+              <Brand
+                key={brand.name}
+                name={brand.name}
+                followers={brand.followers}
+                genre={brand.genre}
+                onClick={() => {}}
+                isSaved={savedBrands.includes(brand.name)}
+                isSelected={selectedBrand === brand.name}
+              />
+            ))}
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto max-h-[calc(100vh-400px)]">
+            {filteredBrands.slice(9).map((brand) => (
+              <Brand
+                key={brand.name}
+                name={brand.name}
+                followers={brand.followers}
+                genre={brand.genre}
+                onClick={() => {}}
+                isSaved={savedBrands.includes(brand.name)}
+                isSelected={selectedBrand === brand.name}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

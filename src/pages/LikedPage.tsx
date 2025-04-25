@@ -1,12 +1,12 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
-import { brands, genreColors } from "@/data/brands";
+import { brands } from "@/data/brands";
 import { toast } from "sonner";
 import { Heart } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { genreColors } from "@/data/brands";
 
 const LikedPage = () => {
   const [likedBrands, setLikedBrands] = useState<string[]>([]);
@@ -43,24 +43,6 @@ const LikedPage = () => {
 
   const closeInstagramView = () => {
     setSelectedBrand(null);
-  };
-
-  const brandBlurbs: Record<string, string> = {
-    "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
-    "isseymiyake": "Issey Miyake blends technology with tradition, creating innovative pleating techniques and architectural silhouettes that redefine modern fashion.",
-    "acnestudios": "Acne Studios combines Scandinavian minimalism with distinctive design elements, offering contemporary pieces with artistic sensibilities.",
-    "maisonmargiela": "Maison Margiela's avant-garde approach deconstructs and reimagines fashion conventions, creating conceptual designs with intellectual depth.",
-    "commedesgarcons": "Comme des Garçons challenges fashion norms with bold, architectural designs that blend art and fashion in unexpected ways.",
-    "rafsimons": "Raf Simons merges youth culture references with precise tailoring, creating collections that are both culturally relevant and impeccably crafted.",
-    "balenciaga": "Balenciaga delivers architectural silhouettes and street-inspired designs that define contemporary fashion through bold innovation.",
-    "vetements": "Vetements subverts fashion expectations with oversized proportions and street influences, creating statement pieces with cultural commentary.",
-    "rickowens": "Rick Owens crafts dark, architectural designs with a distinctive gothic aesthetic that balances brutalist forms with fluid draping.",
-  };
-
-  const getBlurb = (brandName: string) => {
-    const normalizedName = brandName.toLowerCase().replace(/[^a-z0-9]/g, "");
-    return brandBlurbs[normalizedName] || 
-      "This cutting-edge brand combines innovative design with quality craftsmanship, offering distinctive pieces that reflect contemporary fashion sensibilities.";
   };
 
   return (
@@ -102,12 +84,11 @@ const LikedPage = () => {
               {filteredBrands.map((brand) => (
                 <div 
                   key={brand.name}
-                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow p-4 flex flex-col items-center cursor-pointer"
-                  onClick={() => handleBrandClick(brand.name)}
+                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow p-4 flex flex-col items-center"
                 >
                   <Avatar className="w-16 h-16 mb-3">
                     <AvatarImage 
-                      src={`/src/profile_pics/${brand.name}.jpg`}
+                      src={`/src/profile_pics/${brand.name.replace('@', '')}.jpg`}
                       alt={brand.name}
                     />
                     <AvatarFallback className="bg-gray-100">
@@ -115,14 +96,17 @@ const LikedPage = () => {
                     </AvatarFallback>
                   </Avatar>
                   <h3 className="font-semibold text-gray-800 mb-2">{brand.name}</h3>
-                  {brand.genre && (
-                    <Badge 
-                      className={`${genreColors[brand.genre].bg} ${genreColors[brand.genre].text} 
-                      font-medium px-3 py-1`}
-                    >
-                      {brand.genre}
-                    </Badge>
-                  )}
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {brand.genre?.split('/').map((genre, idx) => (
+                      <Badge 
+                        key={idx}
+                        className={`${genreColors[genre.trim()]?.bg || "bg-gray-500"} ${genreColors[genre.trim()]?.text || "text-white"} 
+                        text-xs px-2 py-0.5`}
+                      >
+                        {genre.trim()}
+                      </Badge>
+                    ))}
+                  </div>
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();

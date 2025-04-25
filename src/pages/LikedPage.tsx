@@ -56,7 +56,7 @@ const LikedPage = () => {
     const normalizedName = brandName.toLowerCase().replace(/[^a-z0-9]/g, "");
     return brandBlurbs[normalizedName] || "This cutting-edge brand combines innovative design with quality craftsmanship, offering distinctive pieces that reflect contemporary fashion sensibilities.";
   };
-  return <div className="flex min-h-screen font-kanit bg-zinc-950">
+  return <div className="flex min-h-screen font-kanit bg-gray-50">
       <Sidebar />
       <div className="flex-1 ml-14 md:ml-48 p-8">
         <h1 className="text-3xl font-bold mb-6 text-center">Liked Brands</h1>

@@ -9,6 +9,8 @@ import TermsPage from '@/pages/TermsPage';
 import LandingPage from '@/pages/LandingPage';
 import QuizPage from '@/pages/QuizPage';
 import RecommendationsPage from '@/pages/RecommendationsPage';
+import SwiperPage from '@/pages/SwiperPage';
+import DropTracker from '@/pages/DropTracker';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import './App.css';
 import { Toaster } from '@/components/ui/sonner';
@@ -23,6 +25,8 @@ function AnimatedRoutes() {
         <Route path="/home" element={<Index />} />
         <Route path="/quiz" element={<QuizPage />} />
         <Route path="/recommendations" element={<RecommendationsPage />} />
+        <Route path="/swiper" element={<SwiperPage />} />
+        <Route path="/drop-tracker" element={<DropTracker />} />
         <Route path="/liked" element={<LikedPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/terms" element={<TermsPage />} />

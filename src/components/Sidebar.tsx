@@ -1,4 +1,4 @@
-import { Home, Heart, ChevronLeft, ChevronRight, LogIn, LogOut } from "lucide-react";
+import { Home, Heart, Shuffle, Calendar } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
@@ -122,13 +122,6 @@ const Sidebar = () => {
               collapsed={collapsed}
             />
             <NavItem 
-              icon={<Heart size={18} className="text-red-500" />} 
-              label="Liked" 
-              path="/liked" 
-              isActive={location.pathname === "/liked"} 
-              collapsed={collapsed}
-            />
-            <NavItem 
               icon={<Shuffle size={18} className="text-blue-500" />} 
               label="Swiper" 
               path="/swiper" 
@@ -140,6 +133,13 @@ const Sidebar = () => {
               label="Drop Tracker" 
               path="/drop-tracker" 
               isActive={location.pathname === "/drop-tracker"} 
+              collapsed={collapsed}
+            />
+            <NavItem 
+              icon={<Heart size={18} className="text-red-500" />} 
+              label="Liked" 
+              path="/liked" 
+              isActive={location.pathname === "/liked"} 
               collapsed={collapsed}
             />
           </div>

@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import { brands } from "@/data/brands";
 import { toast } from "sonner";
 import { Heart } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback, Badge } from "@radix-ui/react-avatar";
 
 const LikedPage = () => {
   const [likedBrands, setLikedBrands] = useState<string[]>([]);
@@ -13,21 +13,17 @@ const LikedPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is logged in
     const user = localStorage.getItem('user');
     setIsLoggedIn(!!user);
 
     if (user) {
-      // Only get liked brands if user is logged in
       const savedLikedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
       setLikedBrands(savedLikedBrands);
     } else {
-      // Clear liked brands if not logged in
       setLikedBrands([]);
     }
   }, []);
 
-  // Filter brands to only show liked ones
   const filteredBrands = brands.filter(brand => 
     likedBrands.includes(brand.name)
   );
@@ -47,7 +43,6 @@ const LikedPage = () => {
     setSelectedBrand(null);
   };
 
-  // Sample brand descriptions
   const brandBlurbs: Record<string, string> = {
     "jeanpaulknott": "Jean-Paul Knott delivers timeless elegance with minimalist designs that focus on exceptional tailoring and luxurious fabrics.",
     "isseymiyake": "Issey Miyake blends technology with tradition, creating innovative pleating techniques and architectural silhouettes that redefine modern fashion.",
@@ -60,7 +55,6 @@ const LikedPage = () => {
     "rickowens": "Rick Owens crafts dark, architectural designs with a distinctive gothic aesthetic that balances brutalist forms with fluid draping.",
   };
 
-  // Get a random blurb for brands without a specific one
   const getBlurb = (brandName: string) => {
     const normalizedName = brandName.toLowerCase().replace(/[^a-z0-9]/g, "");
     return brandBlurbs[normalizedName] || 
@@ -68,104 +62,117 @@ const LikedPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-kanit">
+    <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 ml-14 md:ml-48 p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">Liked Brands</h1>
-        
-        {!isLoggedIn && (
-          <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center max-w-2xl mx-auto">
-            <h2 className="text-xl font-semibold mb-2">Sign in to view your liked brands</h2>
-            <p className="text-gray-500 mb-4">Create an account to save and organize your favorite brands</p>
-            <a 
-              href="/signin"
-              className="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
-            >
-              Sign In
-            </a>
-          </div>
-        )}
-        
-        {isLoggedIn && filteredBrands.length === 0 && (
-          <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center max-w-2xl mx-auto">
-            <Heart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No liked brands yet</h2>
-            <p className="text-gray-500 mb-4">Start browsing and save your favorite brands</p>
-            <a 
-              href="/home"
-              className="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
-            >
-              Browse Brands
-            </a>
-          </div>
-        )}
-        
-        {isLoggedIn && filteredBrands.length > 0 && !selectedBrand && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            {filteredBrands.map((brand) => (
-              <div 
-                key={brand.name}
-                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow p-4 flex flex-col items-center cursor-pointer"
-                onClick={() => handleBrandClick(brand.name)}
+      <div className="flex-1 ml-14 md:ml-48 pt-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <h1 className="text-3xl font-bold mb-6 text-center">Liked Brands</h1>
+          
+          {!isLoggedIn && (
+            <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center max-w-2xl mx-auto">
+              <h2 className="text-xl font-semibold mb-2">Sign in to view your liked brands</h2>
+              <p className="text-gray-500 mb-4">Create an account to save and organize your favorite brands</p>
+              <a 
+                href="/signin"
+                className="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
               >
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold mb-2 bg-gradient-to-br from-${brand.name.charCodeAt(0) % 2 ? 'pink-500 to-orange-400' : 'purple-500 to-blue-500'}`}>
-                  {brand.name.charAt(0).toUpperCase()}
-                </div>
-                <h3 className="font-semibold text-gray-800">{brand.name}</h3>
-                <p className="text-xs text-gray-500 mt-1">{brand.genre}</p>
-                <p className="text-xs text-gray-400 mt-2">{brand.followers}</p>
-                
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUnlike(brand.name);
-                  }}
-                  className="mt-3 p-1.5 hover:bg-gray-100 rounded-full"
+                Sign In
+              </a>
+            </div>
+          )}
+          
+          {isLoggedIn && filteredBrands.length === 0 && (
+            <div className="p-6 bg-gray-50 rounded-lg border border-gray-100 text-center max-w-2xl mx-auto">
+              <Heart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <h2 className="text-xl font-semibold mb-2">No liked brands yet</h2>
+              <p className="text-gray-500 mb-4">Start browsing and save your favorite brands</p>
+              <a 
+                href="/home"
+                className="inline-flex items-center px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+              >
+                Browse Brands
+              </a>
+            </div>
+          )}
+          
+          {isLoggedIn && filteredBrands.length > 0 && !selectedBrand && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              {filteredBrands.map((brand) => (
+                <div 
+                  key={brand.name}
+                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow p-4 flex flex-col items-center cursor-pointer"
+                  onClick={() => handleBrandClick(brand.name)}
                 >
-                  <Heart className="h-4 w-4 fill-red-500 text-red-500" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-        
-        {selectedBrand && (
-          <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center ml-14 md:ml-48">
-            <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">{selectedBrand}</h2>
-                <div className="flex items-center gap-2">
+                  <Avatar className="w-16 h-16 mb-3">
+                    <AvatarImage 
+                      src={`/src/profile_pics/${brand.name}.jpg`}
+                      alt={brand.name}
+                    />
+                    <AvatarFallback className="bg-gray-100">
+                      {brand.name.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <h3 className="font-semibold text-gray-800 mb-2">{brand.name}</h3>
+                  {brand.genre && (
+                    <Badge 
+                      className={`${genreColors[brand.genre].bg} ${genreColors[brand.genre].text} 
+                      font-medium px-3 py-1`}
+                    >
+                      {brand.genre}
+                    </Badge>
+                  )}
                   <button 
-                    onClick={() => handleUnlike(selectedBrand)}
-                    className="p-2 hover:bg-gray-100 rounded-full"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUnlike(brand.name);
+                    }}
+                    className="mt-3 p-1.5 hover:bg-gray-100 rounded-full"
                   >
-                    <Heart className="h-5 w-5 fill-red-500 text-red-500" /> 
-                  </button>
-                  <button 
-                    onClick={closeInstagramView}
-                    className="p-2 hover:bg-gray-100 rounded-full"
-                  >
-                    ✕
+                    <Heart className="h-4 w-4 fill-red-500 text-red-500" />
                   </button>
                 </div>
-              </div>
-              
-              <div className="mb-4 text-gray-600 text-center py-2 bg-gray-50 rounded-lg">
-                More details coming soon
-              </div>
-              
-              <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
-                <iframe 
-                  src={`https://www.instagram.com/${selectedBrand}/embed`}
-                  className="w-full h-full border-none" 
-                  title={`${selectedBrand} Instagram Feed`}
-                  allowTransparency={true}
-                  scrolling="no"
-                />
+              ))}
+            </div>
+          )}
+          
+          {selectedBrand && (
+            <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center ml-14 md:ml-48">
+              <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold">{selectedBrand}</h2>
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => handleUnlike(selectedBrand)}
+                      className="p-2 hover:bg-gray-100 rounded-full"
+                    >
+                      <Heart className="h-5 w-5 fill-red-500 text-red-500" /> 
+                    </button>
+                    <button 
+                      onClick={closeInstagramView}
+                      className="p-2 hover:bg-gray-100 rounded-full"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="mb-4 text-gray-600 text-center py-2 bg-gray-50 rounded-lg">
+                  More details coming soon
+                </div>
+                
+                <div className="rounded-xl overflow-hidden aspect-square w-full h-[70vh]">
+                  <iframe 
+                    src={`https://www.instagram.com/${selectedBrand}/embed`}
+                    className="w-full h-full border-none" 
+                    title={`${selectedBrand} Instagram Feed`}
+                    allowTransparency={true}
+                    scrolling="no"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

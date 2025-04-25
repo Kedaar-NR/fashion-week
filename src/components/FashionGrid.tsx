@@ -100,7 +100,7 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
           <MarqueeCategories onSelectCategory={setSelectedCategory} />
         </div>
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 p-2 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 p-2 w-full overflow-y-auto max-h-[calc(100vh-220px)]">
           {filteredItems.map((item) => (
             <motion.div
               key={item.id}

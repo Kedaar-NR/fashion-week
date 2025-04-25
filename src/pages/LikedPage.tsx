@@ -1,10 +1,12 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
-import { brands } from "@/data/brands";
+import { brands, genreColors } from "@/data/brands";
 import { toast } from "sonner";
 import { Heart } from "lucide-react";
-import { Avatar, AvatarImage, AvatarFallback, Badge } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 const LikedPage = () => {
   const [likedBrands, setLikedBrands] = useState<string[]>([]);

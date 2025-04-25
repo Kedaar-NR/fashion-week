@@ -79,11 +79,7 @@ const Index = () => {
           </div>
 
           <div className="flex-1 overflow-hidden">
-            <FashionGrid 
-              searchQuery={searchQuery} 
-              onSelectBrand={setSelectedBrand} 
-              onResetSearch={resetSearch} 
-            />
+            <FashionGrid searchQuery={searchQuery} onSelectBrand={setSelectedBrand} onResetSearch={resetSearch} />
           </div>
         </div>
         

@@ -179,12 +179,12 @@ const FashionGrid = ({ searchQuery = "", onSelectBrand, onResetSearch }: Fashion
                 />
               </div>
               
-              <div className="px-2 py-2 flex justify-center">
+              <div className="px-2 py-2 flex justify-center w-full">
                 <div className="flex flex-wrap gap-2 justify-center">
                   {item.genre.split('/').map((genre, idx) => (
                     <span 
                       key={idx}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105 ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
+                      className={`px-4 py-2 rounded-full text-sm font-bold w-full text-center transition-all hover:scale-105 ${genreColors[item.genre]?.bg || "bg-gray-500"} ${genreColors[item.genre]?.text || "text-white"}`}
                     >
                       {genre.trim()}
                     </span>

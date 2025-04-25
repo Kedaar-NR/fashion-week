@@ -1,4 +1,3 @@
-
 import { Home, Heart, Shuffle, Calendar, ChevronRight, ChevronLeft, LogIn, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -113,7 +112,7 @@ const Sidebar = () => {
           )}
         </div>
 
-        <div className="flex flex-col items-center justify-center flex-grow">
+        <div className="flex flex-col items-center pt-6">
           <div className="flex flex-col space-y-6 items-center">
             <NavItem 
               icon={<Home size={18} className="text-green-600" />} 
@@ -123,17 +122,17 @@ const Sidebar = () => {
               collapsed={collapsed}
             />
             <NavItem 
-              icon={<Shuffle size={18} className="text-blue-500" />} 
-              label="Swiper" 
-              path="/swiper" 
-              isActive={location.pathname === "/swiper"} 
-              collapsed={collapsed}
-            />
-            <NavItem 
               icon={<Calendar size={18} className="text-purple-500" />} 
               label="Drop Tracker" 
               path="/drop-tracker" 
               isActive={location.pathname === "/drop-tracker"} 
+              collapsed={collapsed}
+            />
+            <NavItem 
+              icon={<Shuffle size={18} className="text-blue-500" />} 
+              label="Swiper" 
+              path="/swiper" 
+              isActive={location.pathname === "/swiper"} 
               collapsed={collapsed}
             />
             <NavItem 

@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import Sidebar from '@/components/Sidebar';
 
-// Paths to the uploaded images for quiz part 1
+// Paths to the uploaded images for quiz part 1 (smaller size)
 const firstQuizImages = [
   "/lovable-uploads/2826c26c-5666-46ec-8872-60b6f526e6a5.png",
   "/lovable-uploads/c5e45c20-edf8-4052-9d18-b4293316d77f.png",
@@ -17,7 +17,7 @@ const firstQuizImages = [
   "/lovable-uploads/f10a9c4d-aac3-4645-8f81-e333a6ab3dba.png",
 ];
 
-// Paths to the uploaded images for quiz part 2
+// Paths to the uploaded images for quiz part 2 (smaller size)
 const secondQuizImages = [
   "/lovable-uploads/cc94c43a-db79-4499-9294-05627894354a.png",
   "/lovable-uploads/200a1dfb-d9d8-49d2-8b01-89160bde0f75.png",
@@ -83,97 +83,98 @@ const QuizPage = () => {
   };
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div 
-        key={step}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        className="min-h-screen flex flex-col items-center justify-center bg-white p-6"
-      >
-        <h1 className="text-5xl md:text-7xl font-bold text-black mb-12">
-          {step === 1 ? "WHO ARE YOU?" : "WHAT DO YOU LIKE?"}
-        </h1>
-        
-        <p className="text-xl mb-8">select from the following</p>
-        
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-3 max-w-4xl mx-auto">
-          {step === 1 ? (
-            // First quiz with uploaded images (smaller size)
-            firstQuizImages.map((image, index) => (
-              <motion.div 
-                key={index}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.05 }}
-                className={`relative cursor-pointer overflow-hidden rounded-2xl aspect-square ${
-                  isImageSelected(index, 1) ? "ring-4 ring-blue-500" : ""
-                }`}
-                onClick={() => handleFirstQuizSelection(index)}
-              >
-                <img 
-                  src={image} 
-                  alt={`Style option ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                />
-                {isImageSelected(index, 1) && (
-                  <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
-                    <div className="bg-white rounded-full p-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-                        <path d="M20 6L9 17l-5-5" />
-                      </svg>
+    <div className="flex">
+      <Sidebar />
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={step}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="min-h-screen flex-1 flex flex-col items-center justify-center bg-white p-6 ml-14"
+        >
+          <h1 className="text-5xl md:text-7xl font-bold text-black mb-12">
+            {step === 1 ? "WHO ARE YOU?" : "WHAT DO YOU LIKE?"}
+          </h1>
+          
+          <p className="text-xl mb-8">select from the following</p>
+          
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+            {step === 1 ? (
+              firstQuizImages.map((image, index) => (
+                <motion.div 
+                  key={index}
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className={`relative cursor-pointer overflow-hidden rounded-2xl aspect-square ${
+                    isImageSelected(index, 1) ? "ring-4 ring-blue-500" : ""
+                  }`}
+                  onClick={() => handleFirstQuizSelection(index)}
+                >
+                  <img 
+                    src={image} 
+                    alt={`Style option ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                  />
+                  {isImageSelected(index, 1) && (
+                    <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
+                      <div className="bg-white rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </motion.div>
-            ))
-          ) : (
-            // Second quiz with uploaded images (smaller size)
-            secondQuizImages.map((image, index) => (
-              <motion.div 
-                key={index}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.05 }}
-                className={`relative cursor-pointer overflow-hidden rounded-2xl aspect-square ${
-                  isImageSelected(index, 2) ? "ring-4 ring-blue-500" : ""
-                }`}
-                onClick={() => handleSecondQuizSelection(index)}
-              >
-                <img 
-                  src={image} 
-                  alt={`Style option ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                />
-                {isImageSelected(index, 2) && (
-                  <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
-                    <div className="bg-white rounded-full p-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-                        <path d="M20 6L9 17l-5-5" />
-                      </svg>
+                  )}
+                </motion.div>
+              ))
+            ) : (
+              secondQuizImages.map((image, index) => (
+                <motion.div 
+                  key={index}
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className={`relative cursor-pointer overflow-hidden rounded-2xl aspect-square ${
+                    isImageSelected(index, 2) ? "ring-4 ring-blue-500" : ""
+                  }`}
+                  onClick={() => handleSecondQuizSelection(index)}
+                >
+                  <img 
+                    src={image} 
+                    alt={`Style option ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                  />
+                  {isImageSelected(index, 2) && (
+                    <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
+                      <div className="bg-white rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </motion.div>
-            ))
-          )}
-        </div>
-        
-        <div className="mt-12">
-          <Button 
-            onClick={handleNext}
-            disabled={(step === 1 && selectedFirstImages.length === 0) || 
-                    (step === 2 && selectedSecondImages.length === 0)}
-            className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none"
-          >
-            next
-          </Button>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+                  )}
+                </motion.div>
+              ))
+            )}
+          </div>
+          
+          <div className="mt-12">
+            <Button 
+              onClick={handleNext}
+              disabled={(step === 1 && selectedFirstImages.length === 0) || 
+                      (step === 2 && selectedSecondImages.length === 0)}
+              className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none"
+            >
+              next
+            </Button>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 };
 

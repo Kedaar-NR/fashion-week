@@ -1,4 +1,5 @@
-import { Home, Heart, Shuffle, Calendar } from "lucide-react";
+
+import { Home, Heart, Shuffle, Calendar, ChevronRight, ChevronLeft, LogIn, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";

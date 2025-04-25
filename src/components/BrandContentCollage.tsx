@@ -1,6 +1,6 @@
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Instagram } from 'lucide-react';
 
 // Define types for the brand content structure
 interface BrandContent {
@@ -9,12 +9,13 @@ interface BrandContent {
   videos: string[];
 }
 
+// Update the props interface to include brandName
 interface BrandContentCollageProps {
-  onSelectBrand: (brandName: string) => void;
+  brandName: string;
 }
-const BrandContentCollage = ({ onSelectBrand }: BrandContentCollageProps) => {
+
+const BrandContentCollage = ({ brandName }: BrandContentCollageProps) => {
   const [brandContents, setBrandContents] = useState<BrandContent[]>([]);
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Function to load all brand content from the folders
@@ -178,47 +179,13 @@ const BrandContentCollage = ({ onSelectBrand }: BrandContentCollageProps) => {
     });
   }, [brandContents]);
 
-  // Handle brand selection to view content collage
-  // Ensure the brand selection logic correctly fetches and displays the content
-  const handleBrandSelect = (brandName: string) => {
-    setSelectedBrand(selectedBrand === brandName ? null : brandName);
-    onSelectBrand(brandName);
-  };
-  
-  // Update UI to visually indicate the selected brand with a color change
+  // Find the selected brand's content
   const getSelectedBrandContent = () => {
-    if (!selectedBrand) return null;
-    return brandContents.find(brand => brand.name === selectedBrand);
+    return brandContents.find(brand => brand.name === brandName);
   };
   
   const selectedContent = getSelectedBrandContent();
   
-  // Convert brand name to Instagram handle format
-  const getBrandHandle = (name: string): string => {
-    let handle = name.toLowerCase().replace(/\s+/g, '');
-    
-    // Custom mappings for some brands
-    const handleMap: Record<string, string> = {
-      'badson': 'badson.us',
-      'brotherly love': 'brotherlylove',
-      'derschutze clo': 'derschutze_clo',
-      'droland miller': 'drolandmiller',
-      'haveyoudiedbefore': 'haveyoudiedbefore',
-      'california arts': 'california.arts',
-      'era worldwide club': 'eraworldwideclub',
-      'nomaintenance': 'nomaintenance',
-      'outlaw xyz': 'outlw.usa',
-      'poolhouse ny': 'poolhousenewyork',
-      'the gv gallery': 'thegvgallery'
-    };
-    
-    return handleMap[name.toLowerCase()] || handle;
-  };
-
-
-
-
-  const selectedContent = getSelectedBrandContent();
   return (
     <div className="w-full max-w-6xl mx-auto mb-8">
       {loading ? (
@@ -264,10 +231,11 @@ const BrandContentCollage = ({ onSelectBrand }: BrandContentCollageProps) => {
         </motion.div>
       ) : (
         <div className="text-center text-gray-500 py-8">
-          <p>Select a brand above to view their content</p>
+          <p>No content available for {brandName}</p>
         </div>
       )}
     </div>
   );
 };
+
 export default BrandContentCollage;

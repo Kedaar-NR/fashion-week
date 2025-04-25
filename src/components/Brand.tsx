@@ -1,128 +1,48 @@
-
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Heart } from "lucide-react";
-import { toast } from "sonner";
 import { genreColors } from "@/data/brands";
 
 interface BrandProps {
   name: string;
   followers: string;
-  genre: string;
-  onClick?: () => void;
-  isSaved?: boolean;
+  genre?: string;
+  onClick: () => void;
+  isSaved: boolean;
+  isSelected?: boolean; // Add isSelected as optional prop
 }
 
-const Brand = ({ name, followers, genre, onClick, isSaved: externalIsLiked }: BrandProps) => {
-  const navigate = useNavigate();
-  const [isLiked, setIsLiked] = useState(false);
-  
-  // Check if brand is in liked brands from localStorage
-  useEffect(() => {
-    if (externalIsLiked !== undefined) {
-      setIsLiked(externalIsLiked);
-    } else {
-      const likedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
-      setIsLiked(likedBrands.includes(name));
-    }
-  }, [name, externalIsLiked]);
-
-  const handleClick = () => {
-    if (onClick) {
-      onClick();
-    } else {
-      navigate(`/brands?brand=${name}`);
-    }
-  };
-
-  const handleLike = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering the parent's onClick
-    
-    // Check if user is logged in
-    const user = localStorage.getItem('user');
-    if (!user) {
-      toast.error("Please sign in to save brands");
-      // Redirect to sign in page
-      setTimeout(() => {
-        navigate('/signin');
-      }, 1500);
-      return;
-    }
-    
-    const likedBrands = JSON.parse(localStorage.getItem('likedBrands') || '[]');
-    
-    if (isLiked) {
-      // Remove from liked
-      const updatedLikedBrands = likedBrands.filter((brand: string) => brand !== name);
-      localStorage.setItem('likedBrands', JSON.stringify(updatedLikedBrands));
-      setIsLiked(false);
-      toast.success(`Removed ${name} from liked brands`);
-    } else {
-      // Add to liked
-      likedBrands.push(name);
-      localStorage.setItem('likedBrands', JSON.stringify(likedBrands));
-      setIsLiked(true);
-      toast.success(`Added ${name} to liked brands`);
-    }
-  };
-
-  // Get first letter for avatar
-  const firstLetter = name.charAt(0).toUpperCase();
-  
-  // Format follower count to round up with a "+"
-  const formatFollowers = () => {
-    const count = parseInt(followers, 10);
-    if (isNaN(count)) return followers;
-    
-    if (count < 1000) return `${count}+`;
-    if (count < 10000) return `${Math.floor(count / 1000)}k+`;
-    if (count < 1000000) return `${Math.floor(count / 1000)}k+`;
-    return `${Math.floor(count / 1000000)}M+`;
-  };
-  
-  // Get random light background color based on name
-  const getBackgroundColor = () => {
-    const colors = [
-      'bg-gradient-to-br from-purple-500 to-blue-500',
-      'bg-gradient-to-br from-pink-500 to-orange-400',
-      'bg-gradient-to-br from-green-400 to-blue-500',
-      'bg-gradient-to-br from-yellow-400 to-orange-500',
-      'bg-gradient-to-br from-pink-400 to-red-500',
-      'bg-gradient-to-br from-indigo-500 to-purple-500',
-      'bg-gradient-to-br from-blue-400 to-emerald-400',
-      'bg-gradient-to-br from-amber-400 to-orange-600',
-    ];
-    
-    // Use the brand name to generate a consistent color
-    const index = name.charCodeAt(0) % colors.length;
-    return colors[index];
-  };
-
-  const genreStyle = genreColors[genre.toUpperCase()];
+const Brand = ({ name, followers, genre = "ESSENTIALS", onClick, isSaved, isSelected }: BrandProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const genreStyle = genreColors[genre] || genreColors["ESSENTIALS"];
 
   return (
-    <div 
-      onClick={handleClick}
-      className="relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer p-4 flex flex-col items-center"
+    <div
+      className="relative group cursor-pointer"
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold mb-2 ${getBackgroundColor()}`}>
-        {firstLetter}
+      <div className="relative">
+        <div className="absolute top-2 left-2">
+          <div className={`${genreStyle.bg} ${genreStyle.text} px-2 py-1 rounded-full text-xs font-bold uppercase`}>
+            {genre}
+          </div>
+        </div>
+        <img
+          src={`https://source.unsplash.com/random/300x300?${name}`}
+          alt={name}
+          className="rounded-md w-full h-48 object-cover transition-transform duration-300 transform group-hover:scale-105"
+        />
       </div>
-      <h3 className="font-semibold text-gray-800">{name}</h3>
-      <div className="mt-1">
-        <span className={`px-2 py-0.5 rounded-full text-xs ${genreStyle?.bg || "bg-gray-500"} ${genreStyle?.text || "text-white"}`}>
-          {genre}
-        </span>
+      <div className="mt-2 px-2">
+        <h3 className="font-semibold text-black">{name}</h3>
+        <p className="text-gray-500 text-sm">{followers} Followers</p>
       </div>
-      <p className="text-xs text-gray-400 mt-2">{formatFollowers()}</p>
-      
-      <button 
-        onClick={handleLike} 
-        className="absolute top-2 right-2 p-1.5 hover:bg-gray-100 rounded-full"
-        aria-label={isLiked ? "Unlike" : "Like"}
-      >
-        <Heart className={`h-4 w-4 ${isLiked ? "fill-red-500 text-red-500" : "text-gray-400"}`} />
-      </button>
+      {isHovered && (
+        <div className="absolute top-2 right-2">
+          <Heart className={`h-5 w-5 ${isSaved ? 'fill-red-500 text-red-500' : 'text-gray-500'}`} />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
@@ -11,7 +10,7 @@ const categories = [
   "CRAZY EXPERIMENTAL",
   "Y2K",
   "JEWELERY",
-  "TECHWEAR"
+  "TECHWEAR",
 ];
 
 interface MarqueeCategoriesProps {
@@ -20,8 +19,10 @@ interface MarqueeCategoriesProps {
 
 const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [duplicatedCategories, setDuplicatedCategories] = useState<string[]>([]);
-  
+  const [duplicatedCategories, setDuplicatedCategories] = useState<string[]>(
+    []
+  );
+
   useEffect(() => {
     setDuplicatedCategories([...categories, ...categories]);
   }, []);
@@ -31,40 +32,40 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
     setActiveCategory(newActive);
     onSelectCategory(newActive || "");
   };
-  
+
   const getCategoryColorClass = (category: string) => {
     const colorMap: Record<string, string> = {
-      "STREET": "bg-red-500 text-white hover:bg-red-600",
+      STREET: "bg-red-500 text-white hover:bg-red-600",
       "PUNK/GOTH/GRUNGE": "bg-purple-500 text-white hover:bg-purple-600",
-      "ESSENTIALS": "bg-blue-500 text-white hover:bg-blue-600",
+      ESSENTIALS: "bg-blue-500 text-white hover:bg-blue-600",
       "LUXURY/VINTAGE": "bg-amber-400 text-black hover:bg-amber-500",
-      "MINIMALISTIC": "bg-gray-500 text-white hover:bg-gray-600",
+      MINIMALISTIC: "bg-gray-500 text-white hover:bg-gray-600",
       "CRAZY EXPERIMENTAL": "bg-pink-500 text-white hover:bg-pink-600",
-      "Y2K": "bg-violet-400 text-white hover:bg-violet-500",
-      "JEWELERY": "bg-emerald-500 text-white hover:bg-emerald-600",
-      "TECHWEAR": "bg-cyan-500 text-white hover:bg-cyan-600"
+      Y2K: "bg-violet-400 text-white hover:bg-violet-500",
+      JEWELERY: "bg-emerald-500 text-white hover:bg-emerald-600",
+      TECHWEAR: "bg-cyan-500 text-white hover:bg-cyan-600",
     };
-    
+
     return colorMap[category] || "bg-gray-500 text-white hover:bg-gray-600";
   };
-  
+
   return (
-    <div className="w-full overflow-hidden py-2 bg-gradient-to-r from-gray-50 to-white rounded-xl my-2">
-      <motion.div 
+    <div className="w-full overflow-hidden py-4 bg-gradient-to-r from-gray-50 to-white rounded-xl my-2">
+      <motion.div
         className="flex whitespace-nowrap"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ 
+        transition={{
           repeat: Infinity,
           duration: 20,
-          ease: "linear"
+          ease: "linear",
         }}
       >
         {duplicatedCategories.map((category, idx) => (
           <button
             key={`${category}-${idx}`}
-            className={`px-3 py-1 mx-2 whitespace-nowrap rounded-full transition-all text-xs font-medium ${
-              activeCategory === category 
-                ? "bg-black text-white scale-105" 
+            className={`px-4 py-2 mx-3 whitespace-nowrap rounded-full transition-all text-sm font-bold ${
+              activeCategory === category
+                ? "bg-black text-white scale-105"
                 : getCategoryColorClass(category)
             }`}
             onClick={() => handleCategoryClick(category)}

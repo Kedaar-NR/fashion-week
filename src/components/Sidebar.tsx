@@ -1,4 +1,3 @@
-
 import {
   Home,
   Heart,
@@ -25,7 +24,12 @@ import { supabase } from "@/lib/supabaseClient";
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth <= 640; // closed on mobile, open on desktop
+    }
+    return false;
+  });
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {

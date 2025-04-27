@@ -130,6 +130,14 @@ const SwiperPage = () => {
     }
   }, [currentIndex]);
 
+  useEffect(() => {
+    // Preload all swiper images
+    quizImages.forEach((img) => {
+      const image = new window.Image();
+      image.src = `/style_quiz/${img}`;
+    });
+  }, []);
+
   const handleSwipe = (direction: "left" | "right") => {
     if (finished) return;
     const currentImg = quizImages[currentIndex];

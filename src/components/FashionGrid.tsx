@@ -96,6 +96,16 @@ const FashionGrid = ({
     return () => observer.disconnect();
   }, [visibleBrands]);
 
+  useEffect(() => {
+    // Preload all brand profile images
+    brands.forEach((brand) => {
+      const image = new window.Image();
+      image.src = `/profile_pics/${brand.name
+        .replace("@", "")
+        .toLowerCase()}.jpg`;
+    });
+  }, []);
+
   return (
     <div className="p-1 flex-1 overflow-auto">
       <div className="w-full max-w-6xl mx-auto flex flex-col items-center">

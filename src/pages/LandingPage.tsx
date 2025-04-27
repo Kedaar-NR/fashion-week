@@ -38,7 +38,10 @@ const LandingPage = () => {
       className="min-h-screen w-full flex items-center justify-center bg-white"
     >
       <div className="flex flex-col items-center justify-center w-full px-4">
-        <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold text-black text-center mb-12 tracking-tight leading-tight">
+        <h1
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold text-black text-center mb-12 tracking-tight leading-tight"
+          style={{ fontFamily: "Kanit, sans-serif" }}
+        >
           <span className="block">WELCOME TO</span>
           <span>FASHION:WEEK</span>
         </h1>

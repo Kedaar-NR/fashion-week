@@ -9,22 +9,47 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
+        // Get the URL hash parameters
+        const hashParams = new URLSearchParams(
+          window.location.hash.substring(1)
+        );
+        const accessToken = hashParams.get("access_token");
+        const refreshToken = hashParams.get("refresh_token");
 
-        if (error) {
-          toast.error("Authentication failed: " + error.message);
-          navigate("/signin");
-          return;
-        }
+        if (accessToken && refreshToken) {
+          // Set the session manually
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
 
-        if (session) {
+          if (error) {
+            toast.error("Authentication failed: " + error.message);
+            navigate("/signin");
+            return;
+          }
+
           toast.success("Successfully signed in!");
           navigate("/home");
         } else {
-          navigate("/signin");
+          // Try to get the session normally
+          const {
+            data: { session },
+            error,
+          } = await supabase.auth.getSession();
+
+          if (error) {
+            toast.error("Authentication failed: " + error.message);
+            navigate("/signin");
+            return;
+          }
+
+          if (session) {
+            toast.success("Successfully signed in!");
+            navigate("/home");
+          } else {
+            navigate("/signin");
+          }
         }
       } catch (error: any) {
         toast.error("Error processing authentication: " + error.message);

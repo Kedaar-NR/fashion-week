@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -111,7 +112,9 @@ const LikedPage = () => {
                               e.currentTarget.parentElement?.querySelector(
                                 ".avatar-fallback"
                               );
-                            if (fallback) fallback.style.display = "flex";
+                            if (fallback && fallback instanceof HTMLElement) {
+                              fallback.style.display = "flex";
+                            }
                           }}
                         />
                         <AvatarFallback

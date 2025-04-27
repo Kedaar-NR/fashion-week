@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { brands, genreColors } from "@/data/brands";
@@ -156,7 +157,9 @@ const FashionGrid = ({
                           e.currentTarget.parentElement?.querySelector(
                             ".profile-fallback"
                           );
-                        if (fallback) fallback.style.display = "flex";
+                        if (fallback && fallback instanceof HTMLElement) {
+                          fallback.style.display = "flex";
+                        }
                       }}
                     />
                     <span className="profile-fallback hidden w-full h-full items-center justify-center text-xs font-bold text-gray-600 bg-gray-200">

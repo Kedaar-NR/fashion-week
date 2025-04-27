@@ -1,3 +1,4 @@
+
 import Sidebar from "@/components/Sidebar";
 import {
   Table,
@@ -118,7 +119,9 @@ const DropTracker = () => {
                                 e.currentTarget.parentElement?.querySelector(
                                   ".avatar-fallback"
                                 );
-                              if (fallback) fallback.style.display = "flex";
+                              if (fallback && fallback instanceof HTMLElement) {
+                                fallback.style.display = "flex";
+                              }
                             }}
                           />
                           <AvatarFallback

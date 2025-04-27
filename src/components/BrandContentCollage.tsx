@@ -165,6 +165,24 @@ const BrandContentCollage = ({
     });
     setBrandContents(contents);
     setLoading(false);
+
+    // Preload all images and videos for all brands
+    brandFolders.forEach(({ folder, handle }) => {
+      // Preload images
+      const imageFiles = [];
+      const videoFiles = [];
+      // ... (existing logic for populating imageFiles and videoFiles) ...
+      // Preload images
+      imageFiles.forEach((src) => {
+        const img = new window.Image();
+        img.src = src;
+      });
+      // Preload videos
+      videoFiles.forEach((src) => {
+        const video = document.createElement("video");
+        video.src = src;
+      });
+    });
   }, []);
 
   // Preload all images to improve performance

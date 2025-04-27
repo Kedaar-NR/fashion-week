@@ -238,6 +238,10 @@ const SwiperPage = () => {
                       src={`/style_quiz/${img}`}
                       alt={`Liked style ${index + 1}`}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = `https://source.unsplash.com/random/300x300?fashion,${index}`;
+                      }}
                     />
                   </motion.div>
                 ))}

@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
@@ -86,7 +85,7 @@ const SignIn = () => {
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 flex items-center justify-center p-4 ml-0 md:ml-48">
+      <div className="flex-1 flex items-center justify-center p-4 ml-0 md:ml-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

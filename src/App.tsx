@@ -1,23 +1,29 @@
-
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-import Index from '@/pages/Index';
-import LikedPage from '@/pages/LikedPage';
-import SignIn from '@/pages/SignIn';
-import NotFound from '@/pages/NotFound';
-import TermsPage from '@/pages/TermsPage';
-import LandingPage from '@/pages/LandingPage';
-import QuizPage from '@/pages/QuizPage';
-import RecommendationsPage from '@/pages/RecommendationsPage';
-import SwiperPage from '@/pages/SwiperPage';
-import DropTracker from '@/pages/DropTracker';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import './App.css';
-import { Toaster } from '@/components/ui/sonner';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import Index from "@/pages/Index";
+import LikedPage from "@/pages/LikedPage";
+import SignIn from "@/pages/SignIn";
+import NotFound from "@/pages/NotFound";
+import TermsPage from "@/pages/TermsPage";
+import LandingPage from "@/pages/LandingPage";
+import QuizPage from "@/pages/QuizPage";
+import RecommendationsPage from "@/pages/RecommendationsPage";
+import SwiperPage from "@/pages/SwiperPage";
+import DropTracker from "@/pages/DropTracker";
+import AuthCallback from "@/pages/AuthCallback";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import "./App.css";
+import { Toaster } from "@/components/ui/sonner";
 
 function AnimatedRoutes() {
   const location = useLocation();
-  
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
@@ -30,6 +36,7 @@ function AnimatedRoutes() {
         <Route path="/liked" element={<LikedPage />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

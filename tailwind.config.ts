@@ -20,7 +20,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Kanit', 'sans-serif'],
+				sans: ['IBM Plex Mono', 'monospace'],
+				mono: ['IBM Plex Mono', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -123,7 +124,7 @@ export default {
 					from: { transform: 'scale(1)', opacity: '1' },
 					to: { transform: 'scale(0.95)', opacity: '0' }
 				},
-				pulse: {
+				'pulse': {
 					'0%, 100%': { opacity: '1' },
 					'50%': { opacity: '0.7' }
 				},

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { brands, genreColors } from "@/data/brands";
@@ -70,9 +69,11 @@ const FashionGrid = ({
   };
 
   useEffect(() => {
-    // Preload first 50 brands
+    // Preload more on desktop, fewer on mobile for speed
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 640;
+    const preloadCount = isMobile ? 12 : 50;
     const preloadBrands = fashionItems
-      .slice(0, 50)
+      .slice(0, preloadCount)
       .map((item) => item.title.replace("@", ""));
     setVisibleBrands(preloadBrands);
   }, []);

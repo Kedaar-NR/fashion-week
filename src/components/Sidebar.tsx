@@ -1,3 +1,4 @@
+
 import {
   Home,
   Heart,
@@ -8,7 +9,7 @@ import {
   LogIn,
   LogOut,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   Tooltip,
@@ -23,6 +24,7 @@ import { supabase } from "@/lib/supabaseClient";
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(true);
   const [user, setUser] = useState<any>(null);
 
@@ -48,6 +50,7 @@ const Sidebar = () => {
     await supabase.auth.signOut();
     setUser(null);
     toast.success("Successfully logged out");
+    navigate("/");
   };
 
   return (

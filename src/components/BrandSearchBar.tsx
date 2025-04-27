@@ -1,7 +1,6 @@
-
-import { useState, useEffect, useRef } from 'react';
-import { X, Search } from 'lucide-react';
-import { brands } from '@/data/brands';
+import { useState, useEffect, useRef } from "react";
+import { X, Search } from "lucide-react";
+import { brands } from "@/data/brands";
 
 interface AISearchBarProps {
   onSearch: (query: string) => void;
@@ -9,18 +8,21 @@ interface AISearchBarProps {
 }
 
 const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
-  
+
   // Get unique brand names for autocomplete suggestions
-  const brandNames = brands.map(brand => brand.name);
+  const brandNames = brands.map((brand) => brand.name);
 
   useEffect(() => {
     // Handle clicks outside search suggestions to close them
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -28,11 +30,11 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  
+
   // Filter suggestions based on search query
   useEffect(() => {
     if (searchQuery) {
-      const filtered = brandNames.filter(name => 
+      const filtered = brandNames.filter((name) =>
         name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setSuggestions(filtered);
@@ -51,7 +53,7 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearch();
     }
   };
@@ -59,7 +61,7 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
   const handleSelectSuggestion = (suggestion: string) => {
     setSearchQuery(suggestion);
     handleSearch(suggestion);
-    
+
     // If onSelectBrand is provided, call it to display the popup
     if (onSelectBrand) {
       onSelectBrand(suggestion);
@@ -76,19 +78,22 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
           <div className="flex-grow relative">
             <input
               type="text"
-              placeholder="Search brands..."
+              placeholder="Search brands"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyPress}
               onFocus={() => setShowSuggestions(validSuggestions.length > 0)}
               className="w-full h-10 px-4 pl-10 rounded-lg font-kanit focus:outline-none"
             />
-            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <Search
+              size={16}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            />
           </div>
           {searchQuery && (
-            <button 
+            <button
               onClick={() => {
-                setSearchQuery('');
+                setSearchQuery("");
                 setSuggestions([]);
                 setShowSuggestions(false);
               }}
@@ -98,7 +103,7 @@ const AISearchBar = ({ onSearch, onSelectBrand }: AISearchBarProps) => {
             </button>
           )}
         </div>
-        
+
         {showSuggestions && validSuggestions.length > 0 && (
           <div className="absolute w-full mt-1 max-h-60 overflow-auto bg-white border border-gray-200 rounded-md shadow-lg z-50">
             {validSuggestions.map((suggestion) => (

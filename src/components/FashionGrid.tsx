@@ -69,9 +69,9 @@ const FashionGrid = ({
   };
 
   useEffect(() => {
-    // Preload more on desktop, fewer on mobile for speed
+    // Preload all on mobile, 50 on desktop
     const isMobile = typeof window !== "undefined" && window.innerWidth <= 640;
-    const preloadCount = isMobile ? 12 : 50;
+    const preloadCount = isMobile ? fashionItems.length : 50;
     const preloadBrands = fashionItems
       .slice(0, preloadCount)
       .map((item) => item.title.replace("@", ""));

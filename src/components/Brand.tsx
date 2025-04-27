@@ -11,7 +11,14 @@ interface BrandProps {
   isSelected?: boolean; // Add isSelected as optional prop
 }
 
-const Brand = ({ name, followers, genre = "ESSENTIALS", onClick, isSaved, isSelected }: BrandProps) => {
+const Brand = ({
+  name,
+  followers,
+  genre = "ESSENTIALS",
+  onClick,
+  isSaved,
+  isSelected,
+}: BrandProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const genreStyle = genreColors[genre] || genreColors["ESSENTIALS"];
 
@@ -24,13 +31,19 @@ const Brand = ({ name, followers, genre = "ESSENTIALS", onClick, isSaved, isSele
     >
       <div className="relative">
         <div className="absolute top-2 left-2">
-          <div className={`${genreStyle.bg} ${genreStyle.text} px-2 py-1 rounded-full text-xs font-bold uppercase`}>
+          <div
+            className={`${genreStyle.bg} ${genreStyle.text} px-2 py-1 rounded-full text-xs font-bold uppercase`}
+          >
             {genre}
           </div>
         </div>
         <img
-          src={`https://source.unsplash.com/random/300x300?${name}`}
+          src={`/profile_pics/${name.replace("@", "").toLowerCase()}.jpg`}
           alt={name}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = `https://source.unsplash.com/random/300x300?${name}`;
+          }}
           className="rounded-md w-full h-48 object-cover transition-transform duration-300 transform group-hover:scale-105"
         />
       </div>
@@ -40,7 +53,11 @@ const Brand = ({ name, followers, genre = "ESSENTIALS", onClick, isSaved, isSele
       </div>
       {isHovered && (
         <div className="absolute top-2 right-2">
-          <Heart className={`h-5 w-5 ${isSaved ? 'fill-red-500 text-red-500' : 'text-gray-500'}`} />
+          <Heart
+            className={`h-5 w-5 ${
+              isSaved ? "fill-red-500 text-red-500" : "text-gray-500"
+            }`}
+          />
         </div>
       )}
     </div>

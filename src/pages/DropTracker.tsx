@@ -16,78 +16,20 @@ import { ChevronDown, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Enhanced genre colors with more variety
+// Update genreColors to match MarqueeCategories
 const genreColors = {
-  HYPEBEAST: {
-    bg: "bg-purple-200",
-    text: "text-purple-800",
-    border: "border-purple-300",
-  },
-  MINIMALIST: {
-    bg: "bg-slate-200",
-    text: "text-slate-800",
-    border: "border-slate-300",
-  },
-  GOTH: {
-    bg: "bg-gray-200",
-    text: "text-gray-800",
-    border: "border-gray-300",
-  },
-  VINTAGE: {
-    bg: "bg-amber-200",
-    text: "text-amber-800",
-    border: "border-amber-300",
-  },
-  LUXURY: {
-    bg: "bg-indigo-200",
-    text: "text-indigo-800",
-    border: "border-indigo-300",
-  },
-  ATHLETIC: {
-    bg: "bg-emerald-200",
-    text: "text-emerald-800",
-    border: "border-emerald-300",
-  },
-  STREET: {
-    bg: "bg-red-200",
-    text: "text-red-800",
-    border: "border-red-300",
-  },
-  STREETWEAR: {
-    bg: "bg-red-200",
-    text: "text-red-800",
-    border: "border-red-300",
-  },
-  DESIGNER: {
-    bg: "bg-blue-200",
-    text: "text-blue-800",
-    border: "border-blue-300",
-  },
-  AVANT: {
-    bg: "bg-violet-200",
-    text: "text-violet-800",
-    border: "border-violet-300",
-  },
-  ESSENTIALS: {
-    bg: "bg-green-200",
-    text: "text-green-800",
-    border: "border-green-300",
-  },
-  CORE: {
-    bg: "bg-yellow-200",
-    text: "text-yellow-800",
-    border: "border-yellow-300",
-  },
-  PUNK: {
-    bg: "bg-pink-200",
-    text: "text-pink-800",
-    border: "border-pink-300",
-  },
-  GRUNGE: {
-    bg: "bg-purple-200",
-    text: "text-purple-800",
-    border: "border-purple-300",
-  },
+  PUNK: { bg: "bg-purple-500", text: "text-white" },
+  GOTH: { bg: "bg-purple-500", text: "text-white" },
+  GRUNGE: { bg: "bg-purple-500", text: "text-white" },
+  ESSENTIALS: { bg: "bg-blue-500", text: "text-white" },
+  LUXURY: { bg: "bg-amber-400", text: "text-black" },
+  VINTAGE: { bg: "bg-amber-400", text: "text-black" },
+  MINIMALISTIC: { bg: "bg-gray-500", text: "text-white" },
+  "CRAZY EXPERIMENTAL": { bg: "bg-pink-500", text: "text-white" },
+  Y2K: { bg: "bg-violet-400", text: "text-white" },
+  JEWELERY: { bg: "bg-emerald-500", text: "text-white" },
+  TECHWEAR: { bg: "bg-cyan-500", text: "text-white" },
+  STREET: { bg: "bg-red-500", text: "text-white" },
 };
 
 const DropTracker = () => {
@@ -165,13 +107,24 @@ const DropTracker = () => {
                       <div className="flex items-center gap-4">
                         <Avatar className="h-12 w-12 rounded">
                           <AvatarImage
-                            src={`/src/profile_pics/${brand.name
+                            src={`/profile_pics/${brand.name
                               .toLowerCase()
                               .replace("@", "")}.jpg`}
                             alt={brand.name}
                             className="object-cover"
+                            onError={(e) => {
+                              e.currentTarget.style.display = "none";
+                              const fallback =
+                                e.currentTarget.parentElement?.querySelector(
+                                  ".avatar-fallback"
+                                );
+                              if (fallback) fallback.style.display = "flex";
+                            }}
                           />
-                          <AvatarFallback className="bg-gray-100">
+                          <AvatarFallback
+                            className="bg-gray-100 avatar-fallback"
+                            style={{ display: "none" }}
+                          >
                             {brand.name.substring(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
@@ -187,28 +140,63 @@ const DropTracker = () => {
                     </TableCell>
                     <TableCell className="text-center">
                       {brand.genre &&
-                        brand.genre.split("/").map((genre, idx) => {
-                          const genreKey = genre.trim().toUpperCase();
-                          return (
-                            <Badge
+                        (() => {
+                          // Group PUNK/GOTH/GRUNGE and LUXURY/VINTAGE
+                          const genres = brand.genre
+                            .split("/")
+                            .map((g) => g.trim().toUpperCase());
+                          const grouped: string[][] = [];
+                          let i = 0;
+                          while (i < genres.length) {
+                            if (
+                              ["PUNK", "GOTH", "GRUNGE"].includes(genres[i])
+                            ) {
+                              const group = genres
+                                .slice(i, i + 3)
+                                .filter((g) =>
+                                  ["PUNK", "GOTH", "GRUNGE"].includes(g)
+                                );
+                              grouped.push(group);
+                              i += group.length;
+                            } else if (
+                              ["LUXURY", "VINTAGE"].includes(genres[i])
+                            ) {
+                              const group = genres
+                                .slice(i, i + 2)
+                                .filter((g) =>
+                                  ["LUXURY", "VINTAGE"].includes(g)
+                                );
+                              grouped.push(group);
+                              i += group.length;
+                            } else {
+                              grouped.push([genres[i]]);
+                              i++;
+                            }
+                          }
+                          return grouped.map((group, idx) => (
+                            <span
                               key={idx}
-                              className={`mr-2 ${
-                                genreColors[genreKey]?.bg || "bg-gray-100"
-                              } ${
-                                genreColors[genreKey]?.text || "text-gray-700"
-                              } font-medium px-3 py-1 border ${
-                                genreColors[genreKey]?.border ||
-                                "border-gray-200"
-                              }`}
+                              className="inline-flex gap-2 justify-center mb-1"
                             >
-                              {genre.trim()}
-                            </Badge>
-                          );
-                        })}
+                              {group.map((genre, j) => (
+                                <span
+                                  key={j}
+                                  className={`px-3 py-1 rounded-full text-xs font-bold mx-1 ${
+                                    genreColors[genre]?.bg || "bg-gray-500"
+                                  } ${
+                                    genreColors[genre]?.text || "text-white"
+                                  }`}
+                                >
+                                  {genre}
+                                </span>
+                              ))}
+                            </span>
+                          ));
+                        })()}
                     </TableCell>
                     <TableCell className="text-right">
-                      <span className="text-sm font-medium text-green-600">
-                        October 17, 2025
+                      <span className="text-sm font-medium text-gray-500">
+                        Adding soon
                       </span>
                     </TableCell>
                   </TableRow>
@@ -221,8 +209,14 @@ const DropTracker = () => {
 
       {/* Instagram Embed Modal */}
       {selectedBrand && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
+        <div
+          className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
+          onClick={() => setSelectedBrand(null)}
+        >
+          <div
+            className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold">
                 @{selectedBrand.replace("@", "")}

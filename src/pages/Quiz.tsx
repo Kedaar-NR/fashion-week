@@ -1,71 +1,77 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import StyleSwiper from "@/components/StyleSwiper";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 
 const Quiz = () => {
   const navigate = useNavigate();
-  const [likedStyles, setLikedStyles] = useState<string[]>([]);
+  const [quizImages, setQuizImages] = useState<string[]>([]);
+  const [page, setPage] = useState(1); // 1 or 2
+  const [showCurated, setShowCurated] = useState(false);
 
-  const handleLike = (image: string) => {
-    setLikedStyles((prev) => [...prev, image]);
-    // Save to localStorage
-    const savedStyles = JSON.parse(localStorage.getItem("likedStyles") || "[]");
-    localStorage.setItem(
-      "likedStyles",
-      JSON.stringify([...savedStyles, image])
-    );
-  };
-
-  const handleComplete = () => {
-    setTimeout(() => {
-      navigate("/"); // Return to home page after completion
-    }, 2000);
-  };
+  // On mount, pick 20 random images from 24
+  useEffect(() => {
+    const allImages = Array.from({ length: 24 }, (_, i) => `${i + 1}.jpg`);
+    const shuffled = allImages.sort(() => 0.5 - Math.random());
+    setQuizImages(shuffled.slice(0, 20));
+  }, []);
 
   return (
-    <div className="flex min-h-screen font-kanit">
+    <div className="min-h-screen bg-white font-kanit flex flex-col">
       <Sidebar />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 p-8 bg-white"
+        className="flex-1 flex flex-col items-center w-full px-2 sm:px-6 pt-8"
       >
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-8">
-            Discover Your Style
-          </h1>
-
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">
-              Swipe right for styles you like, left for those you don't
-            </h2>
-            <StyleSwiper onComplete={handleComplete} onLike={handleLike} />
-          </div>
-
-          {likedStyles.length > 0 && (
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">Your Liked Styles</h3>
-              <div className="grid grid-cols-4 gap-4">
-                {likedStyles.map((style, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square rounded-lg overflow-hidden"
-                  >
-                    <img
-                      src={`/src/style_quiz/${style}`}
-                      alt={`Liked style ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black text-center mb-2 mt-2 w-full">
+          WHO ARE YOU?
+        </h1>
+        <p className="text-lg text-center text-gray-700 mb-8 w-full">
+          select from the following
+        </p>
+        {!showCurated ? (
+          <div className="w-full max-w-3xl flex flex-col items-center">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-6 w-full mb-8">
+              {quizImages.slice((page - 1) * 10, page * 10).map((img, idx) => (
+                <div
+                  key={img}
+                  className="aspect-square rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center"
+                >
+                  <img
+                    src={`/style_quiz/${img}`}
+                    alt={`Style option ${(page - 1) * 10 + idx + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+            <button
+              className="mt-4 bg-gray-700 text-white px-8 py-3 rounded-md font-bold text-lg hover:bg-gray-800 transition"
+              onClick={() => {
+                if (page === 1) setPage(2);
+                else setShowCurated(true);
+              }}
+            >
+              next
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full w-full bg-gray-50 rounded-lg p-8">
+            <h2 className="text-2xl font-bold mb-4">Curated for You</h2>
+            <p className="text-gray-600 text-center mb-6">
+              Here are some brands you might like!
+            </p>
+            <button
+              className="mt-4 bg-black text-white px-8 py-3 rounded-md font-bold text-lg hover:bg-gray-800 transition"
+              onClick={() => navigate("/")}
+            >
+              next
+            </button>
+          </div>
+        )}
       </motion.div>
     </div>
   );

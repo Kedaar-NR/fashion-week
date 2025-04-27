@@ -14,23 +14,49 @@ const StyleSwiper = ({ onComplete, onLike }: StyleSwiperProps) => {
   const [images, setImages] = useState<string[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
+  // Load 24 images from /public/style_quiz/
   useEffect(() => {
-    // Load images from style_quiz folder
-    const loadImages = async () => {
-      try {
-        const imageContext = import.meta.glob(
-          "/src/style_quiz/*.{png,jpg,jpeg}"
-        );
-        const imageList = Object.keys(imageContext).map((path) =>
-          path.replace("/src/style_quiz/", "")
-        );
-        setImages(imageList);
-      } catch (error) {
-        console.error("Error loading images:", error);
+    // If your images are named 1.jpg, 2.jpg, ..., 24.jpg, update as needed
+    const imageList = Array.from({ length: 24 }, (_, i) => `${i + 1}.jpg`);
+    setImages(imageList);
+  }, []);
+
+  // Keyboard navigation (left/right arrow)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isCompleted) return;
+      if (e.key === "ArrowLeft") handleSwipe(false);
+      if (e.key === "ArrowRight") handleSwipe(true);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentIndex, images, isCompleted]);
+
+  // Touch/swipe navigation for mobile
+  useEffect(() => {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.changedTouches[0].screenX;
+    };
+    const handleTouchEnd = (e: TouchEvent) => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (isCompleted) return;
+      if (touchEndX - touchStartX > 50) handleSwipe(false); // swipe right to left = dislike
+      if (touchStartX - touchEndX > 50) handleSwipe(true); // swipe left to right = like
+    };
+    const container = document.getElementById("style-swiper-container");
+    if (container) {
+      container.addEventListener("touchstart", handleTouchStart);
+      container.addEventListener("touchend", handleTouchEnd);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("touchstart", handleTouchStart);
+        container.removeEventListener("touchend", handleTouchEnd);
       }
     };
-    loadImages();
-  }, []);
+  }, [currentIndex, images, isCompleted]);
 
   const handleSwipe = (liked: boolean) => {
     if (liked) {
@@ -59,7 +85,10 @@ const StyleSwiper = ({ onComplete, onLike }: StyleSwiperProps) => {
   }
 
   return (
-    <div className="relative h-[600px] bg-gray-50 rounded-lg overflow-hidden">
+    <div
+      id="style-swiper-container"
+      className="relative h-[600px] bg-gray-50 rounded-lg overflow-hidden touch-pan-x select-none"
+    >
       <AnimatePresence initial={false}>
         <motion.div
           key={currentIndex}
@@ -72,7 +101,7 @@ const StyleSwiper = ({ onComplete, onLike }: StyleSwiperProps) => {
           {images[currentIndex] && (
             <div className="relative w-full h-full max-w-2xl mx-auto">
               <img
-                src={`/src/style_quiz/${images[currentIndex]}`}
+                src={`/style_quiz/${images[currentIndex]}`}
                 alt={`Style ${currentIndex + 1}`}
                 className="w-full h-full object-contain rounded-lg"
               />

@@ -44,9 +44,8 @@ const FashionGrid = ({
   onResetSearch,
 }: FashionGridProps) => {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [likedBrands, setLikedBrands] = useState<string[]>(
-    JSON.parse(localStorage.getItem("likedBrands") || "[]")
-  );
+  const [likedBrands, setLikedBrands] = useState<string[]>([]);
+  const [visibleBrands, setVisibleBrands] = useState<string[]>([]);
 
   const filteredItems = fashionItems
     .filter((item) => {
@@ -69,6 +68,34 @@ const FashionGrid = ({
     localStorage.setItem("likedBrands", JSON.stringify(updatedLikes));
   };
 
+  useEffect(() => {
+    // Preload first 50 brands
+    const preloadBrands = fashionItems
+      .slice(0, 50)
+      .map((item) => item.title.replace("@", ""));
+    setVisibleBrands(preloadBrands);
+  }, []);
+
+  useEffect(() => {
+    // Lazy load the rest as you scroll
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const brandName = entry.target.getAttribute("data-brand");
+            if (brandName && !visibleBrands.includes(brandName)) {
+              setVisibleBrands((prev) => [...prev, brandName]);
+            }
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    const elements = document.querySelectorAll("[data-lazy-load]");
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [visibleBrands]);
+
   return (
     <div className="p-1 flex-1 overflow-auto">
       <div className="w-full max-w-6xl mx-auto flex flex-col items-center">
@@ -90,14 +117,19 @@ const FashionGrid = ({
           <MarqueeCategories onSelectCategory={setSelectedCategory} />
         </div>
 
-        <div className="grid grid-cols-3 gap-6 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
           {filteredItems.map((item) => (
             <motion.div
               key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="bg-white rounded-xl overflow-hidden shadow-lg"
+              data-lazy-load
+              data-brand={item.title.replace("@", "")}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 10 }}
               onClick={() => onSelectBrand(item)}
-              className="bg-gray-50 rounded-lg overflow-hidden hover:bg-gray-100 transition-colors flex flex-col cursor-pointer shadow-sm"
             >
               <div className="p-3 border-b flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -110,17 +142,18 @@ const FashionGrid = ({
                       className="h-full w-full object-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
-                        e.currentTarget.parentElement
-                          ?.querySelector(".fallback-icon")
-                          ?.classList.remove("hidden");
+                        const fallback =
+                          e.currentTarget.parentElement?.querySelector(
+                            ".profile-fallback"
+                          );
+                        if (fallback) fallback.style.display = "flex";
                       }}
                     />
-                    <Instagram
-                      size={16}
-                      className="text-gray-500 fallback-icon hidden"
-                    />
+                    <span className="profile-fallback hidden w-full h-full items-center justify-center text-xs font-bold text-gray-600 bg-gray-200">
+                      {item.title.replace("@", "").slice(0, 2).toUpperCase()}
+                    </span>
                   </div>
-                  <div className="text-sm font-medium truncate max-w-[150px]">
+                  <div className="text-sm font-medium break-words whitespace-normal">
                     @{item.title.replace("@", "")}
                   </div>
                 </div>
@@ -144,39 +177,32 @@ const FashionGrid = ({
               </div>
 
               <div className="h-[400px] overflow-hidden relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <img
-                    src={`/src/profile_pics/${item.title
-                      .replace("@", "")
-                      .toLowerCase()}.jpg`}
-                    alt={item.title}
-                    className="w-full h-full object-cover opacity-10"
+                {visibleBrands.includes(item.title.replace("@", "")) && (
+                  <iframe
+                    src={`https://www.instagram.com/${item.title.replace(
+                      "@",
+                      ""
+                    )}/embed`}
+                    className="relative z-10 w-full h-full border-none scale-[1.02]"
+                    title={`${item.title} Instagram Feed`}
+                    scrolling="no"
+                    loading="eager"
+                    onError={(e) => {
+                      const iframe = e.currentTarget;
+                      iframe.style.display = "none";
+                      const container = document.createElement("div");
+                      container.className =
+                        "w-full h-full flex items-center justify-center bg-gray-100";
+                      const iconContainer = document.createElement("div");
+                      iconContainer.className =
+                        "text-gray-400 flex items-center justify-center h-full";
+                      iconContainer.innerHTML =
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
+                      container.appendChild(iconContainer);
+                      iframe.parentNode?.appendChild(container);
+                    }}
                   />
-                </div>
-                <iframe
-                  src={`https://www.instagram.com/${item.title.replace(
-                    "@",
-                    ""
-                  )}/embed`}
-                  className="relative z-10 w-full h-full border-none scale-[1.02]"
-                  title={`${item.title} Instagram Feed`}
-                  scrolling="no"
-                  loading="eager"
-                  onError={(e) => {
-                    const iframe = e.currentTarget;
-                    iframe.style.display = "none";
-                    const container = document.createElement("div");
-                    container.className =
-                      "w-full h-full flex items-center justify-center bg-gray-100";
-                    const iconContainer = document.createElement("div");
-                    iconContainer.className =
-                      "text-gray-400 flex items-center justify-center h-full";
-                    iconContainer.innerHTML =
-                      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>';
-                    container.appendChild(iconContainer);
-                    iframe.parentNode?.appendChild(container);
-                  }}
-                />
+                )}
               </div>
 
               <div className="px-3 py-2">

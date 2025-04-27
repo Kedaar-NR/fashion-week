@@ -4,206 +4,148 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 
+// Get the 20 quiz images from the public/style_quiz folder
+const quizImages = [
+  "Grunge.png",
+  "Grunge.jpg",
+  "AvantStreet_LoudStreet.jpg",
+  "EuroStreet.webp",
+  "Streetwear.jpg",
+  "LuxaryStreet.jpg",
+  "Y2K_Street.jpg",
+  "Opium_Goth.jpg",
+  "Gorpcore.JPG",
+  "Minimal_Comfy.JPG",
+  "Streetwear(1).JPG",
+  "Leather.JPG",
+  "work_street.JPG",
+  "IMG_4959.jpg",
+  "Luxary Street.webp",
+  "Japanese_Punk.jpg",
+  "Emo_Opium_Goth.jpg",
+  "Vintage.jpg",
+  "Minimalist.jpg",
+  "Workwear.jpg",
+];
+
 const QuizPage = () => {
   const [step, setStep] = useState(1);
-  const [selectedFirstImages, setSelectedFirstImages] = useState<number[]>([]);
-  const [selectedSecondImages, setSelectedSecondImages] = useState<number[]>(
-    []
-  );
+  const [selectedImages, setSelectedImages] = useState<number[]>([]);
   const navigate = useNavigate();
-
-  // Paths to the uploaded images for quiz part 1 (smaller size)
-  const firstQuizImages = [
-    "/lovable-uploads/2826c26c-5666-46ec-8872-60b6f526e6a5.png",
-    "/lovable-uploads/c5e45c20-edf8-4052-9d18-b4293316d77f.png",
-    "/lovable-uploads/963420ec-8c53-43e3-91b3-b507a7d64bad.png",
-    "/lovable-uploads/723635b7-5223-430c-a054-2a1ab7971a24.png",
-    "/lovable-uploads/9953ddd7-f803-4af2-8bf3-6966acb27840.png",
-    "/lovable-uploads/58f18634-f3fe-4af0-8647-8d05ef1fe6f1.png",
-    "/lovable-uploads/1dd45f3b-15d1-4835-8864-ed5dfe439022.png",
-    "/lovable-uploads/06e2fc25-31fe-4a72-8da0-83102ca9a5f2.png",
-    "/lovable-uploads/f10a9c4d-aac3-4645-8f81-e333a6ab3dba.png",
-  ];
-
-  // Paths to the uploaded images for quiz part 2 (smaller size)
-  const secondQuizImages = [
-    "/lovable-uploads/cc94c43a-db79-4499-9294-05627894354a.png",
-    "/lovable-uploads/200a1dfb-d9d8-49d2-8b01-89160bde0f75.png",
-    "/lovable-uploads/dfcb5746-f522-48dd-b19d-d5be29f59c01.png",
-    "/lovable-uploads/cd42b70e-971a-4590-b221-eecf8d55c2ff.png",
-    "/lovable-uploads/0b5aa324-dc5c-4449-b3a0-293a2b9c1a7f.png",
-    "/lovable-uploads/ee5de25f-77c0-4f49-9e73-149439f509d1.png",
-    "/lovable-uploads/9e07dfdf-8b93-4d03-9c1b-10d189de482a.png",
-    "/lovable-uploads/82c44263-ca67-41ed-995a-d9ce61575943.png",
-    "/lovable-uploads/c477a5b0-8825-4f0a-8417-f0f376abb471.png",
-  ];
 
   // Preload all quiz images
   useEffect(() => {
-    const allImages = [...firstQuizImages, ...secondQuizImages];
-    allImages.forEach((src) => {
-      const img = new Image();
-      img.src = src;
+    quizImages.forEach((img) => {
+      const image = new window.Image();
+      image.src = `/style_quiz/${img}`;
     });
   }, []);
 
-  const handleFirstQuizSelection = (index: number) => {
-    if (selectedFirstImages.includes(index)) {
-      setSelectedFirstImages(selectedFirstImages.filter((i) => i !== index));
-    } else if (selectedFirstImages.length < 5) {
-      setSelectedFirstImages([...selectedFirstImages, index]);
-    }
-  };
-
-  const handleSecondQuizSelection = (index: number) => {
-    if (selectedSecondImages.includes(index)) {
-      setSelectedSecondImages(selectedSecondImages.filter((i) => i !== index));
-    } else if (selectedSecondImages.length < 5) {
-      setSelectedSecondImages([...selectedSecondImages, index]);
+  const handleImageSelect = (index: number) => {
+    if (selectedImages.includes(index)) {
+      setSelectedImages(selectedImages.filter((i) => i !== index));
+    } else {
+      setSelectedImages([...selectedImages, index]);
     }
   };
 
   const handleNext = () => {
-    if (step === 1) {
-      setStep(2);
-    } else {
-      // Combine both quiz selections for recommendation algorithm
-      const stylePreferences = [
-        ...selectedFirstImages,
-        ...selectedSecondImages,
-      ];
-
-      // Store the user's selections in localStorage
-      localStorage.setItem(
-        "stylePreferences",
-        JSON.stringify(stylePreferences)
-      );
-
-      // Navigate to home page
-      navigate("/home");
-    }
+    if (step === 1) setStep(2);
+    else navigate("/recommendations");
   };
 
-  const isImageSelected = (index: number, step: number) => {
-    return step === 1
-      ? selectedFirstImages.includes(index)
-      : selectedSecondImages.includes(index);
-  };
+  const imagesToShow =
+    step === 1 ? quizImages.slice(0, 10) : quizImages.slice(10, 20);
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen flex-col bg-white">
       <Sidebar />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={step}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="min-h-screen flex-1 flex flex-col items-center justify-center bg-white p-6 ml-14"
+      <header className="w-full py-8 px-2 sm:px-0 flex justify-center items-center">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-black text-center w-full max-w-4xl mx-auto">
+          WHO ARE YOU?
+        </h1>
+      </header>
+      <main className="flex-1 flex flex-col items-center w-full px-2 sm:px-6 justify-start mt-[-32px] md:mt-[-48px]">
+        <div
+          className="flex flex-col items-center w-full"
+          style={{ marginTop: 0 }}
         >
-          <h1 className="text-5xl font-bold text-black mb-12 md:text-5xl">
-            {step === 1 ? "WHO ARE YOU?" : "WHAT DO YOU LIKE?"}
-          </h1>
-
-          <p className="text-xl mb-8">select from the following</p>
-
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
-            {step === 1
-              ? firstQuizImages.map((image, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={`relative cursor-pointer overflow-hidden rounded-2xl aspect-square ${
-                      isImageSelected(index, 1) ? "ring-4 ring-blue-500" : ""
-                    }`}
-                    onClick={() => handleFirstQuizSelection(index)}
-                  >
-                    <img
-                      src={image}
-                      alt={`Style option ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      loading="eager"
-                    />
-                    {isImageSelected(index, 1) && (
-                      <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
-                        <div className="bg-white rounded-full p-1">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-blue-500"
-                          >
-                            <path d="M20 6L9 17l-5-5" />
-                          </svg>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ))
-              : secondQuizImages.map((image, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={`relative cursor-pointer overflow-hidden rounded-2xl aspect-square ${
-                      isImageSelected(index, 2) ? "ring-4 ring-blue-500" : ""
-                    }`}
-                    onClick={() => handleSecondQuizSelection(index)}
-                  >
-                    <img
-                      src={image}
-                      alt={`Style option ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      loading="eager"
-                    />
-                    {isImageSelected(index, 2) && (
-                      <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
-                        <div className="bg-white rounded-full p-1">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-blue-500"
-                          >
-                            <path d="M20 6L9 17l-5-5" />
-                          </svg>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
+          <div className="h-6 sm:h-10 md:h-16" />
+          <p className="text-lg sm:text-xl mb-6 sm:mb-8 text-center">
+            select from the following
+          </p>
+          <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 sm:gap-6 md:gap-8 w-full max-w-6xl mb-6 sm:mb-8 place-items-center">
+            {imagesToShow.map((img, idx) => (
+              <motion.div
+                key={img}
+                className={`relative cursor-pointer overflow-hidden rounded-2xl aspect-square ${
+                  selectedImages.includes((step - 1) * 10 + idx)
+                    ? "ring-4 ring-blue-500"
+                    : ""
+                }`}
+                onClick={() => handleImageSelect((step - 1) * 10 + idx)}
+                style={{
+                  minHeight: "120px",
+                  minWidth: "120px",
+                  height: "22vw",
+                  width: "22vw",
+                  maxHeight: "260px",
+                  maxWidth: "260px",
+                  ...(window.innerWidth < 640
+                    ? {
+                        height: "36vw",
+                        width: "36vw",
+                        maxHeight: "160px",
+                        maxWidth: "160px",
+                      }
+                    : {}),
+                  ...(window.innerWidth >= 1024
+                    ? {
+                        height: "180px",
+                        width: "180px",
+                        maxHeight: "320px",
+                        maxWidth: "320px",
+                      }
+                    : {}),
+                }}
+              >
+                <img
+                  src={`/style_quiz/${img}`}
+                  alt={`Style option ${(step - 1) * 10 + idx + 1}`}
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                />
+                {selectedImages.includes((step - 1) * 10 + idx) && (
+                  <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">
+                    <div className="bg-white rounded-full p-1">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-blue-500"
+                      >
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            ))}
           </div>
-
-          <div className="mt-12">
-            <Button
-              onClick={handleNext}
-              disabled={
-                (step === 1 && selectedFirstImages.length === 0) ||
-                (step === 2 && selectedSecondImages.length === 0)
-              }
-              className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none"
-            >
-              next
-            </Button>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          <Button
+            onClick={handleNext}
+            className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none mt-2"
+          >
+            Next
+          </Button>
+        </div>
+      </main>
     </div>
   );
 };

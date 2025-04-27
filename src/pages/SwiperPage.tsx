@@ -81,41 +81,65 @@ const genreColors = {
   },
 };
 
+// At the top, get all quiz images
+const quizImages = [
+  "Grunge.png",
+  "Grunge.jpg",
+  "AvantStreet_LoudStreet.jpg",
+  "EuroStreet.webp",
+  "Streetwear.jpg",
+  "LuxaryStreet.jpg",
+  "Y2K_Street.jpg",
+  "Opium_Goth.jpg",
+  "Gorpcore.JPG",
+  "Minimal_Comfy.JPG",
+  "Streetwear(1).JPG",
+  "Leather.JPG",
+  "work_street.JPG",
+  "IMG_4959.jpg",
+  "Luxary Street.webp",
+  "Japanese_Punk.jpg",
+  "Emo_Opium_Goth.jpg",
+  "Vintage.jpg",
+  "Minimalist.jpg",
+  "Workwear.jpg",
+];
+
 const SwiperPage = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [likedImages, setLikedImages] = useState<string[]>([]);
+  const [finished, setFinished] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
-  const [hasCompletedQuiz, setHasCompletedQuiz] = useState(false);
-  const [currentStyleIndex, setCurrentStyleIndex] = useState(0);
-  const [likedStyles, setLikedStyles] = useState<string[]>(() => {
-    const saved = localStorage.getItem("likedStyles");
-    return saved ? JSON.parse(saved) : [];
-  });
 
-  // Check if quiz is completed on mount
   useEffect(() => {
-    const completed = localStorage.getItem("hasCompletedQuiz");
-    if (completed === "true") {
-      setHasCompletedQuiz(true);
-    }
-  }, []);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (finished) return;
+      if (e.key === "ArrowRight") handleSwipe("right");
+      if (e.key === "ArrowLeft") handleSwipe("left");
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentIndex, finished]);
 
-  const handleSwipe = (direction: string) => {
+  useEffect(() => {
+    if (currentIndex === 3) {
+      setShowPopup(true);
+      const timeout = setTimeout(() => setShowPopup(false), 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex]);
+
+  const handleSwipe = (direction: "left" | "right") => {
+    if (finished) return;
+    const currentImg = quizImages[currentIndex];
     if (direction === "right") {
-      const currentStyle = `style${currentStyleIndex + 1}.jpg`;
-      setLikedStyles((prev) => {
-        const newLikedStyles = [...prev, currentStyle];
-        localStorage.setItem("likedStyles", JSON.stringify(newLikedStyles));
-        return newLikedStyles;
-      });
+      setLikedImages((prev) => [...prev, currentImg]);
     }
-
-    if (currentStyleIndex + 1 >= 10) {
-      // Assuming we have 10 style images
-      localStorage.setItem("hasCompletedQuiz", "true");
-      setTimeout(() => {
-        navigate("/home");
-      }, 500);
+    if (currentIndex + 1 >= quizImages.length) {
+      setFinished(true);
     } else {
-      setCurrentStyleIndex((prev) => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
     }
   };
 
@@ -129,70 +153,81 @@ const SwiperPage = () => {
         transition={{ duration: 0.5 }}
         className="flex-1 p-8 bg-white overflow-y-auto"
       >
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 text-transparent bg-clip-text">
+        <div className="max-w-4xl mx-auto flex flex-col items-center">
+          <h1 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 text-transparent bg-clip-text">
             Discover Your Style
           </h1>
+          <p className="text-lg text-center mb-8 text-gray-600">
+            we're learning from what you like!
+          </p>
 
-          {hasCompletedQuiz ? (
-            <div className="text-center mb-12">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                New Pictures Coming Soon!
-              </h2>
-              <p className="text-gray-600">
-                Check back later for more styles to discover.
-              </p>
-            </div>
-          ) : (
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">
-                Swipe right for styles you like, left for those you don't
-              </h2>
-
-              <div className="relative h-96 flex items-center justify-center">
-                <AnimatePresence>
-                  {currentStyleIndex < 10 && (
-                    <StyleCard
-                      key={currentStyleIndex}
-                      styleIndex={currentStyleIndex + 1}
-                      onSwipe={handleSwipe}
-                    />
-                  )}
-                </AnimatePresence>
-
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
-                  <button
-                    onClick={() => handleSwipe("left")}
-                    className="p-3 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <X className="w-6 h-6 text-red-500" />
-                  </button>
-                  <button
-                    onClick={() => handleSwipe("right")}
-                    className="p-3 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <Heart className="w-6 h-6 text-green-500" />
-                  </button>
+          <div className="mb-8 w-full flex flex-col items-center">
+            {!finished ? (
+              <>
+                <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">
+                  Swipe right for styles you like, left for those you don't
+                </h2>
+                <div
+                  className="relative w-full flex flex-col items-center justify-center"
+                  style={{ minHeight: 0 }}
+                >
+                  <AnimatePresence>
+                    <motion.div
+                      key={currentIndex}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full max-w-2xl h-[60vw] min-h-[350px] max-h-[700px] flex items-center justify-center"
+                    >
+                      <img
+                        src={`/style_quiz/${quizImages[currentIndex]}`}
+                        alt={`Style option ${currentIndex + 1}`}
+                        className="rounded-2xl shadow-lg w-full h-full object-cover mx-auto"
+                        style={{ aspectRatio: "3/4" }}
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                  <div className="flex gap-4 z-10 mt-6">
+                    <button
+                      onClick={() => handleSwipe("left")}
+                      className="p-3 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <X className="w-6 h-6 text-red-500" />
+                    </button>
+                    <button
+                      onClick={() => handleSwipe("right")}
+                      className="p-3 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors"
+                    >
+                      <Heart className="w-6 h-6 text-green-500" />
+                    </button>
+                  </div>
                 </div>
+              </>
+            ) : (
+              <div className="text-center mb-12 w-full">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                  Come back later for more fashion items!
+                </h2>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
-          {likedStyles.length > 0 && (
-            <div className="mb-12">
+          {likedImages.length > 0 && (
+            <div className="mb-12 w-full">
               <h3 className="text-xl font-semibold mb-6 text-center text-gray-800">
                 Your Liked Styles
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {likedStyles.map((style, index) => (
+                {likedImages.map((img, index) => (
                   <motion.div
-                    key={index}
+                    key={img}
                     className="relative aspect-square rounded-lg overflow-hidden shadow-md cursor-pointer"
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   >
                     <img
-                      src={`/style_quiz/${style}`}
+                      src={`/style_quiz/${img}`}
                       alt={`Liked style ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
@@ -209,7 +244,7 @@ const SwiperPage = () => {
 
 const StyleCard = ({
   styleIndex,
-  onSwipe,
+  onSwipe: _onSwipe,
 }: {
   styleIndex: number;
   onSwipe: (direction: string) => void;
@@ -222,7 +257,7 @@ const StyleCard = ({
       onDragEnd={(e, { offset, velocity }) => {
         const swipe = offset.x;
         if (Math.abs(swipe) > 100) {
-          onSwipe(swipe > 0 ? "right" : "left");
+          _onSwipe(swipe > 0 ? "right" : "left");
         }
       }}
     >

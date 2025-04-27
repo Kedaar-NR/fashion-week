@@ -132,21 +132,13 @@ const RecommendationsPage = () => {
 
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-      exit={{
-        opacity: 0,
-      }}
-      transition={{
-        duration: 0.5,
-      }}
-      className="min-h-screen flex flex-col bg-black"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen flex flex-col bg-white"
     >
-      <div className="flex-grow p-4 bg-gray-50">
+      <div className="flex-grow p-4 bg-white">
         <h1 className="text-5xl font-bold text-center my-8 text-zinc-950 md:text-5xl">
           CURATED FOR YOU:
         </h1>
@@ -205,7 +197,7 @@ const RecommendationsPage = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-xl overflow-hidden h-[400px]">
+                  <div className="rounded-xl overflow-hidden h-[600px]">
                     <div className="aspect-square w-full h-full">
                       <iframe
                         src={`https://www.instagram.com/${cleanName}/embed`}

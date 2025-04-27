@@ -104,8 +104,20 @@ const LikedPage = () => {
                             .replace("@", "")
                             .toLowerCase()}.jpg`}
                           alt={brand.name}
+                          className="object-cover"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                            const fallback =
+                              e.currentTarget.parentElement?.querySelector(
+                                ".avatar-fallback"
+                              );
+                            if (fallback) fallback.style.display = "flex";
+                          }}
                         />
-                        <AvatarFallback className="bg-gray-100">
+                        <AvatarFallback
+                          className="bg-gray-100 avatar-fallback"
+                          style={{ display: "none" }}
+                        >
                           {brand.name.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
@@ -160,8 +172,14 @@ const LikedPage = () => {
           )}
 
           {selectedBrand && (
-            <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
-              <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
+            <div
+              className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
+              onClick={closeInstagramView}
+            >
+              <div
+                className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-2xl font-bold">{selectedBrand}</h2>
                   <div className="flex items-center gap-2">
@@ -179,7 +197,6 @@ const LikedPage = () => {
                     </button>
                   </div>
                 </div>
-
                 <div className="rounded-xl overflow-hidden aspect-square w-full">
                   <iframe
                     src={`https://www.instagram.com/${selectedBrand.replace(

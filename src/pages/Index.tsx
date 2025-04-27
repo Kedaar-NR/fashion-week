@@ -15,11 +15,30 @@ const Index = () => {
   const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
   const [expandedBrand, setExpandedBrand] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [visibleBrands, setVisibleBrands] = useState<string[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Preload all brands immediately
+  useEffect(() => {
+    const allBrands = brands.map((brand) => brand.name.replace("@", ""));
+    setVisibleBrands(allBrands);
+  }, []);
+
+  // Scroll lock when popup/modal is open
+  useEffect(() => {
+    if (expandedBrand || selectedBrand) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [expandedBrand, selectedBrand]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -114,12 +133,19 @@ const Index = () => {
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
-                className="overflow-hidden mb-8 bg-white rounded-lg"
+                className="overflow-hidden mb-8 bg-white rounded-lg fixed left-0 top-0 w-full z-40"
+                style={{ minHeight: "100vh" }}
               >
                 <BrandContentCollage
                   brandName={expandedBrand}
                   onSelectBrand={handleBrandSelect}
                 />
+                <button
+                  className="absolute top-6 right-8 z-50 bg-black text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-gray-800 transition"
+                  onClick={() => setExpandedBrand(null)}
+                >
+                  Close
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -136,8 +162,14 @@ const Index = () => {
         </div>
 
         {selectedBrand && (
-          <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
-            <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto">
+          <div
+            className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
+            onClick={closeInstagramView}
+          >
+            <div
+              className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">
                   @{selectedBrand.title.replace("@", "")}
@@ -149,17 +181,20 @@ const Index = () => {
                   <X size={20} />
                 </button>
               </div>
-
               <div className="rounded-xl overflow-hidden aspect-square w-full relative">
-                <iframe
-                  src={`https://www.instagram.com/${selectedBrand.title.replace(
-                    "@",
-                    ""
-                  )}/embed`}
-                  className="w-full h-full border-none"
-                  title={`${selectedBrand.title} Instagram Feed`}
-                  loading="eager"
-                />
+                {visibleBrands.includes(
+                  selectedBrand.title.replace("@", "")
+                ) && (
+                  <iframe
+                    src={`https://www.instagram.com/${selectedBrand.title.replace(
+                      "@",
+                      ""
+                    )}/embed`}
+                    className="w-full h-full border-none"
+                    title={`${selectedBrand.title} Instagram Feed`}
+                    loading="eager"
+                  />
+                )}
               </div>
             </div>
           </div>

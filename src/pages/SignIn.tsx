@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
@@ -7,9 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
-import BrandSearchBar from "@/components/BrandSearchBar";
-import FashionGrid from "@/components/FashionGrid";
-import TallyEmailWidget from "@/components/TallyEmailWidget";
 import { AuthError } from "@supabase/supabase-js";
 
 const SignIn = () => {
@@ -20,8 +18,6 @@ const SignIn = () => {
   const [name, setName] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState(null);
 
   useEffect(() => {
     /**
@@ -35,6 +31,30 @@ const SignIn = () => {
       }
     };
     getSession();
+
+    // Handle auth state changes and URL auth response
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log("Auth state changed:", event);
+        if (session) {
+          // Store session securely
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.user_metadata?.name,
+              avatar_url: session.user.user_metadata?.avatar_url,
+            })
+          );
+          navigate("/home");
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
@@ -99,15 +119,12 @@ const SignIn = () => {
             access_type: "offline",
             prompt: "consent",
           },
-          skipBrowserRedirect: false,
-          scopes: "email profile",
         },
       });
 
       if (error) {
         toast.error(error.message);
         setIsLoading(false);
-        return;
       }
     } catch (error) {
       const authError = error as AuthError;
@@ -118,19 +135,6 @@ const SignIn = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const handleBrandSelect = (brand: any) => {
-    setSelectedBrand(brand);
-  };
-
-  const resetSearch = () => {
-    setSearchQuery("");
-    setSelectedBrand(null);
   };
 
   return (
@@ -242,6 +246,7 @@ const SignIn = () => {
               type="button"
               onClick={handleGoogleSignIn}
               className="w-full bg-white hover:bg-gray-50 text-gray-900 font-medium border border-gray-300 py-3 rounded-md flex items-center justify-center gap-2"
+              disabled={isLoading}
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path

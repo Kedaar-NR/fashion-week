@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut, User, Settings, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { supabase } from "@/lib/supabaseClient";
 
 interface UserProfileProps {
   className?: string;
@@ -12,7 +13,7 @@ interface UserProfileProps {
 
 const UserProfile = ({ className = "" }: UserProfileProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<{ email?: string; name?: string; photoURL?: string; } | null>(null);
+  const [user, setUser] = useState<{ id?: string; email?: string; name?: string; avatar_url?: string; } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -24,21 +25,26 @@ const UserProfile = ({ className = "" }: UserProfileProps) => {
         setUser(JSON.parse(storedUser));
       } catch (e) {
         console.error('Failed to parse user data', e);
-        // Set a default user if no valid user found
-        setUser({
-          name: "Demo User",
-          email: "user@example.com",
-          photoURL: "https://ui-avatars.com/api/?name=Demo+User&background=random"
-        });
+        setUser(null);
       }
-    } else {
-      // Set a default user if no user found
-      setUser({
-        name: "Demo User",
-        email: "user@example.com",
-        photoURL: "https://ui-avatars.com/api/?name=Demo+User&background=random"
-      });
     }
+
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        const userData = {
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+          avatar_url: session.user.user_metadata?.avatar_url,
+        };
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData);
+      } else if (event === 'SIGNED_OUT') {
+        localStorage.removeItem('user');
+        setUser(null);
+      }
+    });
 
     // Handle clicks outside dropdown to close it
     const handleClickOutside = (event: MouseEvent) => {
@@ -48,16 +54,24 @@ const UserProfile = ({ className = "" }: UserProfileProps) => {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
+    
     return () => {
+      subscription.unsubscribe();
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setIsOpen(false);
-    toast.success('Logged out successfully');
-    navigate('/signin');
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      localStorage.removeItem('user');
+      setUser(null);
+      setIsOpen(false);
+      toast.success('Logged out successfully');
+      navigate('/');
+    } catch (error: any) {
+      toast.error('Failed to log out: ' + error.message);
+    }
   };
 
   const toggleDropdown = () => {
@@ -74,8 +88,8 @@ const UserProfile = ({ className = "" }: UserProfileProps) => {
         aria-label="Open user profile"
       >
         <Avatar className="h-9 w-9 border-2 border-gray-100 hover:border-gray-300 transition-colors">
-          {user.photoURL ? (
-            <AvatarImage src={user.photoURL} alt={user.name || "User"} />
+          {user.avatar_url ? (
+            <AvatarImage src={user.avatar_url} alt={user.name || "User"} />
           ) : (
             <AvatarFallback className="bg-gradient-to-br from-purple-400 to-purple-600 text-white">
               {user.name ? user.name.charAt(0).toUpperCase() : "U"}
@@ -96,8 +110,8 @@ const UserProfile = ({ className = "" }: UserProfileProps) => {
             <div className="px-4 py-3 border-b border-gray-100">
               <div className="flex items-center space-x-3">
                 <Avatar className="h-12 w-12">
-                  {user.photoURL ? (
-                    <AvatarImage src={user.photoURL} alt={user.name || "User"} />
+                  {user.avatar_url ? (
+                    <AvatarImage src={user.avatar_url} alt={user.name || "User"} />
                   ) : (
                     <AvatarFallback className="bg-gradient-to-br from-purple-400 to-purple-600 text-white text-lg">
                       {user.name ? user.name.charAt(0).toUpperCase() : "U"}

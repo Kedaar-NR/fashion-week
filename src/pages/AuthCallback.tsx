@@ -1,39 +1,34 @@
+
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Clear the URL immediately
-        if (window.history.replaceState) {
-          window.history.replaceState({}, document.title, "/auth/callback");
-        }
-
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
+        // Get the session from the URL if it exists
+        const { data: { session }, error } = await supabase.auth.getSession();
 
         if (error) {
+          console.error("Auth callback error:", error);
           toast.error("Authentication failed: " + error.message);
           navigate("/signin", { replace: true });
           return;
         }
 
         if (session) {
-          // Store session securely
+          // Store user data in localStorage
           localStorage.setItem(
             "user",
             JSON.stringify({
               id: session.user.id,
               email: session.user.email,
-              name: session.user.user_metadata?.name,
+              name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+              avatar_url: session.user.user_metadata?.avatar_url,
             })
           );
 
@@ -43,13 +38,14 @@ const AuthCallback = () => {
           navigate("/signin", { replace: true });
         }
       } catch (error: any) {
+        console.error("Auth callback processing error:", error);
         toast.error("Error processing authentication: " + error.message);
         navigate("/signin", { replace: true });
       }
     };
 
     handleCallback();
-  }, [navigate, location]);
+  }, [navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

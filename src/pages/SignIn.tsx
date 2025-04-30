@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
+import BrandSearchBar from "@/components/BrandSearchBar";
+import FashionGrid from "@/components/FashionGrid";
+import TallyEmailWidget from "@/components/TallyEmailWidget";
+import { AuthError } from "@supabase/supabase-js";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -16,8 +20,14 @@ const SignIn = () => {
   const [name, setName] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState(null);
 
   useEffect(() => {
+    /**
+     * Fetches the current session from Supabase and redirects to the home page
+     * if a session is found.
+     */
     const getSession = async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
@@ -80,28 +90,47 @@ const SignIn = () => {
 
   const handleGoogleSignIn = async () => {
     try {
+      setIsLoading(true);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: "https://fashionweek.wiki/auth/callback",
+          redirectTo: `${window.location.origin}/auth/callback`,
           queryParams: {
             access_type: "offline",
             prompt: "consent",
           },
+          skipBrowserRedirect: false,
+          scopes: "email profile",
         },
       });
 
       if (error) {
         toast.error(error.message);
+        setIsLoading(false);
         return;
       }
-    } catch (error: any) {
-      toast.error(error.message || "Error signing in with Google");
+    } catch (error) {
+      const authError = error as AuthError;
+      toast.error(authError.message || "Error signing in with Google");
+      setIsLoading(false);
     }
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleBrandSelect = (brand: any) => {
+    setSelectedBrand(brand);
+  };
+
+  const resetSearch = () => {
+    setSearchQuery("");
+    setSelectedBrand(null);
   };
 
   return (

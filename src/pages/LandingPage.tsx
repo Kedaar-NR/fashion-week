@@ -17,7 +17,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   const handleBegin = () => {
-    navigate("/home");
+    navigate("/how-it-works");
   };
 
   // Preload important images

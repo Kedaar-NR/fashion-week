@@ -213,10 +213,6 @@ const BrandContentCollage = ({
           exit={{ opacity: 0, y: -20 }}
           className="mb-8"
         >
-          <h3 className="text-xl font-bold mb-6 text-center">
-            @{selectedContent.name}
-          </h3>
-
           <div className="grid grid-cols-3 gap-4">
             {[...selectedContent.videos, ...selectedContent.images].map(
               (content, index, array) => {

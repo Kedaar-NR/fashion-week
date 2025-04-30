@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -7,7 +7,6 @@ const Quiz = () => {
   const navigate = useNavigate();
   const [quizImages, setQuizImages] = useState<string[]>([]);
   const [page, setPage] = useState(1); // 1 or 2
-  const [showCurated, setShowCurated] = useState(false);
 
   // On mount, pick 20 random images from 24
   useEffect(() => {
@@ -32,46 +31,31 @@ const Quiz = () => {
         <p className="text-lg text-center text-gray-700 mb-8 w-full">
           select from the following
         </p>
-        {!showCurated ? (
-          <div className="w-full max-w-3xl flex flex-col items-center">
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-6 w-full mb-8">
-              {quizImages.slice((page - 1) * 10, page * 10).map((img, idx) => (
-                <div
-                  key={img}
-                  className="aspect-square rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center"
-                >
-                  <img
-                    src={`/style_quiz/${img}`}
-                    alt={`Style option ${(page - 1) * 10 + idx + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-            <button
-              className="mt-4 bg-gray-700 text-white px-8 py-3 rounded-md font-bold text-lg hover:bg-gray-800 transition"
-              onClick={() => {
-                if (page === 1) setPage(2);
-                else setShowCurated(true);
-              }}
-            >
-              next
-            </button>
+        <div className="w-full max-w-3xl flex flex-col items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-6 w-full mb-8">
+            {quizImages.slice((page - 1) * 10, page * 10).map((img, idx) => (
+              <div
+                key={img}
+                className="aspect-square rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center"
+              >
+                <img
+                  src={`/style_quiz/${img}`}
+                  alt={`Style option ${(page - 1) * 10 + idx + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full w-full bg-gray-50 rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">Curated for You</h2>
-            <p className="text-gray-600 text-center mb-6">
-              Here are some brands you might like!
-            </p>
-            <button
-              className="mt-4 bg-black text-white px-8 py-3 rounded-md font-bold text-lg hover:bg-gray-800 transition"
-              onClick={() => navigate("/")}
-            >
-              next
-            </button>
-          </div>
-        )}
+          <button
+            className="mt-4 bg-gray-700 text-white px-8 py-3 rounded-md font-bold text-lg hover:bg-gray-800 transition"
+            onClick={() => {
+              if (page === 1) setPage(2);
+              else navigate("/recommendations");
+            }}
+          >
+            {page === 1 ? "Next" : "See Your Recommendations"}
+          </button>
+        </div>
       </motion.div>
     </div>
   );

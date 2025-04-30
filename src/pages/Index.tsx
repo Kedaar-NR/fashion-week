@@ -1,93 +1,79 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import FashionGrid from "@/components/FashionGrid";
+import { Heart } from "lucide-react";
 import BrandSearchBar from "@/components/BrandSearchBar";
 import TallyEmailWidget from "@/components/TallyEmailWidget";
-import Sidebar from "@/components/Sidebar";
+import Sidebar, { useSidebar } from "@/components/Sidebar";
 import BrandContentCollage from "@/components/BrandContentCollage";
 import { useNavigate } from "react-router-dom";
-import { brands } from "@/data/brands";
-import TagSelector from "@/components/TagSelector";
+import { toast } from "sonner";
+import InstagramModal from "@/components/InstagramModal";
+
+const brands = [
+  "badson.us",
+  "brotherlylove",
+  "eraworldwideclub",
+  "outlw.usa",
+  "derschutze_clo",
+  "thegvgallery",
+  "haveyoudiedbefore",
+  "poolhousenewyork",
+  "nomaintenance",
+  "california.arts",
+  "drolandmiller",
+];
 
 const Index = () => {
-  const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
-  const [expandedBrand, setExpandedBrand] = useState<string | null>(null);
+  const { collapsed } = useSidebar();
   const [searchQuery, setSearchQuery] = useState("");
-  const [visibleBrands, setVisibleBrands] = useState<string[]>([]);
+  const [likedBrands, setLikedBrands] = useState<string[]>(() => {
+    const saved = localStorage.getItem("likedBrands");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // Preload all brands immediately
-  useEffect(() => {
-    const allBrands = brands.map((brand) => brand.name.replace("@", ""));
-    setVisibleBrands(allBrands);
-  }, []);
-
-  // Scroll lock when popup/modal is open
-  useEffect(() => {
-    if (expandedBrand || selectedBrand) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-    return () => {
-      document.body.classList.remove("overflow-hidden");
-    };
-  }, [expandedBrand, selectedBrand]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
-  const resetSearch = () => {
-    setSearchQuery("");
-  };
-
   const handleBrandSelect = (brandName: string) => {
-    const cleanBrandName = brandName.replace("@", "");
-    setExpandedBrand(cleanBrandName === expandedBrand ? null : cleanBrandName);
-
-    // If we're closing the current brand, scroll to top
-    if (cleanBrandName === expandedBrand) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    const brand = brands.find((b) => b.name === `@${cleanBrandName}`);
-    if (brand) {
-      setSelectedBrand({
-        id: brands.indexOf(brand) + 1,
-        title: brand.name,
-        genre: brand.genre?.toUpperCase() || "STREET",
-        image: `/profile_pics/${brand.name.replace("@", "")}.jpg`,
-        followers: brand.followers,
-      });
-
-      // If opening a new brand, scroll to the collage after a brief delay
-      if (cleanBrandName !== expandedBrand) {
-        setTimeout(() => {
-          const collageElement = document.getElementById("brand-collage");
-          if (collageElement) {
-            collageElement.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        }, 100);
-      }
-    }
-  };
-
-  const closeInstagramView = () => {
-    setSelectedBrand(null);
+    navigate(`/gallery?brand=${brandName}`);
   };
 
   const handleDiscoverStyle = () => {
     navigate("/quiz");
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const brandParam = urlParams.get("brand");
+    if (brandParam) {
+      handleBrandSelect(brandParam);
+    }
+  }, []);
+
+  const toggleLike = (brandName: string) => {
+    setLikedBrands((prev) => {
+      const newLikedBrands = prev.includes(brandName)
+        ? prev.filter((b) => b !== brandName)
+        : [...prev, brandName];
+
+      localStorage.setItem("likedBrands", JSON.stringify(newLikedBrands));
+
+      if (newLikedBrands.includes(brandName)) {
+        toast.success(`Added ${brandName} to liked brands`);
+      } else {
+        toast.success(`Removed ${brandName} from liked brands`);
+      }
+
+      return newLikedBrands;
+    });
+  };
+
+  const handleBrandClick = (brandName: string) => {
+    setSelectedBrand(brandName);
   };
 
   return (
@@ -98,11 +84,11 @@ const Index = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 p-8 bg-white overflow-y-auto"
+        className="flex-1 ml-48 bg-white overflow-y-auto transition-all duration-300"
       >
-        <div className="max-w-7xl mx-auto">
-          <h1 className="font-bold text-center mb-6 text-black text-4xl">
-            Gallery
+        <div className="w-full px-4">
+          <h1 className="font-kanit font-extrabold tracking-tighter text-center mb-6 text-black text-4xl">
+            FASHION:WEEK
           </h1>
 
           <div className="flex justify-center mb-6">
@@ -114,92 +100,58 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="mb-5">
+          <div className="mb-4">
             <BrandSearchBar
               onSearch={handleSearch}
               onSelectBrand={handleBrandSelect}
             />
           </div>
 
-          <div className="mb-6">
-            <TagSelector onSelectBrand={handleBrandSelect} />
-          </div>
+          <div className="space-y-24 mb-8">
+            {brands.map((brand) => (
+              <div key={brand} className="w-full relative">
+                <div className="flex items-center justify-center mb-8">
+                  <div className="flex items-center gap-3">
+                    <h2
+                      className="text-2xl font-bold cursor-pointer hover:text-gray-600 transition-colors"
+                      onClick={() => handleBrandClick(brand)}
+                    >
+                      {brand}
+                    </h2>
+                    <button
+                      onClick={() => toggleLike(brand)}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    >
+                      <Heart
+                        className={`h-6 w-6 ${
+                          likedBrands.includes(brand)
+                            ? "fill-red-500 text-red-500"
+                            : "text-gray-400"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
 
-          <AnimatePresence>
-            {expandedBrand && (
-              <motion.div
-                id="brand-collage"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden mb-8 bg-white rounded-lg fixed left-0 top-0 w-full z-40"
-                style={{ minHeight: "100vh" }}
-              >
-                <BrandContentCollage
-                  brandName={expandedBrand}
-                  onSelectBrand={handleBrandSelect}
-                />
-                <button
-                  className="absolute top-6 right-8 z-50 bg-black text-white px-4 py-2 rounded-lg text-lg font-bold hover:bg-gray-800 transition"
-                  onClick={() => setExpandedBrand(null)}
-                >
-                  Close
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="mb-8">
-            <FashionGrid
-              searchQuery={searchQuery}
-              onSelectBrand={setSelectedBrand}
-              onResetSearch={resetSearch}
-            />
+                <div className="space-y-8">
+                  <BrandContentCollage brandName={brand} />
+                </div>
+              </div>
+            ))}
           </div>
 
           <TallyEmailWidget />
         </div>
-
-        {selectedBrand && (
-          <div
-            className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
-            onClick={closeInstagramView}
-          >
-            <div
-              className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">
-                  @{selectedBrand.title.replace("@", "")}
-                </h2>
-                <button
-                  onClick={closeInstagramView}
-                  className="p-2 hover:bg-gray-100 rounded-full"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-              <div className="rounded-xl overflow-hidden aspect-square w-full relative">
-                {visibleBrands.includes(
-                  selectedBrand.title.replace("@", "")
-                ) && (
-                  <iframe
-                    src={`https://www.instagram.com/${selectedBrand.title.replace(
-                      "@",
-                      ""
-                    )}/embed`}
-                    className="w-full h-full border-none"
-                    title={`${selectedBrand.title} Instagram Feed`}
-                    loading="eager"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </motion.div>
+
+      <AnimatePresence>
+        {selectedBrand && (
+          <InstagramModal
+            brandName={selectedBrand}
+            onClose={() => setSelectedBrand(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

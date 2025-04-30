@@ -17,6 +17,8 @@ import RecommendationsPage from "@/pages/RecommendationsPage";
 import SwiperPage from "@/pages/SwiperPage";
 import DropTracker from "@/pages/DropTracker";
 import AuthCallback from "@/pages/AuthCallback";
+import Gallery from "@/pages/Gallery";
+import HowItWorks from "@/pages/HowItWorks";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./App.css";
 import { Toaster } from "@/components/ui/sonner";
@@ -29,6 +31,8 @@ function AnimatedRoutes() {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Index />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
         <Route path="/quiz" element={<QuizPage />} />
         <Route path="/recommendations" element={<RecommendationsPage />} />
         <Route path="/swiper" element={<SwiperPage />} />

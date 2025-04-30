@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import MarqueeCategories from "./MarqueeCategories";
 import { Button } from "./ui/button";
+import { useSidebar } from "./Sidebar";
 
 const getBrandWebsiteUrl = (brandName: string) => {
   const websiteUrls: Record<string, string> = {
@@ -43,6 +44,7 @@ const FashionGrid = ({
   onSelectBrand,
   onResetSearch,
 }: FashionGridProps) => {
+  const { collapsed } = useSidebar();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [likedBrands, setLikedBrands] = useState<string[]>([]);
   const [visibleBrands, setVisibleBrands] = useState<string[]>([]);
@@ -110,7 +112,7 @@ const FashionGrid = ({
 
   return (
     <div className="p-1 flex-1 overflow-auto">
-      <div className="w-full max-w-6xl mx-auto flex flex-col items-center">
+      <div className="w-full flex flex-col items-center">
         {searchQuery && (
           <div className="mb-2 w-full flex justify-center">
             <Button
@@ -129,7 +131,13 @@ const FashionGrid = ({
           <MarqueeCategories onSelectCategory={setSelectedCategory} />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
+        <div
+          className={`grid grid-cols-1 ${
+            collapsed
+              ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+              : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          } gap-4 w-full`}
+        >
           {filteredItems.map((item) => (
             <motion.div
               key={item.id}

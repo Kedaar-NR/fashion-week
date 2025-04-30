@@ -1,74 +1,62 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get the URL hash parameters
-        const hashParams = new URLSearchParams(
-          window.location.hash.substring(1)
-        );
-        const accessToken = hashParams.get("access_token");
-        const refreshToken = hashParams.get("refresh_token");
+        // Clear the URL immediately
+        if (window.history.replaceState) {
+          window.history.replaceState({}, document.title, "/auth/callback");
+        }
 
-        if (accessToken && refreshToken) {
-          // Set the session manually
-          const { error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
 
-          if (error) {
-            toast.error("Authentication failed: " + error.message);
-            navigate("/signin");
-            return;
-          }
+        if (error) {
+          toast.error("Authentication failed: " + error.message);
+          navigate("/signin", { replace: true });
+          return;
+        }
+
+        if (session) {
+          // Store session securely
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.user_metadata?.name,
+            })
+          );
 
           toast.success("Successfully signed in!");
-          navigate("/home");
+          navigate("/home", { replace: true });
         } else {
-          // Try to get the session normally
-          const {
-            data: { session },
-            error,
-          } = await supabase.auth.getSession();
-
-          if (error) {
-            toast.error("Authentication failed: " + error.message);
-            navigate("/signin");
-            return;
-          }
-
-          if (session) {
-            toast.success("Successfully signed in!");
-            navigate("/home");
-          } else {
-            navigate("/signin");
-          }
+          navigate("/signin", { replace: true });
         }
       } catch (error: any) {
         toast.error("Error processing authentication: " + error.message);
-        navigate("/signin");
+        navigate("/signin", { replace: true });
       }
     };
 
     handleCallback();
-  }, [navigate]);
+  }, [navigate, location]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
-        <h2 className="text-xl font-semibold mb-2">
-          Processing authentication...
-        </h2>
-        <p className="text-gray-600">
-          Please wait while we complete your sign-in.
-        </p>
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black mx-auto mb-4"></div>
+        <h2 className="text-xl font-semibold mb-2">Completing sign in...</h2>
+        <p className="text-gray-600">You will be redirected automatically.</p>
       </div>
     </div>
   );

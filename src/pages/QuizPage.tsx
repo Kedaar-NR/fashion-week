@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import Sidebar from "@/components/Sidebar";
 
 // Get the 20 quiz images from the public/style_quiz folder
 const quizImages = [
@@ -58,23 +57,21 @@ const QuizPage = () => {
     step === 1 ? quizImages.slice(0, 10) : quizImages.slice(10, 20);
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      <Sidebar />
-      <header className="w-full py-8 px-2 sm:px-0 flex justify-center items-center">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-black text-center w-full max-w-4xl mx-auto">
+    <div
+      className="min-h-screen w-full bg-white"
+      style={{ fontFamily: "Kanit, sans-serif" }}
+    >
+      <header className="w-full py-8 px-4 flex justify-center items-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-black text-center w-full max-w-4xl mx-auto">
           WHO ARE YOU?
         </h1>
       </header>
-      <main className="flex-1 flex flex-col items-center w-full px-2 sm:px-6 justify-start mt-[-32px] md:mt-[-48px]">
-        <div
-          className="flex flex-col items-center w-full"
-          style={{ marginTop: 0 }}
-        >
-          <div className="h-6 sm:h-10 md:h-16" />
-          <p className="text-lg sm:text-xl mb-6 sm:mb-8 text-center">
+      <main className="flex-1 flex flex-col items-center w-full px-4 justify-start">
+        <div className="flex flex-col items-center w-full max-w-6xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-center">
             select from the following
           </p>
-          <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 sm:gap-6 md:gap-8 w-full max-w-6xl mb-6 sm:mb-8 place-items-center">
+          <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 sm:gap-4 md:gap-6 w-full mb-6 sm:mb-8 place-items-center">
             {imagesToShow.map((img, idx) => (
               <motion.div
                 key={img}
@@ -85,26 +82,26 @@ const QuizPage = () => {
                 }`}
                 onClick={() => handleImageSelect((step - 1) * 10 + idx)}
                 style={{
-                  minHeight: "120px",
-                  minWidth: "120px",
-                  height: "22vw",
-                  width: "22vw",
-                  maxHeight: "260px",
-                  maxWidth: "260px",
+                  minHeight: "100px",
+                  minWidth: "100px",
+                  height: "20vw",
+                  width: "20vw",
+                  maxHeight: "220px",
+                  maxWidth: "220px",
                   ...(window.innerWidth < 640
                     ? {
-                        height: "36vw",
-                        width: "36vw",
-                        maxHeight: "160px",
-                        maxWidth: "160px",
+                        height: "32vw",
+                        width: "32vw",
+                        maxHeight: "140px",
+                        maxWidth: "140px",
                       }
                     : {}),
                   ...(window.innerWidth >= 1024
                     ? {
-                        height: "180px",
-                        width: "180px",
-                        maxHeight: "320px",
-                        maxWidth: "320px",
+                        height: "160px",
+                        width: "160px",
+                        maxHeight: "280px",
+                        maxWidth: "280px",
                       }
                     : {}),
                 }}
@@ -140,7 +137,7 @@ const QuizPage = () => {
           </div>
           <Button
             onClick={handleNext}
-            className="text-xl px-10 py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none mt-2"
+            className="text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-6 h-auto bg-black text-white hover:bg-gray-800 rounded-none mt-2"
           >
             Next
           </Button>

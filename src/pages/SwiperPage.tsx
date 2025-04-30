@@ -159,7 +159,7 @@ const SwiperPage = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 p-8 bg-white overflow-y-auto"
+        className="flex-1 ml-48 p-8 bg-white overflow-y-auto"
       >
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <h1 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 text-transparent bg-clip-text">

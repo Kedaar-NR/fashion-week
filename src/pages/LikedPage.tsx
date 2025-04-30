@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -51,7 +50,7 @@ const LikedPage = () => {
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 ml-48">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">Liked Brands</h1>
 
@@ -97,9 +96,9 @@ const LikedPage = () => {
                   key={brand.name}
                   className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                 >
-                  <div className="p-4 border-b flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="w-10 h-10">
+                  <div className="p-4 border-b flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <Avatar className="w-8 h-8 flex-shrink-0">
                         <AvatarImage
                           src={`/profile_pics/${brand.name
                             .replace("@", "")
@@ -124,16 +123,18 @@ const LikedPage = () => {
                           {brand.name.substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <h3 className="font-medium text-gray-900">
-                        {brand.name}
-                      </h3>
+                      <div className="truncate">
+                        <h3 className="font-medium text-gray-900 text-sm">
+                          {brand.name}
+                        </h3>
+                      </div>
                     </div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleUnlike(brand.name);
                       }}
-                      className="p-1.5 hover:bg-gray-100 rounded-full"
+                      className="p-1.5 hover:bg-gray-100 rounded-full flex-shrink-0"
                     >
                       <Heart className="h-5 w-5 fill-red-500 text-red-500" />
                     </button>

@@ -1,4 +1,3 @@
-
 import Sidebar from "@/components/Sidebar";
 import {
   Table,
@@ -48,7 +47,7 @@ const DropTracker = () => {
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 ml-48">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 text-transparent bg-clip-text">

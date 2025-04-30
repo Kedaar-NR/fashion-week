@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { brands } from "@/data/brands";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Heart } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import InstagramModal from "@/components/InstagramModal";
 
 const getRandomBrands = (count: number) => {
   const shuffled = [...brands].sort(() => 0.5 - Math.random());
@@ -18,6 +22,7 @@ interface StyleTag {
 
 const RecommendationsPage = () => {
   const [recommendedBrands, setRecommendedBrands] = useState<typeof brands>([]);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const styleTags: Record<string, StyleTag> = {
@@ -122,12 +127,8 @@ const RecommendationsPage = () => {
     }
   }, []);
 
-  const handleFinish = () => {
-    localStorage.setItem("hasCompletedQuiz", "true");
-    toast.success(
-      "Your brand recommendations have been saved to your liked brands!"
-    );
-    navigate("/home");
+  const handleBrandClick = (brandName: string) => {
+    setSelectedBrand(brandName);
   };
 
   return (
@@ -138,12 +139,15 @@ const RecommendationsPage = () => {
       transition={{ duration: 0.5 }}
       className="min-h-screen flex flex-col bg-white"
     >
-      <div className="flex-grow p-4 bg-white">
-        <h1 className="text-5xl font-bold text-center my-8 text-zinc-950 md:text-5xl">
+      <div className="flex-grow flex flex-col items-center justify-center p-4 bg-white">
+        <h1 className="text-5xl font-bold text-center mb-12 text-zinc-950">
           CURATED FOR YOU:
+          <span className="block text-lg text-gray-500 mt-2">
+            (Click on brands to see their Instagram)
+          </span>
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
           {recommendedBrands.map((brand, index) => {
             const cleanName = brand.name.replace("@", "");
             return (
@@ -162,7 +166,10 @@ const RecommendationsPage = () => {
                 }}
                 className="flex flex-col"
               >
-                <div className="rounded-xl p-3 mb-2 overflow-hidden bg-gray-900">
+                <div
+                  className="rounded-xl p-3 overflow-hidden bg-gray-900 cursor-pointer hover:bg-gray-800 transition-colors"
+                  onClick={() => handleBrandClick(cleanName)}
+                >
                   <div className="flex flex-col items-center justify-center mb-4">
                     <div className="w-16 h-16 rounded-full overflow-hidden mb-3 bg-gray-800 flex items-center justify-center">
                       <img
@@ -185,45 +192,16 @@ const RecommendationsPage = () => {
                         @{cleanName}
                       </h2>
                       <div className="flex flex-wrap gap-1 mt-2 justify-center">
-                        {getBrandTags(brand).map((tag, i) => (
-                          <span
+                        {brand.genre?.split("/").map((genre, i) => (
+                          <Badge
                             key={i}
-                            className={`px-2 py-0.5 rounded-full ${tag.color} ${tag.textColor} text-xs font-medium`}
+                            variant="outline"
+                            className="text-white border-white/20"
                           >
-                            {tag.name}
-                          </span>
+                            {genre.trim()}
+                          </Badge>
                         ))}
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl overflow-hidden h-[600px]">
-                    <div className="aspect-square w-full h-full">
-                      <iframe
-                        src={`https://www.instagram.com/${cleanName}/embed`}
-                        className="w-full h-full border-none"
-                        title={`${brand.name} Instagram Feed`}
-                        scrolling="no"
-                        loading="eager"
-                        onError={(e) => {
-                          try {
-                            const iframe = e.currentTarget;
-                            iframe.style.display = "none";
-                            const img = document.createElement("img");
-                            img.src = `https://placeholder.pics/svg/300x300/DEDEDE/555555/${brand.name}`;
-                            img.className =
-                              "w-full h-full object-cover rounded-xl";
-                            if (iframe.parentNode) {
-                              iframe.parentNode.appendChild(img);
-                            }
-                          } catch (error) {
-                            console.error(
-                              "Error handling iframe error:",
-                              error
-                            );
-                          }
-                        }}
-                      ></iframe>
                     </div>
                   </div>
                 </div>
@@ -232,15 +210,22 @@ const RecommendationsPage = () => {
           })}
         </div>
 
-        <div className="flex justify-center mt-6 mb-8">
-          <Button
-            onClick={handleFinish}
-            className="text-xl px-10 py-6 h-auto rounded-none font-normal bg-zinc-950 hover:bg-zinc-800 text-slate-50"
-          >
-            Next
-          </Button>
-        </div>
+        <Button
+          onClick={() => navigate("/home")}
+          className="bg-black text-white hover:bg-gray-800 font-bold text-lg"
+        >
+          Explore More Brands
+        </Button>
       </div>
+
+      <AnimatePresence>
+        {selectedBrand && (
+          <InstagramModal
+            brandName={selectedBrand}
+            onClose={() => setSelectedBrand(null)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

@@ -11,6 +11,11 @@ const imagesToPreload = [
   "/profile_pics/outlw.usa.jpg",
   "/profile_pics/derschutze_clo.jpg",
   "/profile_pics/thegvgallery.jpg",
+  "/profile_pics/haveyoudiedbefore.jpg",
+  "/profile_pics/poolhousenewyork.jpg",
+  "/profile_pics/nomaintenance.jpg",
+  "/profile_pics/california.arts.jpg",
+  "/profile_pics/drolandmiller.jpg",
 ];
 
 const LandingPage = () => {
@@ -22,10 +27,11 @@ const LandingPage = () => {
 
   // Preload important images
   useEffect(() => {
-    // Preload quiz images for faster loading later
     imagesToPreload.forEach((src) => {
       const img = new Image();
       img.src = src;
+      img.loading = "eager";
+      img.fetchPriority = "high";
     });
   }, []);
 

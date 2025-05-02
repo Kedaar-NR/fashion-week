@@ -38,6 +38,7 @@ const QuizPage = () => {
     quizImages.forEach((img) => {
       const image = new window.Image();
       image.src = `/style_quiz/${img}`;
+      image.loading = "eager"; // Add eager loading
     });
   }, []);
 
@@ -122,6 +123,7 @@ const QuizPage = () => {
                     alt={`Style option ${(step - 1) * 10 + idx + 1}`}
                     className="w-full h-full object-cover"
                     loading="eager"
+                    fetchPriority="high"
                   />
                   {selectedImages.includes((step - 1) * 10 + idx) && (
                     <div className="absolute inset-0 bg-blue-500 bg-opacity-30 flex items-center justify-center">

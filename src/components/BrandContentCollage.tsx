@@ -373,7 +373,25 @@ const BrandContentCollage = ({
                   <motion.div
                     key={`content-${index}`}
                     className="relative overflow-hidden cursor-pointer group aspect-[3/4]"
-                    whileHover={{ scale: 1.02 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{
+                      opacity: 1,
+                      scale: 1,
+                      transition: {
+                        type: "spring",
+                        damping: 20,
+                        stiffness: 300,
+                        delay: index * 0.1,
+                      },
+                    }}
+                    whileHover={{
+                      scale: 1.02,
+                      transition: {
+                        type: "spring",
+                        damping: 15,
+                        stiffness: 400,
+                      },
+                    }}
                     onClick={(e) => {
                       handleContentTap(content, e);
                       if (!e.defaultPrevented) {

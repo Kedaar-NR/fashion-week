@@ -33,6 +33,7 @@ const Index = () => {
   const [showSignInPopup, setShowSignInPopup] = useState(false);
   const [showQuizPopup, setShowQuizPopup] = useState(false);
   const [showTimedSignUpPopup, setShowTimedSignUpPopup] = useState(false);
+  const [showTimedQuizPopup, setShowTimedQuizPopup] = useState(false);
   const [currentBrandIndex, setCurrentBrandIndex] = useState(0);
   const brandRefs = useRef<(HTMLDivElement | null)[]>([]);
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const Index = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
             const index = brandRefs.current.findIndex(
               (ref) => ref === entry.target
             );
@@ -84,8 +85,8 @@ const Index = () => {
         });
       },
       {
-        threshold: 0.5,
-        rootMargin: "-50% 0px -50% 0px",
+        threshold: [0.1, 0.5, 0.8], // Multiple thresholds for smoother detection
+        rootMargin: "-10% 0px", // Smaller margin for more precise snapping
       }
     );
 
@@ -104,6 +105,14 @@ const Index = () => {
 
       return () => clearTimeout(timer);
     }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowTimedQuizPopup(true);
+    }, 20000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const toggleLike = (brandName: string) => {
@@ -201,80 +210,80 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="space-y-8 sm:space-y-12 md:space-y-16 mb-8">
+          <div className="relative h-[calc(100vh-200px)] overflow-y-auto snap-y snap-mandatory">
             {brands.map((brand, index) => (
               <motion.div
                 key={brand}
                 ref={(el) => (brandRefs.current[index] = el)}
-                initial={{ opacity: 0, y: 100 }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    type: "spring",
-                    damping: 20,
-                    stiffness: 100,
-                  },
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: currentBrandIndex === index ? 1 : 0.3,
+                  scale: currentBrandIndex === index ? 1 : 0.95,
                 }}
-                viewport={{ once: false, margin: "-20%" }}
-                className={`w-full relative border border-black p-3 sm:p-4 md:p-6 lg:p-8 rounded-lg transform transition-transform duration-500 ${
-                  currentBrandIndex === index ? "scale-100" : "scale-95"
-                }`}
+                transition={{
+                  type: "spring",
+                  damping: 30,
+                  stiffness: 300,
+                  mass: 0.8,
+                }}
+                className="h-full w-full snap-start snap-always"
               >
-                <motion.div
-                  className="flex items-center justify-center mb-4 sm:mb-6 md:mb-8"
-                  initial={{ opacity: 0 }}
-                  whileInView={{
-                    opacity: 1,
-                    transition: {
-                      duration: 0.2,
-                      delay: 0.15,
-                    },
-                  }}
-                  viewport={{ once: false }}
-                >
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <h2
-                      className="text-lg sm:text-xl md:text-2xl font-black cursor-pointer hover:text-gray-600 transition-colors"
-                      style={{ fontFamily: "Arial Black, sans-serif" }}
-                      onClick={() => handleBrandClick(brand)}
-                    >
-                      @{brand}
-                    </h2>
-                    <button
-                      onClick={() => toggleLike(brand)}
-                      className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
-                    >
-                      <Heart
-                        className={`h-5 w-5 sm:h-6 sm:w-6 ${
-                          likedBrands.includes(brand)
-                            ? "fill-red-500 text-red-500"
-                            : "text-gray-400"
-                        }`}
-                      />
-                    </button>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className="space-y-8"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{
-                    opacity: 1,
-                    scale: 1,
-                    transition: {
-                      duration: 0.25,
+                <div className="w-full h-full border border-black p-3 sm:p-4 md:p-6 lg:p-8 rounded-lg bg-white">
+                  <motion.div
+                    className="flex items-center justify-center mb-4 sm:mb-6 md:mb-8"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{
+                      opacity: currentBrandIndex === index ? 1 : 0.5,
+                      x: 0,
+                    }}
+                    transition={{
+                      type: "spring",
+                      damping: 20,
+                      stiffness: 100,
                       delay: 0.2,
-                      ease: [0.25, 0.1, 0.25, 1.0],
-                    },
-                  }}
-                  viewport={{ once: false, margin: "-10%" }}
-                >
-                  <BrandContentCollage
-                    brandName={brand}
-                    onSelectBrand={handleBrandClick}
-                  />
-                </motion.div>
+                    }}
+                  >
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <h2
+                        className="text-lg sm:text-xl md:text-2xl font-black cursor-pointer hover:text-gray-600 transition-colors"
+                        style={{ fontFamily: "Arial Black, sans-serif" }}
+                        onClick={() => handleBrandClick(brand)}
+                      >
+                        @{brand}
+                      </h2>
+                      <button
+                        onClick={() => toggleLike(brand)}
+                        className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+                      >
+                        <Heart
+                          className={`h-5 w-5 sm:h-6 sm:w-6 ${
+                            likedBrands.includes(brand)
+                              ? "fill-red-500 text-red-500"
+                              : "text-gray-400"
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="h-[calc(100%-80px)] overflow-hidden"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{
+                      opacity: currentBrandIndex === index ? 1 : 0.3,
+                      scale: currentBrandIndex === index ? 1 : 0.95,
+                    }}
+                    transition={{
+                      duration: 0.3,
+                      delay: 0.1,
+                    }}
+                  >
+                    <BrandContentCollage
+                      brandName={brand}
+                      onSelectBrand={handleBrandClick}
+                    />
+                  </motion.div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -373,8 +382,6 @@ const Index = () => {
           )}
         </AnimatePresence>
 
-        <WaitlistPopup />
-
         <AnimatePresence>
           {showTimedSignUpPopup && (
             <motion.div
@@ -408,6 +415,56 @@ const Index = () => {
                   className="w-full bg-black hover:bg-gray-900 text-white text-lg py-6 rounded-lg shadow-lg transition-all duration-200 hover:scale-[1.02]"
                 >
                   Sign In
+                </Button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showTimedQuizPopup && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 flex items-center justify-center z-50"
+              onClick={() => setShowTimedQuizPopup(false)}
+            >
+              <motion.div
+                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+              <motion.div
+                initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.9, y: 20, opacity: 0 }}
+                transition={{ type: "spring", duration: 0.7, bounce: 0.3 }}
+                className="relative z-10 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 border-2 border-black"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="absolute -top-3 -right-3">
+                  <Sparkles className="w-8 h-8 text-yellow-400" />
+                </div>
+                <h2
+                  className="text-3xl font-black text-center mb-4"
+                  style={{ fontFamily: "Arial Black, sans-serif" }}
+                >
+                  DISCOVER YOUR STYLE
+                </h2>
+                <p className="text-center text-gray-600 mb-6">
+                  Take our style quiz to find brands that match your unique
+                  taste
+                </p>
+                <Button
+                  onClick={() => {
+                    setShowTimedQuizPopup(false);
+                    navigate("/quiz");
+                  }}
+                  className="w-full bg-black hover:bg-gray-800 text-white text-xl py-6 rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 hover:shadow-2xl"
+                >
+                  Take the Quiz
                 </Button>
               </motion.div>
             </motion.div>

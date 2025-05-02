@@ -60,9 +60,9 @@
     @apply bg-background text-foreground font-sans;
   }
   
-  /* Apply Kanit font to all text by default */
+  /* Apply fonts */
   html {
-    font-family: 'Kanit', sans-serif;
+    font-family: 'Helvetica Neue', 'Arial Black', 'Inter', 'Roboto', sans-serif;
   }
   
   /* iPhone specific styles */

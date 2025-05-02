@@ -38,7 +38,7 @@ const MarqueeCategories = ({ onSelectCategory }: MarqueeCategoriesProps) => {
       STREET: "bg-red-500 text-white hover:bg-red-600",
       "PUNK/GOTH/GRUNGE": "bg-purple-500 text-white hover:bg-purple-600",
       ESSENTIALS: "bg-blue-500 text-white hover:bg-blue-600",
-      "LUXURY/VINTAGE": "bg-amber-400 text-black hover:bg-amber-500",
+      "LUXURY/VINTAGE": "bg-amber-400 text-white hover:bg-amber-500",
       MINIMALISTIC: "bg-gray-500 text-white hover:bg-gray-600",
       "CRAZY EXPERIMENTAL": "bg-pink-500 text-white hover:bg-pink-600",
       Y2K: "bg-violet-400 text-white hover:bg-violet-500",

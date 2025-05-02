@@ -64,54 +64,50 @@ const Sidebar = () => {
   return (
     <SidebarContext.Provider value={{ collapsed: false }}>
       <div className="w-48 h-full bg-white fixed left-0 top-0 bottom-0 flex flex-col z-10 shadow-md">
-        <div className="flex flex-col border-b border-gray-200">
+        <div className="sticky top-0 z-20 bg-white border-b border-gray-200">
           <div className="flex items-center justify-center p-3">
-            <h1 className="text-lg font-kanit font-extrabold tracking-tighter text-black">
-              FASHION:WEEK
-            </h1>
-          </div>
-
-          {!user ? (
-            <Link
-              to="/signin"
-              className={`flex items-center justify-center hover:bg-gray-800 transition-colors py-2 px-2 rounded-md ${
-                location.pathname === "/signin"
-                  ? "bg-black text-white font-semibold"
-                  : "bg-black text-white"
-              } mx-2 mb-3`}
-            >
-              <span className="font-kanit text-sm uppercase">SIGN IN</span>
-            </Link>
-          ) : (
-            <div className="mx-2 mb-3 space-y-2">
-              <div className="flex items-center justify-center hover:bg-gray-100 transition-colors py-2 px-2 rounded-md">
-                <div className="flex items-center justify-center">
-                  <Avatar className="h-7 w-7">
-                    <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white text-xs">
-                      {user.user_metadata?.name
-                        ? user.user_metadata.name.charAt(0).toUpperCase()
-                        : user.email?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="ml-3 font-kanit text-sm text-black uppercase">
-                    {user.user_metadata?.name ||
-                      user.email?.split("@")[0] ||
-                      "PROFILE"}
-                  </span>
-                </div>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="flex w-full items-center justify-center hover:bg-gray-100 transition-colors py-2 px-2 rounded-md text-black"
+            <Link to="/home">
+              <h1
+                className="text-4xl font-black tracking-wider text-black hover:text-gray-700 transition-colors cursor-pointer"
+                style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
               >
-                <span className="font-kanit text-sm uppercase">LOGOUT</span>
-              </button>
-            </div>
-          )}
+                F:W
+              </h1>
+            </Link>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center pt-6">
-          <div className="flex flex-col space-y-6 items-center w-full">
+        {user && (
+          <div className="px-4 py-3 border-b border-gray-200">
+            <div className="flex flex-col items-center text-center">
+              <Avatar className="h-10 w-10 mb-2">
+                <AvatarFallback className="bg-gradient-to-br from-gray-400 to-gray-800 text-white">
+                  {user.user_metadata?.name
+                    ? user.user_metadata.name.charAt(0).toUpperCase()
+                    : user.email?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col items-center w-full">
+                <span
+                  className="text-sm font-bold text-black uppercase break-words text-center w-full"
+                  style={{ fontFamily: "Arial Black, sans-serif" }}
+                >
+                  {user.user_metadata?.name || user.email?.split("@")[0]}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="text-xs text-gray-500 hover:text-gray-700 uppercase mt-1"
+                  style={{ fontFamily: "Arial Black, sans-serif" }}
+                >
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col items-start pt-6 w-full">
+          <div className="flex flex-col space-y-3 w-full">
             <NavItem
               label="HOME"
               path="/home"
@@ -126,20 +122,68 @@ const Sidebar = () => {
               label="DROP TRACKER"
               path="/drop-tracker"
               isActive={location.pathname === "/drop-tracker"}
+              className="whitespace-nowrap"
             />
             <NavItem
-              label="SWIPER"
+              label="STYLE QUIZ"
+              path="/quiz"
+              isActive={location.pathname === "/quiz"}
+            />
+            {/* Temporarily hiding Tinder */}
+            {/* <NavItem
+              label="TINDER"
               path="/swiper"
               isActive={location.pathname === "/swiper"}
-            />
+            /> */}
             <NavItem
-              label="LIKED"
+              label="WISHLIST"
               path="/liked"
               isActive={location.pathname === "/liked"}
             />
           </div>
         </div>
+
+        {/* Footer Links */}
+        <div className="mt-auto p-4 border-t border-gray-200">
+          <div className="flex flex-col space-y-2 w-full">
+            <Link
+              to="/terms"
+              className="text-[10px] text-gray-500 hover:text-gray-700 px-6 text-left whitespace-nowrap"
+              style={{ fontFamily: "Arial Black, sans-serif" }}
+            >
+              TERMS OF SERVICE
+            </Link>
+            <Link
+              to="/privacy"
+              className="text-[10px] text-gray-500 hover:text-gray-700 px-6 text-left whitespace-nowrap"
+              style={{ fontFamily: "Arial Black, sans-serif" }}
+            >
+              PRIVACY POLICY
+            </Link>
+          </div>
+        </div>
       </div>
+
+      {/* Fixed top-right sign in button - only show when not logged in */}
+      {!user && (
+        <div className="fixed top-0 right-0 p-4 z-[100]">
+          <Link
+            to="/signin"
+            className={`flex items-center justify-center hover:bg-gray-800 transition-colors py-2 px-4 rounded-md ${
+              location.pathname === "/signin"
+                ? "bg-black text-white font-black"
+                : "bg-black text-white"
+            }`}
+          >
+            <span
+              className="text-base uppercase tracking-wider"
+              style={{ fontFamily: "Arial Black, sans-serif" }}
+            >
+              SIGN IN
+            </span>
+          </Link>
+        </div>
+      )}
     </SidebarContext.Provider>
   );
 };
@@ -148,19 +192,26 @@ const NavItem = ({
   label,
   path,
   isActive,
+  className = "",
 }: {
   label: string;
   path: string;
   isActive: boolean;
+  className?: string;
 }) => {
   return (
     <Link
       to={path}
-      className={`w-full flex items-center justify-center hover:bg-gray-100 transition-colors py-2 px-2 rounded-md ${
-        isActive ? "bg-gray-100 text-black font-semibold" : "text-black"
+      className={`w-full flex items-center justify-start hover:bg-gray-100 transition-colors py-2 px-6 rounded-md ${
+        isActive ? "bg-gray-100 text-black font-black" : "text-black font-black"
       }`}
     >
-      <span className="font-kanit text-sm uppercase">{label}</span>
+      <span
+        className={`text-base uppercase ${className}`}
+        style={{ fontFamily: "Arial Black, sans-serif" }}
+      >
+        {label}
+      </span>
     </Link>
   );
 };

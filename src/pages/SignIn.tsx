@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
@@ -33,24 +32,24 @@ const SignIn = () => {
     getSession();
 
     // Handle auth state changes and URL auth response
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log("Auth state changed:", event);
-        if (session) {
-          // Store session securely
-          localStorage.setItem(
-            "user",
-            JSON.stringify({
-              id: session.user.id,
-              email: session.user.email,
-              name: session.user.user_metadata?.name,
-              avatar_url: session.user.user_metadata?.avatar_url,
-            })
-          );
-          navigate("/home");
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event);
+      if (session) {
+        // Store session securely
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            id: session.user.id,
+            email: session.user.email,
+            name: session.user.user_metadata?.name,
+            avatar_url: session.user.user_metadata?.avatar_url,
+          })
+        );
+        navigate("/home");
       }
-    );
+    });
 
     return () => {
       subscription.unsubscribe();
@@ -114,7 +113,7 @@ const SignIn = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: "https://fashionweek.wiki/auth/callback",
           queryParams: {
             access_type: "offline",
             prompt: "consent",
@@ -140,7 +139,7 @@ const SignIn = () => {
   return (
     <div className="flex min-h-screen bg-white">
       <Sidebar />
-      <div className="flex-1 flex items-center justify-center p-4 ml-0 md:ml-32">
+      <div className="flex-1 flex items-center justify-center p-4 ml-48">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,8 +147,11 @@ const SignIn = () => {
           transition={{ duration: 0.3 }}
           className="w-full max-w-md p-8 bg-white rounded-xl shadow-lg"
         >
-          <h1 className="text-3xl font-bold text-center mb-8">
-            {isSignUp ? "Create an Account" : "Sign In"}
+          <h1
+            className="text-5xl font-bold text-center mb-8"
+            style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
+          >
+            {isSignUp ? "CREATE AN ACCOUNT" : "SIGN IN"}
           </h1>
           <form onSubmit={handleEmailSignIn} className="space-y-6">
             {isSignUp && (

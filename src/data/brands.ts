@@ -5,19 +5,20 @@ export interface Brand {
 }
 
 // Define colors for the new genre categories based on the provided image
-const genreColors: Record<string, { bg: string, text: string, border?: string }> = {
-  "STREET": { bg: "bg-red-500", text: "text-black", border: "border-red-400" },
-  "PUNK/GOTH/GRUNGE": { bg: "bg-purple-600", text: "text-black", border: "border-purple-500" },
-  "ESSENTIALS": { bg: "bg-blue-700", text: "text-white" },
-  "LUXURY/VINTAGE": { bg: "bg-yellow-200", text: "text-black" },
-  "MINIMALISTIC": { bg: "bg-gray-500", text: "text-white" },
-  "CRAZY EXPERIMENTAL": { bg: "bg-green-500", text: "text-black", border: "border-green-400" },
-  "Y2K": { bg: "bg-pink-200", text: "text-black" },
-  "JEWELERY": { bg: "bg-gray-700", text: "text-white" },
-  "TECHWEAR": { bg: "bg-green-700", text: "text-white" }
+export const genreColors: Record<string, { bg: string; text: string }> = {
+  PUNK: { bg: "#a855f7", text: "text-white" },
+  GOTH: { bg: "#a855f7", text: "text-white" },
+  GRUNGE: { bg: "#a855f7", text: "text-white" },
+  ESSENTIALS: { bg: "#3b82f6", text: "text-white" },
+  LUXURY: { bg: "#f59e0b", text: "text-white" },
+  VINTAGE: { bg: "#f59e0b", text: "text-white" },
+  MINIMALISTIC: { bg: "#6b7280", text: "text-white" },
+  "CRAZY EXPERIMENTAL": { bg: "#ec4899", text: "text-white" },
+  Y2K: { bg: "#8b5cf6", text: "text-white" },
+  JEWELERY: { bg: "#10b981", text: "text-white" },
+  TECHWEAR: { bg: "#06b6d4", text: "text-white" },
+  STREET: { bg: "#ef4444", text: "text-white" },
 };
-
-export { genreColors };
 
 export const brands: Brand[] = [
   { name: "shmuie", followers: "10k+", genre: "STREET" },

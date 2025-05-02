@@ -8,7 +8,7 @@ const HowItWorks = () => {
   return (
     <div
       className="h-screen w-full bg-white flex items-center justify-center"
-      style={{ fontFamily: "Kanit, sans-serif" }}
+      style={{ fontFamily: "Arial Black, sans-serif" }}
     >
       <motion.div
         initial={{ opacity: 0 }}
@@ -18,47 +18,47 @@ const HowItWorks = () => {
         className="w-full flex items-center justify-center px-4"
       >
         <div className="w-full max-w-4xl flex flex-col items-center justify-center">
-          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-8 sm:mb-12 tracking-tight text-center">
+          <h1 className="font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-8 sm:mb-12 tracking-tight text-center text-black">
             HOW IT WORKS:
           </h1>
 
           <div className="space-y-6 sm:space-y-8 w-full max-w-3xl mb-12">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
               <div className="flex items-center gap-2 sm:gap-4">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black">
                   step
                 </span>
-                <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-400">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-400">
                   1
                 </span>
               </div>
-              <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black text-center">
                 : take your style quiz
               </span>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
               <div className="flex items-center gap-2 sm:gap-4">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black">
                   step
                 </span>
-                <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-400">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-400">
                   2
                 </span>
               </div>
-              <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black text-center">
                 : get matched with brands
               </span>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
               <div className="flex items-center gap-2 sm:gap-4">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black">
                   step
                 </span>
-                <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-400">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-400">
                   3
                 </span>
               </div>
-              <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-black text-black text-center">
                 : explore brands in the gallery
               </span>
             </div>
@@ -66,7 +66,7 @@ const HowItWorks = () => {
 
           <Button
             onClick={() => navigate("/quiz")}
-            className="text-xl sm:text-2xl py-4 sm:py-6 px-8 sm:px-12 bg-black text-white hover:bg-gray-800 font-bold tracking-wide"
+            className="text-xl sm:text-2xl py-4 sm:py-6 px-8 sm:px-12 bg-black text-white hover:bg-gray-800 font-black tracking-wide"
           >
             continue
           </Button>

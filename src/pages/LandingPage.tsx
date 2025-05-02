@@ -5,12 +5,12 @@ import { useEffect } from "react";
 
 // List of important images to preload
 const imagesToPreload = [
-  "/lovable-uploads/2826c26c-5666-46ec-8872-60b6f526e6a5.png",
-  "/lovable-uploads/c5e45c20-edf8-4052-9d18-b4293316d77f.png",
-  "/lovable-uploads/963420ec-8c53-43e3-91b3-b507a7d64bad.png",
-  "/lovable-uploads/cc94c43a-db79-4499-9294-05627894354a.png",
-  "/lovable-uploads/200a1dfb-d9d8-49d2-8b01-89160bde0f75.png",
-  "/lovable-uploads/dfcb5746-f522-48dd-b19d-d5be29f59c01.png",
+  "/profile_pics/badson.us.jpg",
+  "/profile_pics/brotherlylove.jpg",
+  "/profile_pics/eraworldwideclub.jpg",
+  "/profile_pics/outlw.usa.jpg",
+  "/profile_pics/derschutze_clo.jpg",
+  "/profile_pics/thegvgallery.jpg",
 ];
 
 const LandingPage = () => {
@@ -39,8 +39,8 @@ const LandingPage = () => {
     >
       <div className="flex flex-col items-center justify-center w-full px-4">
         <h1
-          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold text-black text-center mb-12 tracking-tight leading-tight"
-          style={{ fontFamily: "Kanit, sans-serif" }}
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-black text-center mb-12 tracking-tight leading-tight"
+          style={{ fontFamily: "Arial Black, sans-serif" }}
         >
           <span className="block">WELCOME TO</span>
           <span>FASHION:WEEK</span>

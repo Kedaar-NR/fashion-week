@@ -10,7 +10,8 @@ import Index from "@/pages/Index";
 import LikedPage from "@/pages/LikedPage";
 import SignIn from "@/pages/SignIn";
 import NotFound from "@/pages/NotFound";
-import TermsPage from "@/pages/TermsPage";
+import Terms from "@/pages/Terms";
+import Privacy from "@/pages/Privacy";
 import LandingPage from "@/pages/LandingPage";
 import QuizPage from "@/pages/QuizPage";
 import RecommendationsPage from "@/pages/RecommendationsPage";
@@ -39,7 +40,8 @@ function AnimatedRoutes() {
         <Route path="/drop-tracker" element={<DropTracker />} />
         <Route path="/liked" element={<LikedPage />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

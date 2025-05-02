@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
+import { Heart, Sparkles, ArrowRight } from "lucide-react";
 import BrandSearchBar from "@/components/BrandSearchBar";
-import TallyEmailWidget from "@/components/TallyEmailWidget";
 import Sidebar, { useSidebar } from "@/components/Sidebar";
 import BrandContentCollage from "@/components/BrandContentCollage";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import InstagramModal from "@/components/InstagramModal";
+import Marquee from "react-fast-marquee";
+import WaitlistPopup from "@/components/WaitlistPopup";
 
 const brands = [
   "badson.us",
@@ -27,11 +28,13 @@ const brands = [
 const Index = () => {
   const { collapsed } = useSidebar();
   const [searchQuery, setSearchQuery] = useState("");
-  const [likedBrands, setLikedBrands] = useState<string[]>(() => {
-    const saved = localStorage.getItem("likedBrands");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [likedBrands, setLikedBrands] = useState<string[]>([]);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [showSignInPopup, setShowSignInPopup] = useState(false);
+  const [showQuizPopup, setShowQuizPopup] = useState(false);
+  const [showTimedSignUpPopup, setShowTimedSignUpPopup] = useState(false);
+  const [currentBrandIndex, setCurrentBrandIndex] = useState(0);
+  const brandRefs = useRef<(HTMLDivElement | null)[]>([]);
   const navigate = useNavigate();
 
   const handleSearch = (query: string) => {
@@ -39,7 +42,8 @@ const Index = () => {
   };
 
   const handleBrandSelect = (brandName: string) => {
-    navigate(`/gallery?brand=${brandName}`);
+    const cleanBrandName = brandName.replace("@", "");
+    navigate(`/gallery?brand=${cleanBrandName}`);
   };
 
   const handleDiscoverStyle = () => {
@@ -51,6 +55,54 @@ const Index = () => {
     const brandParam = urlParams.get("brand");
     if (brandParam) {
       handleBrandSelect(brandParam);
+    }
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = brandRefs.current.findIndex(
+              (ref) => ref === entry.target
+            );
+            setCurrentBrandIndex(index);
+
+            // Show sign in popup when reaching @eraworldwideclub
+            if (
+              brands[index] === "eraworldwideclub" &&
+              !localStorage.getItem("user")
+            ) {
+              setShowSignInPopup(true);
+            }
+
+            // Show quiz popup when reaching @thegvgallery
+            if (brands[index] === "thegvgallery") {
+              setShowQuizPopup(true);
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+        rootMargin: "-50% 0px -50% 0px",
+      }
+    );
+
+    brandRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      const timer = setTimeout(() => {
+        setShowTimedSignUpPopup(true);
+      }, 16000);
+
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -77,53 +129,124 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen font-kanit">
+    <div className="flex min-h-screen bg-white">
       <Sidebar />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 ml-48 bg-white overflow-y-auto transition-all duration-300"
+        className="flex-1 ml-48 overflow-x-hidden"
       >
-        <div className="w-full px-4">
-          <h1 className="font-kanit font-extrabold tracking-tighter text-center mb-6 text-black text-4xl">
-            FASHION:WEEK
-          </h1>
-
-          <div className="flex justify-center mb-6">
-            <Button
-              onClick={handleDiscoverStyle}
-              className="bg-black text-white hover:bg-gray-800 font-bold text-lg"
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+          <div className="text-center mb-12">
+            <h1
+              className="text-4xl sm:text-5xl font-black text-black"
+              style={{ fontFamily: "Arial Black, sans-serif" }}
             >
-              Discover Your Style
-            </Button>
+              FASHION:WEEK
+            </h1>
           </div>
 
-          <div className="mb-4">
+          <div className="mb-8">
             <BrandSearchBar
               onSearch={handleSearch}
               onSelectBrand={handleBrandSelect}
             />
           </div>
 
-          <div className="space-y-24 mb-8">
-            {brands.map((brand) => (
-              <div key={brand} className="w-full relative">
-                <div className="flex items-center justify-center mb-8">
-                  <div className="flex items-center gap-3">
+          <div className="mb-8 -mx-4 sm:-mx-6 lg:-mx-8">
+            <Marquee
+              speed={50}
+              gradient={false}
+              className="py-2 bg-black text-white overflow-hidden"
+            >
+              <div
+                className="flex gap-6 mx-4 text-xs sm:text-sm md:text-base font-black text-white"
+                style={{ fontFamily: "Arial Black, sans-serif" }}
+              >
+                <span className="text-white">STREETWEAR</span>
+                <span className="text-white">•</span>
+                <span className="text-white">PUNK</span>
+                <span className="text-white">•</span>
+                <span className="text-white">ESSENTIALS</span>
+                <span className="text-white">•</span>
+                <span className="text-white">LUXURY</span>
+                <span className="text-white">•</span>
+                <span className="text-white">VINTAGE</span>
+                <span className="text-white">•</span>
+                <span className="text-white">MINIMALISTIC</span>
+                <span className="text-white">•</span>
+                <span className="text-white">CRAZY EXPERIMENTAL</span>
+                <span className="text-white">•</span>
+                <span className="text-white">Y2K</span>
+                <span className="text-white">•</span>
+                <span className="text-white">JEWELERY</span>
+                <span className="text-white">•</span>
+                <span className="text-white">TECHWEAR</span>
+                <span className="text-white">•</span>
+                <span className="text-white">STREET</span>
+              </div>
+            </Marquee>
+          </div>
+
+          <div className="w-full mb-8">
+            <div className="border-2 border-black py-3 sm:py-4">
+              <h2
+                className="text-xl sm:text-2xl md:text-3xl font-black tracking-[0.15em] text-center"
+                style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
+              >
+                FEATURED&nbsp;&nbsp;BRANDS
+              </h2>
+            </div>
+          </div>
+
+          <div className="space-y-8 sm:space-y-12 md:space-y-16 mb-8">
+            {brands.map((brand, index) => (
+              <motion.div
+                key={brand}
+                ref={(el) => (brandRefs.current[index] = el)}
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    type: "spring",
+                    damping: 20,
+                    stiffness: 100,
+                  },
+                }}
+                viewport={{ once: false, margin: "-20%" }}
+                className={`w-full relative border border-black p-3 sm:p-4 md:p-6 lg:p-8 rounded-lg transform transition-transform duration-500 ${
+                  currentBrandIndex === index ? "scale-100" : "scale-95"
+                }`}
+              >
+                <motion.div
+                  className="flex items-center justify-center mb-4 sm:mb-6 md:mb-8"
+                  initial={{ opacity: 0 }}
+                  whileInView={{
+                    opacity: 1,
+                    transition: {
+                      duration: 0.2,
+                      delay: 0.15,
+                    },
+                  }}
+                  viewport={{ once: false }}
+                >
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <h2
-                      className="text-2xl font-bold cursor-pointer hover:text-gray-600 transition-colors"
+                      className="text-lg sm:text-xl md:text-2xl font-black cursor-pointer hover:text-gray-600 transition-colors"
+                      style={{ fontFamily: "Arial Black, sans-serif" }}
                       onClick={() => handleBrandClick(brand)}
                     >
-                      {brand}
+                      @{brand}
                     </h2>
                     <button
                       onClick={() => toggleLike(brand)}
-                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                      className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
                     >
                       <Heart
-                        className={`h-6 w-6 ${
+                        className={`h-5 w-5 sm:h-6 sm:w-6 ${
                           likedBrands.includes(brand)
                             ? "fill-red-500 text-red-500"
                             : "text-gray-400"
@@ -131,27 +254,166 @@ const Index = () => {
                       />
                     </button>
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="space-y-8">
-                  <BrandContentCollage brandName={brand} />
-                </div>
-              </div>
+                <motion.div
+                  className="space-y-8"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: 1,
+                    transition: {
+                      duration: 0.25,
+                      delay: 0.2,
+                      ease: [0.25, 0.1, 0.25, 1.0],
+                    },
+                  }}
+                  viewport={{ once: false, margin: "-10%" }}
+                >
+                  <BrandContentCollage
+                    brandName={brand}
+                    onSelectBrand={handleBrandClick}
+                  />
+                </motion.div>
+              </motion.div>
             ))}
           </div>
-
-          <TallyEmailWidget />
         </div>
-      </motion.div>
 
-      <AnimatePresence>
-        {selectedBrand && (
-          <InstagramModal
-            brandName={selectedBrand}
-            onClose={() => setSelectedBrand(null)}
-          />
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {showSignInPopup && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 left-48 flex items-center justify-center z-50"
+            >
+              <motion.div
+                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowSignInPopup(false)}
+              />
+              <motion.div
+                initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.9, y: 20, opacity: 0 }}
+                transition={{ type: "spring", duration: 0.7, bounce: 0.3 }}
+                className="relative z-10 bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4"
+              >
+                <h2 className="text-2xl font-bold text-center mb-6">
+                  Sign in to see more
+                </h2>
+                <Button
+                  onClick={() => {
+                    setShowSignInPopup(false);
+                    navigate("/signin");
+                  }}
+                  className="w-full bg-black hover:bg-gray-800 text-white text-xl py-6 rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105"
+                >
+                  Sign In
+                </Button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {showQuizPopup && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 left-48 flex items-center justify-center z-50"
+            >
+              <motion.div
+                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowQuizPopup(false)}
+              />
+              <motion.div
+                initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.9, y: 20, opacity: 0 }}
+                transition={{ type: "spring", duration: 0.7, bounce: 0.3 }}
+                className="relative z-10 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 border-2 border-black"
+              >
+                <div className="absolute -top-3 -right-3">
+                  <Sparkles className="w-8 h-8 text-yellow-400" />
+                </div>
+                <h2 className="text-2xl font-bold text-center mb-4">
+                  Take Our Style Quiz!
+                </h2>
+                <p className="text-center text-gray-600 mb-6">
+                  Discover brands that match your unique style preferences
+                </p>
+                <Button
+                  onClick={() => {
+                    setShowQuizPopup(false);
+                    navigate("/quiz");
+                  }}
+                  className="w-full bg-black hover:bg-gray-800 text-white text-xl py-6 rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 hover:shadow-2xl"
+                >
+                  Take the Quiz
+                </Button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {selectedBrand && (
+            <InstagramModal
+              brandName={selectedBrand}
+              onClose={() => setSelectedBrand(null)}
+            />
+          )}
+        </AnimatePresence>
+
+        <WaitlistPopup />
+
+        <AnimatePresence>
+          {showTimedSignUpPopup && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 left-48 flex items-center justify-center z-50"
+            >
+              <motion.div
+                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowTimedSignUpPopup(false)}
+              />
+              <motion.div
+                initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.9, y: 20, opacity: 0 }}
+                transition={{ type: "spring", duration: 0.7, bounce: 0.3 }}
+                className="relative z-10 bg-white rounded-xl p-8 max-w-sm w-full mx-4"
+              >
+                <h2 className="text-3xl font-black text-center mb-6">
+                  Sign In
+                </h2>
+                <Button
+                  onClick={() => {
+                    setShowTimedSignUpPopup(false);
+                    navigate("/signin");
+                  }}
+                  className="w-full bg-black hover:bg-gray-900 text-white text-lg py-6 rounded-lg shadow-lg transition-all duration-200 hover:scale-[1.02]"
+                >
+                  Sign In
+                </Button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 };

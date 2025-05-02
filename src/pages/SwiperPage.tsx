@@ -162,17 +162,17 @@ const SwiperPage = () => {
         className="flex-1 ml-48 p-8 bg-white overflow-y-auto"
       >
         <div className="max-w-4xl mx-auto flex flex-col items-center">
-          <h1 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 text-transparent bg-clip-text">
+          <h1 className="text-3xl font-bold text-center mb-2 text-black">
             Discover Your Style
           </h1>
-          <p className="text-lg text-center mb-8 text-gray-600">
+          <p className="text-lg text-center mb-8 text-black">
             we're learning from what you like!
           </p>
 
           <div className="mb-8 w-full flex flex-col items-center">
             {!finished ? (
               <>
-                <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">
+                <h2 className="text-xl font-semibold mb-4 text-center text-black">
                   Swipe right for styles you like, left for those you don't
                 </h2>
                 <div
@@ -214,7 +214,7 @@ const SwiperPage = () => {
               </>
             ) : (
               <div className="text-center mb-12 w-full">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                <h2 className="text-2xl font-semibold text-black mb-4">
                   Come back later for more fashion items!
                 </h2>
               </div>
@@ -223,7 +223,7 @@ const SwiperPage = () => {
 
           {likedImages.length > 0 && (
             <div className="mb-12 w-full">
-              <h3 className="text-xl font-semibold mb-6 text-center text-gray-800">
+              <h3 className="text-xl font-semibold mb-6 text-center text-black">
                 Your Liked Styles
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

@@ -179,7 +179,11 @@ const RecommendationsPage = () => {
                         </AvatarFallback>
                       </Avatar>
                       <div className="truncate">
-                        <h3 className="font-medium text-gray-900">
+                        <h3
+                          className={`font-black text-gray-900 ${
+                            cleanName.length > 15 ? "text-sm" : "text-base"
+                          }`}
+                        >
                           @{cleanName}
                         </h3>
                       </div>

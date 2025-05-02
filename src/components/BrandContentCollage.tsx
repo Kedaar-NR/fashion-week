@@ -372,7 +372,7 @@ const BrandContentCollage = ({
                 return (
                   <motion.div
                     key={`content-${index}`}
-                    className="relative overflow-hidden cursor-pointer group aspect-[3/4]"
+                    className="relative overflow-hidden cursor-pointer group w-full aspect-square"
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{
                       opacity: 1,
@@ -402,7 +402,7 @@ const BrandContentCollage = ({
                     {isVideo ? (
                       <video
                         src={content}
-                        className="absolute inset-0 w-full h-full object-cover bg-black"
+                        className="w-full h-full object-cover bg-black"
                         autoPlay
                         muted
                         loop
@@ -412,7 +412,7 @@ const BrandContentCollage = ({
                       <img
                         src={content}
                         alt={`${selectedContent.name} content`}
-                        className="absolute inset-0 w-full h-full object-cover bg-black"
+                        className="w-full h-full object-cover bg-black"
                         loading="lazy"
                       />
                     )}

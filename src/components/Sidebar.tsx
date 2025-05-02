@@ -183,18 +183,9 @@ const Sidebar = () => {
         <div className="fixed top-0 right-0 p-4 z-[100]">
           <Link
             to="/signin"
-            className={`flex items-center justify-center hover:bg-gray-800 transition-colors py-2 px-4 rounded-md ${
-              location.pathname === "/signin"
-                ? "bg-black text-white font-black"
-                : "bg-black text-white"
-            }`}
+            className="absolute top-4 right-12 bg-black text-white px-10 py-3 rounded-lg text-lg font-bold hover:bg-gray-800 transition whitespace-nowrap"
           >
-            <span
-              className="text-base uppercase tracking-wider"
-              style={{ fontFamily: "Arial Black, sans-serif" }}
-            >
-              SIGN IN
-            </span>
+            SIGN IN
           </Link>
         </div>
       )}

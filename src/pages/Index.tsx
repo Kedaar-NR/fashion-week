@@ -427,7 +427,7 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 flex items-center justify-center z-50"
+              className="fixed inset-0 flex items-center justify-center -translate-x-8 z-50"
               onClick={() => setShowTimedQuizPopup(false)}
             >
               <motion.div
@@ -441,7 +441,7 @@ const Index = () => {
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.9, y: 20, opacity: 0 }}
                 transition={{ type: "spring", duration: 0.7, bounce: 0.3 }}
-                className="relative z-10 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 border-2 border-black"
+                className="relative z-10 bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-auto"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="absolute -top-3 -right-3">
@@ -462,9 +462,9 @@ const Index = () => {
                     setShowTimedQuizPopup(false);
                     navigate("/quiz");
                   }}
-                  className="w-full bg-black hover:bg-gray-800 text-white text-xl py-6 rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 hover:shadow-2xl"
+                  className="w-full bg-black hover:bg-gray-800 text-white text-xl py-6 rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 hover:shadow-2xl whitespace-nowrap"
                 >
-                  Take the Quiz
+                  SIGN IN
                 </Button>
               </motion.div>
             </motion.div>

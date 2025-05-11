@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import AnimatedText from "@/components/AnimatedText";
@@ -7,7 +6,6 @@ import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-
 const Waitlist = () => {
   const firstLine = "Dress better than";
   const spelloutDelay = firstLine.length * 0.12 + 0.04;
@@ -28,7 +26,6 @@ const Waitlist = () => {
       img.loading = 'eager';
     });
   }, []);
-  
   useEffect(() => {
     setShowSecond(false);
     const timer = setTimeout(() => setShowSecond(true), spelloutDelay * 1000 + 125);
@@ -45,7 +42,6 @@ const Waitlist = () => {
       return () => clearInterval(interval);
     }
   }, []);
-
   return <div className="flex min-h-screen bg-white">
       <Sidebar />
       <div className="flex-1 flex flex-col items-center justify-center px-4 ml-48">
@@ -62,19 +58,12 @@ const Waitlist = () => {
                   <div className="relative w-[90vw] max-w-3xl aspect-[4/3] bg-white rounded-[32px] shadow-2xl border-8 border-black mx-auto flex items-center justify-center p-0" style={{
                   boxShadow: "0 8px 32px 0 rgba(0,0,0,0.25)"
                 }}>
-                    <img 
-                      src="/collage-sample.png" 
-                      alt="Collage grid" 
-                      className="w-full h-full object-cover" 
-                      fetchPriority="high" 
-                      loading="eager" 
-                      style={{
-                        objectFit: "cover",
-                        objectPosition: "center",
-                        width: "100%",
-                        height: "100%"
-                      }} 
-                    />
+                    <img src="/collage-sample.png" alt="Collage grid" fetchPriority="high" loading="eager" style={{
+                    objectFit: "cover",
+                    objectPosition: "center",
+                    width: "100%",
+                    height: "100%"
+                  }} className="w-full h-full object-contain" />
                   </div>
                 </ContainerScroll>
               </div>

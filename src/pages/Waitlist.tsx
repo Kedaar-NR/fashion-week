@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import AnimatedText from "@/components/AnimatedText";
@@ -50,27 +51,36 @@ const Waitlist = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-4 ml-48">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center flex flex-col justify-between min-h-[70vh]">
-            {/* Keeping top margin for title */}
-            <div className="mt-8">
+            {/* Moved title a bit down */}
+            <div className="mt-6">
               <AnimatedText text={firstLine} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-black" />
               {showSecond && <AnimatedText text="everyone." className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-red-600" />}
               
-              {/* Removed margin-top entirely and reduced margin-bottom to move iPad up even more */}
-              <div className="-mt-2 mb-4 flex items-center justify-center px-0">
+              {/* Moved iPad up significantly more */}
+              <div className="-mt-8 mb-2 flex items-center justify-center px-0">
                 <ContainerScroll titleComponent={null}>
-                  <div className="relative w-[90vw] max-w-3xl aspect-[4/3] bg-white rounded-[32px] shadow-2xl border-8 border-black mx-auto flex items-center justify-center p-6" style={{
+                  <div className="relative w-[90vw] max-w-3xl aspect-[4/3] bg-white rounded-[32px] shadow-2xl border-8 border-black mx-auto flex items-center justify-center p-0" style={{
                   boxShadow: "0 8px 32px 0 rgba(0,0,0,0.25)"
                 }}>
-                    <img src="/collage-sample.png" alt="Collage grid" className="w-full h-full object-contain" fetchPriority="high" loading="eager" style={{
-                    objectFit: "contain",
-                    objectPosition: "center"
-                  }} />
+                    <img 
+                      src="/collage-sample.png" 
+                      alt="Collage grid" 
+                      className="w-full h-full object-cover" 
+                      fetchPriority="high" 
+                      loading="eager" 
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "center",
+                        width: "100%",
+                        height: "100%"
+                      }} 
+                    />
                   </div>
                 </ContainerScroll>
               </div>
               
-              {/* Further reduced margin-top to move waitlist counter and button up more */}
-              <div className="flex flex-col items-center space-y-2 mt-2">
+              {/* Moved counter and button up significantly more */}
+              <div className="flex flex-col items-center space-y-2 -mt-4">
                 <div className="text-2xl font-bold">
                   join <WaitlistCounter /> others on the waitlist
                 </div>

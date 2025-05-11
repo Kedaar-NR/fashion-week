@@ -97,20 +97,22 @@ const Index = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Show sign-in popup every 5 seconds if not signed in
   useEffect(() => {
     if (!localStorage.getItem("user")) {
-      const timer = setTimeout(() => {
+      setShowTimedSignUpPopup(true);
+      const interval = setInterval(() => {
         setShowTimedSignUpPopup(true);
-      }, 16000);
-
-      return () => clearTimeout(timer);
+      }, 5000);
+      return () => clearInterval(interval);
     }
   }, []);
 
+  // Show quiz popup every 3 minutes
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowTimedQuizPopup(true);
-    }, 20000);
+    }, 180000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -427,7 +429,7 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 flex items-center justify-center -translate-x-8 z-50"
+              className="fixed inset-0 flex items-center justify-center z-50"
               onClick={() => setShowTimedQuizPopup(false)}
             >
               <motion.div
@@ -444,27 +446,20 @@ const Index = () => {
                 className="relative z-10 bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-auto"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="absolute -top-3 -right-3">
-                  <Sparkles className="w-8 h-8 text-yellow-400" />
-                </div>
                 <h2
-                  className="text-3xl font-black text-center mb-4"
+                  className="text-3xl font-black text-center mb-6"
                   style={{ fontFamily: "Arial Black, sans-serif" }}
                 >
-                  DISCOVER YOUR STYLE
+                  Sign In
                 </h2>
-                <p className="text-center text-gray-600 mb-6">
-                  Take our style quiz to find brands that match your unique
-                  taste
-                </p>
                 <Button
                   onClick={() => {
                     setShowTimedQuizPopup(false);
-                    navigate("/quiz");
+                    navigate("/signin");
                   }}
-                  className="w-full bg-black hover:bg-gray-800 text-white text-xl py-6 rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 hover:shadow-2xl whitespace-nowrap"
+                  className="w-full bg-black hover:bg-gray-900 text-white text-lg py-6 rounded-lg shadow-lg transition-all duration-200 hover:scale-[1.02]"
                 >
-                  SIGN IN
+                  Sign In
                 </Button>
               </motion.div>
             </motion.div>

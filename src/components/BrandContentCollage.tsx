@@ -338,7 +338,7 @@ const BrandContentCollage = ({
   );
 
   return (
-    <div className="w-full max-w-[100vw] px-2 sm:px-4 md:px-6 lg:px-8">
+    <div className="w-full max-w-[100vw] px-2 sm:px-4 md:px-6 lg:px-8 pb-0 mb-0">
       {loading ? (
         <div className="flex justify-center items-center h-40">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
@@ -348,9 +348,9 @@ const BrandContentCollage = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="mb-8"
+          className="pb-0 mb-0"
         >
-          <div className="grid grid-cols-3 gap-0.5 w-full mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-0.5 w-full mx-auto pb-0 mb-0">
             {(() => {
               // Combine videos and images
               const videos = selectedContent.videos || [];

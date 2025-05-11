@@ -4,7 +4,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { TextShimmerWave } from "@/components/ui/text-shimmer-wave";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
-import WaitlistPopup from "@/components/WaitlistPopup";
 
 interface SidebarContextType {
   collapsed: boolean;
@@ -19,7 +18,6 @@ export const useSidebar = () => useContext(SidebarContext);
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showWaitlistPopup, setShowWaitlistPopup] = useState(false);
   const [user, setUser] = useState<any>(() => {
     const cached = localStorage.getItem("cached_user");
     return cached ? JSON.parse(cached) : null;
@@ -79,13 +77,13 @@ const Sidebar = () => {
           </div>
         </div>
 
-        <button
-          onClick={() => setShowWaitlistPopup(true)}
+        <Link
+          to="/waitlist"
           className="mx-4 my-2 py-2 px-4 text-base font-black text-white bg-black hover:bg-gray-800 transition-colors rounded-md uppercase text-center w-[calc(100%-2rem)]"
           style={{ fontFamily: "Arial Black, sans-serif" }}
         >
           Waitlist
-        </button>
+        </Link>
 
         {user && (
           <div className="px-4 py-3 border-b border-gray-200">
@@ -150,6 +148,11 @@ const Sidebar = () => {
               path="/liked"
               isActive={location.pathname === "/liked"}
             />
+            <NavItem
+              label="EVENTS"
+              path="/events"
+              isActive={location.pathname === "/events"}
+            />
           </div>
         </div>
 
@@ -172,10 +175,6 @@ const Sidebar = () => {
             </Link>
           </div>
         </div>
-
-        {showWaitlistPopup && (
-          <WaitlistPopup onClose={() => setShowWaitlistPopup(false)} />
-        )}
       </div>
 
       {/* Fixed top-right sign in button - only show when not logged in */}

@@ -23,6 +23,8 @@ import HowItWorks from "@/pages/HowItWorks";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./App.css";
 import { Toaster } from "@/components/ui/sonner";
+import Waitlist from "@/pages/Waitlist";
+import Events from "@/pages/Events";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -43,6 +45,8 @@ function AnimatedRoutes() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/waitlist" element={<Waitlist />} />
+        <Route path="/events" element={<Events />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

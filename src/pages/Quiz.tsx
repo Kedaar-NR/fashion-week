@@ -44,7 +44,7 @@ const Quiz = () => {
           (select from the following)
         </p>
         <div className="w-full max-w-3xl flex flex-col items-center">
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-6 w-full mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full mb-8">
             {quizImages.slice((page - 1) * 10, page * 10).map((img, idx) => (
               <div
                 key={img}

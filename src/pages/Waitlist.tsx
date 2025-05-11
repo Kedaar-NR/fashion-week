@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import AnimatedText from "@/components/AnimatedText";
@@ -51,13 +50,13 @@ const Waitlist = () => {
       <div className="flex-1 flex flex-col items-center justify-center px-4 ml-48">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center flex flex-col justify-between min-h-[70vh]">
-            {/* Added some top margin to move title down a bit */}
-            <div className="mt-12">
+            {/* Keeping top margin for title */}
+            <div className="mt-8">
               <AnimatedText text={firstLine} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-black" />
               {showSecond && <AnimatedText text="everyone." className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-red-600" />}
               
-              {/* Reduced margin-top to move iPad up closer to the text */}
-              <div className="mt-0 mb-6 flex items-center justify-center px-0">
+              {/* Removed margin-top entirely and reduced margin-bottom to move iPad up even more */}
+              <div className="-mt-2 mb-4 flex items-center justify-center px-0">
                 <ContainerScroll titleComponent={null}>
                   <div className="relative w-[90vw] max-w-3xl aspect-[4/3] bg-white rounded-[32px] shadow-2xl border-8 border-black mx-auto flex items-center justify-center p-6" style={{
                   boxShadow: "0 8px 32px 0 rgba(0,0,0,0.25)"
@@ -70,8 +69,8 @@ const Waitlist = () => {
                 </ContainerScroll>
               </div>
               
-              {/* Reduced margin-top to move waitlist counter and button up */}
-              <div className="flex flex-col items-center space-y-2 mt-8">
+              {/* Further reduced margin-top to move waitlist counter and button up more */}
+              <div className="flex flex-col items-center space-y-2 mt-2">
                 <div className="text-2xl font-bold">
                   join <WaitlistCounter /> others on the waitlist
                 </div>

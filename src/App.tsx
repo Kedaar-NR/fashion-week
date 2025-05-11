@@ -25,6 +25,7 @@ import "./App.css";
 import { Toaster } from "@/components/ui/sonner";
 import Waitlist from "@/pages/Waitlist";
 import Events from "@/pages/Events";
+import CuratedTransitionScreens from "@/pages/CuratedTransitionScreens";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -47,6 +48,10 @@ function AnimatedRoutes() {
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/events" element={<Events />} />
+        <Route
+          path="/curated-transition"
+          element={<CuratedTransitionScreens />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

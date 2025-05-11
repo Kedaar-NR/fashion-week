@@ -220,7 +220,7 @@ const RecommendationsPage = () => {
           </div>
 
           <Button
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/curated-transition")}
             className="bg-black text-white hover:bg-gray-800 font-bold text-lg px-8 py-3"
           >
             Explore More Brands

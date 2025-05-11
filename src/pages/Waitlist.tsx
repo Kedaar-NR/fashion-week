@@ -79,7 +79,7 @@ const Waitlist = () => {
                       src="/collage-sample.png"
                       alt="Collage grid"
                       className="w-full h-full object-contain"
-                      fetchpriority="high"
+                      fetchPriority="high"
                       loading="eager"
                       style={{
                         objectFit: "contain",

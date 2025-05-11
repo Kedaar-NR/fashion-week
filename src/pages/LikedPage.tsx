@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -118,7 +119,7 @@ const LikedPage = () => {
                             alt={brand.name}
                             className="object-cover"
                             loading="eager"
-                            fetchpriority="high"
+                            fetchPriority="high"
                           />
                           <AvatarFallback
                             className="bg-gray-100 avatar-fallback"

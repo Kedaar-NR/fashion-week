@@ -174,7 +174,7 @@ const Index = () => {
             >
               <div
                 className="flex gap-6 mx-4 text-xs sm:text-sm md:text-base font-black text-white"
-                style={{ fontFamily: "Arial Black, sans-serif" }}
+                style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
               >
                 <span className="text-white">STREETWEAR</span>
                 <span className="text-white">•</span>

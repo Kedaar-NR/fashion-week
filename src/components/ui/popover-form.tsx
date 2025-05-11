@@ -1,3 +1,4 @@
+
 "use client";
 
 import { ReactNode, RefObject, useEffect, useRef } from "react";
@@ -69,8 +70,9 @@ export function PopoverForm({
                 >
                   <ChevronUp className="text-muted-foreground/80" />
                 </button>
-
-                <PopoverFormCutOutTopIcon />
+                
+                {/* Simple divider line to replace missing PopoverFormCutOutTopIcon */}
+                <div className="w-[12px] h-[1px] bg-gray-200"></div>
               </div>
             )}
 

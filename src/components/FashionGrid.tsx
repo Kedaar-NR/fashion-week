@@ -245,7 +245,7 @@ const FashionGrid = ({
                         alt={item.title}
                         className="object-cover"
                         loading={index < 9 ? "eager" : "lazy"}
-                        fetchpriority={index < 9 ? "high" : "auto"}
+                        fetchPriority={index < 9 ? "high" : "auto"}
                       />
                       <AvatarFallback
                         className="bg-gray-100 avatar-fallback"

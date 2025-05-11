@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -19,11 +20,11 @@ const WaitlistCounter = () => {
   const [digits, setDigits] = useState(formatNumber(count));
 
   useEffect(() => {
-    // Function to get a random timeout between 0.5-2 seconds (faster)
-    const getRandomTimeout = () => Math.floor(Math.random() * 1500) + 500;
+    // Function to get a random timeout between 1-2 seconds (slightly faster without going too fast)
+    const getRandomTimeout = () => Math.floor(Math.random() * 1000) + 1000;
 
-    // Function to get random increment between 1-5
-    const getRandomIncrement = () => Math.floor(Math.random() * 5) + 1;
+    // Function to get random increment between 1-3 to reduce updates
+    const getRandomIncrement = () => Math.floor(Math.random() * 3) + 1;
 
     // Increment counter function with random timing
     const incrementCounter = () => {

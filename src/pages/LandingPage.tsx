@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -16,6 +17,7 @@ const imagesToPreload = [
   "/profile_pics/nomaintenance.jpg",
   "/profile_pics/california.arts.jpg",
   "/profile_pics/drolandmiller.jpg",
+  "/collage-sample.png",
 ];
 
 const LandingPage = () => {
@@ -25,14 +27,28 @@ const LandingPage = () => {
     navigate("/how-it-works");
   };
 
-  // Preload important images
+  // Preload important images with priority flags
   useEffect(() => {
-    imagesToPreload.forEach((src) => {
+    const preloadImage = (src: string, index: number) => {
       const img = new Image();
       img.src = src;
       img.loading = "eager";
-      img.fetchPriority = "high";
-    });
+      img.fetchPriority = index < 5 ? "high" : "auto";
+      return img;
+    };
+    
+    // Create an intersection observer to load images when they enter viewport
+    const loadImagesInOrder = () => {
+      // Load first 3 images immediately with high priority
+      const priorityImages = imagesToPreload.slice(0, 3).map((src, i) => preloadImage(src, i));
+      
+      // Load the rest after a slight delay
+      setTimeout(() => {
+        imagesToPreload.slice(3).forEach((src, i) => preloadImage(src, i + 3));
+      }, 500);
+    };
+    
+    loadImagesInOrder();
   }, []);
 
   return (

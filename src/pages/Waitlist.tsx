@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import AnimatedText from "@/components/AnimatedText";
@@ -14,6 +15,21 @@ const Waitlist = () => {
   const [showTallyModal, setShowTallyModal] = useState(false);
   const [showSignInPopup, setShowSignInPopup] = useState(false);
   const navigate = useNavigate();
+
+  // Preload images on component mount for faster loading
+  useEffect(() => {
+    const imagesToPreload = [
+      '/collage-sample.png',
+      // Add other critical images here
+    ];
+    
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      img.src = src;
+      img.fetchPriority = 'high';
+      img.loading = 'eager';
+    });
+  }, []);
 
   useEffect(() => {
     setShowSecond(false);
@@ -52,10 +68,8 @@ const Waitlist = () => {
                   className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-red-600"
                 />
               )}
-              {/* iPad right under heading */}
-              <div className="mt-4 flex items-center justify-center">
-                {" "}
-                {/* Minimal space below heading */}
+              {/* iPad positioning - moved up */}
+              <div className="mt-2 mb-8 flex items-center justify-center">
                 <ContainerScroll titleComponent={null}>
                   <div
                     className="relative w-[90vw] max-w-3xl aspect-[4/3] bg-white rounded-[32px] shadow-2xl border-8 border-black mx-auto flex items-center justify-center p-6"
@@ -65,6 +79,8 @@ const Waitlist = () => {
                       src="/collage-sample.png"
                       alt="Collage grid"
                       className="w-full h-full object-contain"
+                      fetchpriority="high"
+                      loading="eager"
                       style={{
                         objectFit: "contain",
                         objectPosition: "center",
@@ -73,10 +89,8 @@ const Waitlist = () => {
                   </div>
                 </ContainerScroll>
               </div>
-              {/* Counter and Join Waitlist Button just below iPad */}
-              <div className="flex flex-col items-center space-y-2 mt-4 mb-2">
-                {" "}
-                {/* Minimal space below iPad */}
+              {/* Added margin-top to create space (approximately 2 inches) */}
+              <div className="flex flex-col items-center space-y-2 mt-16">
                 <div className="text-2xl font-bold">
                   join <WaitlistCounter /> others on the waitlist
                 </div>
@@ -91,6 +105,7 @@ const Waitlist = () => {
             </div>
           </div>
         </div>
+        {/* Modal and popup sections */}
         {showTallyModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
             <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-2xl w-full relative flex flex-col items-center">
@@ -105,6 +120,7 @@ const Waitlist = () => {
                 src="https://tally.so/r/walQGB"
                 title="Join Waitlist Form"
                 className="w-full h-[70vh] rounded-xl border-none"
+                loading="lazy"
                 allowFullScreen
               ></iframe>
             </div>

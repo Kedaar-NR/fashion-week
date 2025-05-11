@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Mail } from "lucide-react";
 import {
@@ -28,7 +29,7 @@ const WaitlistButton = () => {
   }
 
   return (
-    <div className="flex items-center justify-center py-8">
+    <div className="flex items-center justify-center py-6">
       <PopoverForm
         title="Join Waitlist"
         open={open}

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Mail } from "lucide-react";
 import {
@@ -8,6 +7,24 @@ import {
 } from "@/components/ui/popover-form";
 import WaitlistCounter from "./WaitlistCounter";
 
+// ---
+// Google Apps Script Web App endpoint for email collection
+// 1. Go to your Google Sheet > Extensions > Apps Script
+// 2. Paste the following code and deploy as a web app (access: Anyone)
+//
+// function doPost(e) {
+//   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+//   var data = JSON.parse(e.postData.contents);
+//   sheet.appendRow([new Date(), data.email]);
+//   return ContentService.createTextOutput(
+//     JSON.stringify({ result: "success" })
+//   ).setMimeType(ContentService.MimeType.JSON);
+// }
+//
+// 3. Copy the web app URL and paste it below:
+const APPS_SCRIPT_ENDPOINT = "PASTE_YOUR_WEB_APP_URL_HERE";
+// ---
+
 const WaitlistButton = () => {
   const [formState, setFormState] = useState<"idle" | "loading" | "success">(
     "idle"
@@ -15,12 +32,22 @@ const WaitlistButton = () => {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
 
-  function submit() {
+  async function submit() {
     setFormState("loading");
-    setTimeout(() => {
+    try {
+      // Send email as JSON to Apps Script endpoint
+      const response = await fetch(APPS_SCRIPT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      // Optionally check response if not using no-cors
       setFormState("success");
-    }, 1500);
-
+    } catch (e) {
+      alert("Failed to join waitlist. Please try again.");
+      setFormState("idle");
+      return;
+    }
     setTimeout(() => {
       setOpen(false);
       setFormState("idle");

@@ -122,6 +122,7 @@ const BrandContentCollage = ({
           style={{ minHeight: "100%", height: "100%" }}
         >
           <div
+            ref={gridRef}
             className={`grid gap-3 w-full h-full justify-items-center items-center ${
               squareContent.length === 1 ? "place-items-center" : ""
             }`}
@@ -140,6 +141,9 @@ const BrandContentCollage = ({
           >
             {/* Responsive breakpoints for columns */}
             <style>{`
+              @media (max-width: 640px) {
+                .brand-collage-grid { grid-template-columns: repeat(2, 1fr) !important; }
+              }
               @media (min-width: 640px) {
                 .brand-collage-grid { grid-template-columns: repeat(3, 1fr) !important; }
               }

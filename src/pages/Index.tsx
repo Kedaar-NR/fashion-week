@@ -347,37 +347,37 @@ const Index = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 ml-48 flex flex-col h-screen w-full overflow-hidden items-center justify-between pt-10"
+        className="flex-1 ml-0 md:ml-48 flex flex-col h-screen w-full overflow-x-auto items-center justify-between pt-4 sm:pt-8"
       >
         <div
-          className="w-full flex flex-col items-center justify-start flex-shrink-0"
+          className="w-full flex flex-col items-center justify-start flex-shrink-0 px-1 sm:px-2 md:px-4"
           style={{ flex: "0 0 auto" }}
         >
-          <div className="text-center mb-6 w-full flex justify-center">
+          <div className="text-center mb-4 sm:mb-6 w-full flex justify-center">
             <h1
-              className="text-4xl sm:text-5xl font-black text-black mx-auto"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-black mx-auto"
               style={{ fontFamily: "Arial Black, sans-serif" }}
             >
               FASHION:WEEK
             </h1>
           </div>
-          <div className="mb-3 w-full flex justify-center">
-            <div className="w-full max-w-6xl">
+          <div className="mb-2 w-full flex justify-center">
+            <div className="w-full max-w-full sm:max-w-6xl">
               <BrandSearchBar
                 onSearch={handleSearch}
                 onSelectBrand={handleBrandSelect}
               />
             </div>
           </div>
-          <div className="mb-3 w-full flex justify-center">
-            <div className="w-full max-w-6xl">
+          <div className="mb-2 w-full flex justify-center">
+            <div className="w-full max-w-full sm:max-w-6xl">
               <Marquee
                 speed={50}
                 gradient={false}
-                className="py-2 bg-black text-white overflow-hidden rounded-lg"
+                className="py-2 bg-black text-white overflow-x-auto rounded-lg"
               >
                 <div
-                  className="flex gap-6 mx-4 text-xs sm:text-sm md:text-base font-black text-white"
+                  className="flex gap-4 sm:gap-6 mx-2 sm:mx-4 text-xs sm:text-sm md:text-base font-black text-white"
                   style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
                 >
                   <span className="text-white">STREETWEAR</span>
@@ -405,10 +405,10 @@ const Index = () => {
               </Marquee>
             </div>
           </div>
-          <div className="w-full flex justify-center mb-2">
-            <div className="border-2 border-black py-2 sm:py-3 w-full max-w-6xl mx-auto rounded-lg bg-white">
+          <div className="w-full flex justify-center mb-1 sm:mb-2">
+            <div className="border-2 border-black py-2 sm:py-3 w-full max-w-full sm:max-w-6xl mx-auto rounded-lg bg-white">
               <h2
-                className="text-xl sm:text-2xl md:text-3xl font-black tracking-[0.15em] text-center"
+                className="text-lg sm:text-xl md:text-2xl font-black tracking-[0.15em] text-center"
                 style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
               >
                 FEATURED&nbsp;&nbsp;BRANDS
@@ -418,7 +418,7 @@ const Index = () => {
         </div>
 
         <div
-          className="relative w-full flex-1 flex items-center justify-center overflow-hidden mt-6"
+          className="relative w-full flex-1 flex items-center justify-center overflow-x-auto mt-2 sm:mt-6 px-1 sm:px-2 md:px-4"
           ref={collageContainerRef}
         >
           <motion.div

@@ -131,31 +131,28 @@ const Gallery = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 ml-48 bg-white overflow-y-auto transition-all duration-300"
+        className="flex-1 ml-0 md:ml-48 bg-white overflow-x-auto transition-all duration-300"
       >
-        <div className="w-full px-4">
+        <div className="w-full px-1 sm:px-4">
           <h1
-            className="text-4xl font-black text-center mb-6 text-black"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-center mb-4 sm:mb-6 text-black"
             style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
           >
             GALLERY
           </h1>
-
-          <div className="mb-4">
+          <div className="mb-2 sm:mb-4">
             <BrandSearchBar
               onSearch={handleSearch}
               onSelectBrand={handleBrandSelect}
             />
           </div>
-
-          <div className="mb-8">
+          <div className="mb-4 sm:mb-8">
             <FashionGrid
               searchQuery={searchQuery}
               onSelectBrand={setSelectedBrand}
               onResetSearch={() => setSearchQuery("")}
             />
           </div>
-
           <TallyEmailWidget />
 
           <AnimatePresence>

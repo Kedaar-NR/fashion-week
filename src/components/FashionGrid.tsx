@@ -171,7 +171,7 @@ const FashionGrid = ({
   };
 
   return (
-    <div className="p-1 flex-1 overflow-auto">
+    <div className="p-0 sm:p-1 flex-1 overflow-x-auto">
       <div className="w-full flex flex-col items-center">
         {searchQuery && (
           <div className="mb-2 w-full flex justify-center">
@@ -186,17 +186,11 @@ const FashionGrid = ({
             </Button>
           </div>
         )}
-
-        <div className="mb-4 w-full">
+        <div className="mb-2 sm:mb-4 w-full">
           <MarqueeCategories onSelectCategory={setSelectedCategory} />
         </div>
-
         <div
-          className={`grid grid-cols-1 ${
-            collapsed
-              ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3"
-              : "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"
-          } gap-6 w-full`}
+          className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 w-full max-w-full px-1 sm:px-2 md:px-4`}
         >
           {filteredItems.map((item, index) => {
             const mainGenre = item.genre.split("/")[0].trim().toUpperCase();

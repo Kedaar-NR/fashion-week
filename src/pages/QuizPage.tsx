@@ -66,24 +66,24 @@ const QuizPage = () => {
   return (
     <div className="min-h-screen w-full bg-white flex">
       <Sidebar />
-      <div className="flex-1 flex flex-col items-center w-full px-4 justify-start ml-48">
-        <header className="w-full py-8 px-4 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center w-full px-1 sm:px-4 justify-start ml-0 md:ml-48">
+        <header className="w-full py-6 sm:py-8 px-1 sm:px-4 flex flex-col items-center justify-center">
           <h1
-            className="text-7xl font-semibold text-black text-center w-full max-w-4xl mx-auto mb-4"
+            className="text-4xl sm:text-7xl font-semibold text-black text-center w-full max-w-4xl mx-auto mb-2 sm:mb-4"
             style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
           >
             WHO ARE YOU?
           </h1>
           <p
-            className="text-2xl text-black text-center mb-8 font-light"
+            className="text-lg sm:text-2xl text-black text-center mb-4 sm:mb-8 font-light"
             style={{ fontFamily: "Arial Black, Kanit, sans-serif" }}
           >
             SELECT FROM THE FOLLOWING
           </p>
         </header>
-        <main className="flex-1 flex flex-col items-center w-full px-4 justify-start">
-          <div className="flex flex-col items-center w-full max-w-6xl mx-auto">
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6 w-full mb-6 sm:mb-8 place-items-center">
+        <main className="flex-1 flex flex-col items-center w-full px-1 sm:px-4 justify-start">
+          <div className="flex flex-col items-center w-full max-w-full sm:max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 w-full mb-4 sm:mb-6 place-items-center">
               {imagesToShow.map((img, idx) => (
                 <motion.div
                   key={img}

@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import InstagramModal from "@/components/InstagramModal";
 import Marquee from "react-fast-marquee";
 import WaitlistPopup from "@/components/WaitlistPopup";
+import { brands as allBrandsData } from "@/data/brands";
 
 const brands = [
   "friedrice_nyc",
@@ -118,6 +119,44 @@ function shuffleArray<T>(array: T[]): T[] {
   return arr;
 }
 
+function getUserInterestGenres(likedBrands: string[]): string[] {
+  // Find genres for liked brands
+  const genreSet = new Set<string>();
+  for (const brand of allBrandsData) {
+    if (likedBrands.includes(brand.name)) {
+      if (brand.genre) {
+        brand.genre
+          .split("/")
+          .forEach((g) => genreSet.add(g.trim().toUpperCase()));
+      }
+    }
+  }
+  return Array.from(genreSet);
+}
+
+function getPersonalizedBrands(likedBrands: string[]): string[] {
+  const interestGenres = getUserInterestGenres(likedBrands);
+  if (interestGenres.length === 0) return shuffleArray(brands);
+  // Find brands matching any interest genre
+  const matching: string[] = [];
+  const rest: string[] = [];
+  for (const brand of allBrandsData) {
+    if (brand.genre) {
+      const brandGenres = brand.genre
+        .split("/")
+        .map((g) => g.trim().toUpperCase());
+      if (brandGenres.some((g) => interestGenres.includes(g))) {
+        matching.push(brand.name);
+      } else {
+        rest.push(brand.name);
+      }
+    } else {
+      rest.push(brand.name);
+    }
+  }
+  return [...shuffleArray(matching), ...shuffleArray(rest)];
+}
+
 const Index = () => {
   const { collapsed } = useSidebar();
   const [searchQuery, setSearchQuery] = useState("");
@@ -129,16 +168,14 @@ const Index = () => {
   const [currentBrandIndex, setCurrentBrandIndex] = useState(0);
   const collageContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const [showScrollPopup, setShowScrollPopup] = useState(() => {
-    // Only show on first load, and persist across brand changes
-    return !window.sessionStorage.getItem("hasScrolledOnHome");
-  });
-  const [hasScrolled, setHasScrolled] = useState(() => {
-    return !!window.sessionStorage.getItem("hasScrolledOnHome");
-  });
+  const [showScrollPopup, setShowScrollPopup] = useState(true);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [scrollCount, setScrollCount] = useState(0);
 
-  const [shuffledBrands] = useState(() => shuffleArray(brands));
+  const [shuffledBrands, setShuffledBrands] = useState(() => {
+    const storedLikes = JSON.parse(localStorage.getItem("likedBrands") || "[]");
+    return getPersonalizedBrands(storedLikes);
+  });
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -159,6 +196,9 @@ const Index = () => {
     if (brandParam) {
       handleBrandSelect(brandParam);
     }
+    // Re-personalize on mount in case likes changed in another tab
+    const storedLikes = JSON.parse(localStorage.getItem("likedBrands") || "[]");
+    setShuffledBrands(getPersonalizedBrands(storedLikes));
   }, []);
 
   useEffect(() => {
@@ -253,7 +293,6 @@ const Index = () => {
     const handleScroll = () => {
       setShowScrollPopup(false);
       setHasScrolled(true);
-      window.sessionStorage.setItem("hasScrolledOnHome", "true");
     };
     const handleKey = (e: KeyboardEvent) => {
       if (["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(e.key))
@@ -294,6 +333,11 @@ const Index = () => {
       window.removeEventListener("keydown", preventArrowScroll);
     };
   }, []);
+
+  // Re-personalize when likes change
+  useEffect(() => {
+    setShuffledBrands(getPersonalizedBrands(likedBrands));
+  }, [likedBrands]);
 
   return (
     <div className="flex min-h-screen h-screen bg-white overflow-hidden">

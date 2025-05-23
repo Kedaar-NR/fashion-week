@@ -82,21 +82,23 @@ const WishlistPage = () => {
                 onClick={() => setShowSignInPopup(false)}
               />
               <motion.div
-                initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                initial={{ scale: 0.97, y: 10, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                transition={{ type: "spring", duration: 0.7, bounce: 0.3 }}
-                className="relative z-10 bg-white rounded-xl p-8 max-w-sm w-full mx-4"
+                exit={{ scale: 0.97, y: 10, opacity: 0 }}
+                transition={{ type: "spring", duration: 0.6, bounce: 0.2 }}
+                className="relative z-10 bg-white rounded-xl shadow-2xl p-6 max-w-2xl w-full min-h-[120px] flex flex-col items-center justify-center"
+                onClick={(e) => e.stopPropagation()}
               >
-                <h2 className="text-3xl font-black text-center mb-6">
-                  Sign In Now
-                </h2>
                 <Button
                   onClick={() => {
                     setShowSignInPopup(false);
                     navigate("/signin");
                   }}
-                  className="w-full bg-black hover:bg-gray-900 text-white text-lg py-6 rounded-lg shadow-lg transition-all duration-200 hover:scale-[1.02]"
+                  className="w-full bg-black hover:bg-gray-900 text-white text-2xl py-6 rounded-xl shadow-xl transition-all duration-200 hover:scale-105 font-black tracking-wide"
+                  style={{
+                    fontFamily: "Arial Black, sans-serif",
+                    fontSize: "2rem",
+                  }}
                 >
                   Sign In
                 </Button>

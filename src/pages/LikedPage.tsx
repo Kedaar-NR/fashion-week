@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -9,6 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import SignInPrompt from "@/components/SignInPrompt";
+import { Button } from "@/components/ui/button";
 
 // Update genreColors to match DropTracker
 const genreColors = {
@@ -197,21 +197,26 @@ const LikedPage = () => {
                   className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
                 >
                   <motion.div
-                    initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                    initial={{ scale: 0.97, y: 10, opacity: 0 }}
                     animate={{ scale: 1, y: 0, opacity: 1 }}
-                    exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                    transition={{ type: "spring", duration: 0.7, bounce: 0.3 }}
-                    className="bg-white rounded-xl p-8 flex flex-col items-center max-w-sm mx-4"
+                    exit={{ scale: 0.97, y: 10, opacity: 0 }}
+                    transition={{ type: "spring", duration: 0.6, bounce: 0.2 }}
+                    className="bg-white rounded-xl p-6 flex flex-col items-center max-w-2xl w-full min-h-[120px] mx-4"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                      Sign In
-                    </h2>
-                    <Link
-                      to="/signin"
-                      className="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors"
+                    <Button
+                      onClick={() => {
+                        setShowSignInPopup(false);
+                        navigate("/signin");
+                      }}
+                      className="w-full bg-black hover:bg-gray-800 text-white text-2xl py-6 rounded-xl shadow-xl transition-all duration-200 hover:scale-105 font-black tracking-wide"
+                      style={{
+                        fontFamily: "Arial Black, sans-serif",
+                        fontSize: "2rem",
+                      }}
                     >
-                      Sign in
-                    </Link>
+                      Sign In
+                    </Button>
                   </motion.div>
                 </motion.div>
               )}

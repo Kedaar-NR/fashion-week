@@ -19,7 +19,7 @@ const Waitlist = () => {
       spelloutDelay * 1000 + 125
     );
     return () => clearTimeout(timer);
-  }, []);
+  }, [spelloutDelay]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">

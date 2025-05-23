@@ -23,6 +23,10 @@ import WaitlistCounter from "./WaitlistCounter";
 //
 // 3. Copy the web app URL and paste it below:
 const APPS_SCRIPT_ENDPOINT = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+// Google Form endpoint for email collection
+const GOOGLE_FORM_ACTION_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLSeL_UpoPwG2a8CfRBGteF-pJ0ZMRbNQpuwdhSUNRbQrZyTMYA/formResponse";
 // ---
 
 const WaitlistButton = () => {
@@ -35,13 +39,15 @@ const WaitlistButton = () => {
   async function submit() {
     setFormState("loading");
     try {
-      // Send email as JSON to Apps Script endpoint
-      const response = await fetch(APPS_SCRIPT_ENDPOINT, {
+      const formData = new FormData();
+      formData.append("entry.1716911821", email); // Use the correct field name for email
+
+      await fetch(GOOGLE_FORM_ACTION_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        mode: "no-cors",
+        body: formData,
       });
-      // Optionally check response if not using no-cors
+
       setFormState("success");
     } catch (e) {
       alert("Failed to join waitlist. Please try again.");

@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 
-// Get the 20 quiz images from the public/style_quiz folder
+// Get the quiz images from the public/style_quiz folder
 const quizImages = [
-  "Grunge.png",
+  "Grunge 2.jpg",
   "Grunge.jpg",
   "AvantStreet_LoudStreet.jpg",
   "EuroStreet.webp",
@@ -38,7 +38,7 @@ const QuizPage = () => {
     quizImages.forEach((img) => {
       const image = new window.Image();
       image.src = `/style_quiz/${img}`;
-      image.loading = "eager"; // Add eager loading
+      image.loading = "eager";
     });
   }, []);
 
@@ -54,12 +54,12 @@ const QuizPage = () => {
     if (step === 1) {
       setStep(2);
     } else {
-      // Store selected images before navigating
       localStorage.setItem("quizSelections", JSON.stringify(selectedImages));
       navigate("/recommendations");
     }
   };
 
+  // Show 10 images per step, responsive grid
   const imagesToShow =
     step === 1 ? quizImages.slice(0, 10) : quizImages.slice(10, 20);
 
@@ -83,7 +83,7 @@ const QuizPage = () => {
         </header>
         <main className="flex-1 flex flex-col items-center w-full px-4 justify-start">
           <div className="flex flex-col items-center w-full max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6 w-full mb-6 sm:mb-8 place-items-center">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6 w-full mb-6 sm:mb-8 place-items-center">
               {imagesToShow.map((img, idx) => (
                 <motion.div
                   key={img}

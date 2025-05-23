@@ -101,7 +101,7 @@ const SignIn = () => {
         navigate("/home");
       }
       setIsLoading(false);
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message || "Authentication error");
       setIsLoading(false);
     }

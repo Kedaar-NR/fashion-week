@@ -129,8 +129,13 @@ const Index = () => {
   const [currentBrandIndex, setCurrentBrandIndex] = useState(0);
   const collageContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const [showScrollPopup, setShowScrollPopup] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [showScrollPopup, setShowScrollPopup] = useState(() => {
+    // Only show on first load, and persist across brand changes
+    return !window.sessionStorage.getItem("hasScrolledOnHome");
+  });
+  const [hasScrolled, setHasScrolled] = useState(() => {
+    return !!window.sessionStorage.getItem("hasScrolledOnHome");
+  });
   const [scrollCount, setScrollCount] = useState(0);
 
   const [shuffledBrands] = useState(() => shuffleArray(brands));
@@ -218,9 +223,29 @@ const Index = () => {
   }, [shuffledBrands.length]);
 
   useEffect(() => {
-    setShowScrollPopup(true);
-    setHasScrolled(false);
-  }, [currentBrandIndex]);
+    if (scrollCount > 0 && scrollCount % 6 === 0) {
+      setShowSignInPopup(true);
+      setShowQuizPopup(true);
+    }
+  }, [scrollCount]);
+
+  const toggleLike = (brandName: string) => {
+    setLikedBrands((prev) => {
+      const newLikedBrands = prev.includes(brandName)
+        ? prev.filter((b) => b !== brandName)
+        : [...prev, brandName];
+
+      localStorage.setItem("likedBrands", JSON.stringify(newLikedBrands));
+
+      if (newLikedBrands.includes(brandName)) {
+        toast.success(`Added ${brandName} to liked brands`);
+      } else {
+        toast.success(`Removed ${brandName} from liked brands`);
+      }
+
+      return newLikedBrands;
+    });
+  };
 
   // Hide popup on scroll/swipe/wheel/arrow
   useEffect(() => {
@@ -228,6 +253,7 @@ const Index = () => {
     const handleScroll = () => {
       setShowScrollPopup(false);
       setHasScrolled(true);
+      window.sessionStorage.setItem("hasScrolledOnHome", "true");
     };
     const handleKey = (e: KeyboardEvent) => {
       if (["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(e.key))
@@ -268,31 +294,6 @@ const Index = () => {
       window.removeEventListener("keydown", preventArrowScroll);
     };
   }, []);
-
-  useEffect(() => {
-    if (scrollCount > 0 && scrollCount % 6 === 0) {
-      setShowSignInPopup(true);
-      setShowQuizPopup(true);
-    }
-  }, [scrollCount]);
-
-  const toggleLike = (brandName: string) => {
-    setLikedBrands((prev) => {
-      const newLikedBrands = prev.includes(brandName)
-        ? prev.filter((b) => b !== brandName)
-        : [...prev, brandName];
-
-      localStorage.setItem("likedBrands", JSON.stringify(newLikedBrands));
-
-      if (newLikedBrands.includes(brandName)) {
-        toast.success(`Added ${brandName} to liked brands`);
-      } else {
-        toast.success(`Removed ${brandName} from liked brands`);
-      }
-
-      return newLikedBrands;
-    });
-  };
 
   return (
     <div className="flex min-h-screen h-screen bg-white overflow-hidden">

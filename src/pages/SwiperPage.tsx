@@ -97,7 +97,7 @@ const quizImages = [
   "Leather.JPG",
   "work_street.JPG",
   "IMG_4959.jpg",
-  "Luxary Street.webp",
+  "Luxary Street.jpg",
   "Japanese_Punk.jpg",
   "Emo_Opium_Goth.jpg",
   "Vintage.jpg",

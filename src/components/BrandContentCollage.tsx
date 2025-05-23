@@ -33,17 +33,9 @@ const BrandContentCollage = ({
   useEffect(() => {
     function updateColumns() {
       const width = gridRef.current?.offsetWidth || window.innerWidth;
-      let cols = 1;
-      if (content.length >= 12) cols = 6;
-      else if (content.length >= 9) cols = 5;
-      else if (content.length >= 6) cols = 4;
-      else if (content.length >= 4) cols = 3;
-      else if (content.length === 3) cols = 3;
-      else if (content.length === 2) cols = 2;
-      else cols = 1;
-      // Responsive: shrink columns if container is narrow
-      if (width < 600 && cols > 2) cols = 2;
-      if (width < 400) cols = 1;
+      let cols = Math.floor(Math.sqrt(content.length));
+      if (width < 640) cols = 2;
+      else if (cols < 1) cols = 1;
       setColumns(cols);
     }
     updateColumns();
@@ -127,9 +119,7 @@ const BrandContentCollage = ({
               squareContent.length === 1 ? "place-items-center" : ""
             }`}
             style={{
-              gridTemplateColumns: `repeat(${Math.sqrt(
-                squareContent.length
-              )}, 1fr)`,
+              gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
               justifyContent:
                 squareContent.length === 1 ||
                 (squareContent.length % 2 !== 0 && squareContent.length < 6)
@@ -139,24 +129,12 @@ const BrandContentCollage = ({
               height: "100%",
             }}
           >
-            {/* Responsive breakpoints for columns */}
-            <style>{`
-              @media (max-width: 640px) {
-                .brand-collage-grid { grid-template-columns: repeat(2, 1fr) !important; }
-              }
-              @media (min-width: 640px) {
-                .brand-collage-grid { grid-template-columns: repeat(3, 1fr) !important; }
-              }
-              @media (min-width: 1024px) {
-                .brand-collage-grid { grid-template-columns: repeat(5, 1fr) !important; }
-              }
-            `}</style>
             {squareContent.map((file, index) => {
               const isVideo = file.endsWith(".mp4");
               return (
                 <motion.div
                   key={`content-${index}`}
-                  className="relative overflow-hidden cursor-pointer group h-full w-full aspect-square brand-collage-grid"
+                  className="relative overflow-hidden cursor-pointer group h-full w-full aspect-square"
                   style={{ maxWidth: "100%", maxHeight: "100%" }}
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{

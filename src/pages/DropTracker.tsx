@@ -261,14 +261,15 @@ const DropTracker = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+                className="fixed inset-0 flex items-center justify-center z-50"
+                onClick={() => setShowSignInPopup(false)}
               >
                 <motion.div
                   initial={{ scale: 0.97, y: 10, opacity: 0 }}
                   animate={{ scale: 1, y: 0, opacity: 1 }}
                   exit={{ scale: 0.97, y: 10, opacity: 0 }}
                   transition={{ type: "spring", duration: 0.6, bounce: 0.2 }}
-                  className="bg-white rounded-xl p-6 flex flex-col items-center max-w-2xl w-full min-h-[120px] mx-4"
+                  className="bg-white rounded-xl shadow-2xl p-6 max-w-xs w-full flex flex-col items-center justify-center"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Button
@@ -276,13 +277,14 @@ const DropTracker = () => {
                       setShowSignInPopup(false);
                       navigate("/signin");
                     }}
-                    className="w-full bg-black hover:bg-gray-800 text-white text-2xl py-6 rounded-xl shadow-xl transition-all duration-200 hover:scale-105 font-black tracking-wide"
+                    className="w-full bg-black hover:bg-gray-800 text-white text-xl py-5 rounded-xl shadow-xl font-black tracking-wide"
                     style={{
                       fontFamily: "Arial Black, sans-serif",
-                      fontSize: "2rem",
+                      fontSize: "1.5rem",
+                      letterSpacing: "0.1em",
                     }}
                   >
-                    Sign In
+                    SIGN IN
                   </Button>
                 </motion.div>
               </motion.div>

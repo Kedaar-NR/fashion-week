@@ -63,7 +63,7 @@ const Sidebar = () => {
 
   return (
     <SidebarContext.Provider value={{ collapsed: false }}>
-      <div className="w-48 h-full bg-white fixed left-0 top-0 bottom-0 flex flex-col z-10 shadow-md">
+      <div className="w-48 h-full bg-white fixed left-0 top-0 bottom-0 flex flex-col z-10 shadow-md mt-6">
         <div className="sticky top-0 z-20 bg-white border-b border-gray-200">
           <div className="flex items-center justify-center p-3">
             <Link to="/home">
